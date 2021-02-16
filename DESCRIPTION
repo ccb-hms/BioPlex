@@ -1,0 +1,26 @@
+Package: BioPlex
+Title: Analysis of PPI data from Gygi lab
+Version: 0.99.1
+Authors@R: 
+    person(given = "Ludwig",
+           family = "Geistlinger",
+           role = c("aut", "cre"),
+           email = "ludwig_geistlinger@hms.harvard.edu")
+Description: Analysis of PPI data from Gygi lab
+Encoding: UTF-8
+VignetteBuilder: knitr
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Depends: R (>= 4.0.0)
+Imports: 
+    vroom,
+    SummarizedExperiment,
+    BiocFileCache
+Suggests: 
+    ComplexHeatmap,
+    knitr,
+    rmarkdown,
+    pkgdown,
+    BiocParallel,
+    iSEE

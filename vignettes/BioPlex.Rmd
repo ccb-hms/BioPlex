@@ -1,0 +1,40 @@
+---
+vignette: >
+  % \VignetteIndexEntry{Data retrieval}
+  % \VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    mathjax: null   
+---
+
+# Setup
+```{r, message = FALSE}
+library(BioPlex)
+```
+
+# Obtain CORUM complexes
+
+Complete of
+[CORUM](http://mips.helmholtz-muenchen.de/corum/#download) complexes:
+
+```{r}
+all <- getCorum(set = "all")
+all
+```
+
+Core set of complexes:
+```{r}
+core <- getCorum(set = "core")
+core
+```
+
+Complexes with splice variants:
+```{r}
+splice <- getCorum(set = "splice")
+splice
+```
+
+# Obtain transcriptome data for HEK293 and HCT116 cells
+
+

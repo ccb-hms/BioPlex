@@ -1,0 +1,17 @@
+title: "BioPlex"
+
+url: https://BioPlex.github.io
+
+template:
+  params:
+    bootswatch: flatly
+
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Data retrieval
+      href: articles/BioPlex.html
+  right:
+    - icon: fa-github
+      href: https://github.com/ccb-hms/BioPlex
