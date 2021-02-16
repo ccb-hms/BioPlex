@@ -15,7 +15,7 @@ library(BioPlex)
 
 # Obtain CORUM complexes
 
-Complete of
+Complete set of
 [CORUM](http://mips.helmholtz-muenchen.de/corum/#download) complexes:
 
 ```{r}
@@ -37,4 +37,15 @@ splice
 
 # Obtain transcriptome data for HEK293 and HCT116 cells
 
+Get RNA-seq data for HEK293 cells from GEO: 
+[GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425)
+
+```{r}
+se <- getGSE122425()
+se
+head(assay(se, "raw"))
+head(assay(se, "rpkm"))
+colData(se)
+rowData(se)
+```
 
