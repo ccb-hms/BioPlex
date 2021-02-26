@@ -11,6 +11,7 @@ output:
 # Setup
 ```{r, message = FALSE}
 library(BioPlex)
+library(ExpressionAtlas)
 ```
 
 # Obtain BioPlex PPIs
@@ -56,6 +57,10 @@ splice
 
 # Obtain transcriptome data for HEK293 and HCT116 cells
 
+## HEK293 cells
+
+### GSE122425
+
 Get RNA-seq data for HEK293 cells from GEO: 
 [GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425)
 
@@ -68,3 +73,34 @@ colData(se)
 rowData(se)
 ```
 
+## HCT116 cells
+
+### Cancer Cell Line Encyclopedia (CCLE)
+
+Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the 
+[Cancer Cell Line Encyclopedia](https://portals.broadinstitute.org/ccle) 
+as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
+(Accession: [E-MTAB-2770](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770))
+
+```{r CCLE}
+atlasRes <- ExpressionAtlas::searchAtlasExperiments(
+              properties = "Cancer Cell Line Encyclopedia", 
+              species = "human" )
+atlasRes
+ccle <- ExpressionAtlas::getAtlasData(atlasRes$Accession)
+ccle <- ccle$`E-MTAB-2770`$rnaseq
+ccle
+```
+
+We have raw read counts: 
+```{r ccle-assay}
+assay(ccle)[1:5,1:5]
+colData(ccle)
+```
+
+and we have one sample per cell line:
+
+```{r ccle-hct116}
+ind <- grep("HCT 116", ccle$cell_line)
+colData(ccle)[ind,]
+```

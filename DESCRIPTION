@@ -18,9 +18,10 @@ Depends:
 Imports: 
     BiocFileCache,
     GEOquery,
-    vroom,
+    vroom
 Suggests: 
     ComplexHeatmap,
+    ExpressionAtlas,
     knitr,
     rmarkdown,
     pkgdown,
