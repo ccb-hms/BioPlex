@@ -28,9 +28,9 @@ getCorum <- function(set = c("all", "core", "splice"),
     unzip(set)
     set <- sub(".zip$", "", set)
     corum <- vroom::vroom(set)
-    cacheResource(corum, rname)
 
-    # clean up
+    # clean up & cache
+    cacheResource(corum, rname)
     file.remove(c(set, paste0(set, ".zip")))
     return(corum) 
 }

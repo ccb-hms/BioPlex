@@ -13,24 +13,43 @@ output:
 library(BioPlex)
 ```
 
+# Obtain BioPlex PPIs
+
+[Available networks](https://bioplex.hms.harvard.edu/interactions.php) include: 
+
+* BioPlex 293T cells (versions 1.0, 2.0, and 3.0)
+* BioPlex HCT116 cells (version 1.0)
+
+Let's get the latest version of the 293T PPI network:
+
+```{r bioplex293T}
+bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
+bp.293t
+```
+
+```{r bioplexHCT116}
+bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
+bp.hct116
+```
+
 # Obtain CORUM complexes
 
 Complete set of
 [CORUM](http://mips.helmholtz-muenchen.de/corum/#download) complexes:
 
-```{r}
+```{r corumALL}
 all <- getCorum(set = "all")
 all
 ```
 
 Core set of complexes:
-```{r}
+```{r corumCore}
 core <- getCorum(set = "core")
 core
 ```
 
 Complexes with splice variants:
-```{r}
+```{r corumSplice}
 splice <- getCorum(set = "splice")
 splice
 ```
@@ -40,7 +59,7 @@ splice
 Get RNA-seq data for HEK293 cells from GEO: 
 [GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425)
 
-```{r}
+```{r gse122425}
 se <- getGSE122425()
 se
 head(assay(se, "raw"))
