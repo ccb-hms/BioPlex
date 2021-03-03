@@ -14,7 +14,9 @@ library(BioPlex)
 library(ExpressionAtlas)
 ```
 
-# Obtain BioPlex PPIs
+# Data resources
+
+## BioPlex PPIs
 
 [Available networks](https://bioplex.hms.harvard.edu/interactions.php) include: 
 
@@ -33,7 +35,7 @@ bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
 bp.hct116
 ```
 
-# Obtain CORUM complexes
+## CORUM complexes
 
 Complete set of
 [CORUM](http://mips.helmholtz-muenchen.de/corum/#download) complexes:
@@ -55,7 +57,7 @@ splice <- getCorum(set = "splice")
 splice
 ```
 
-# Obtain transcriptome data for HEK293 and HCT116 cells
+## Transcriptome data (HEK293 and HCT116)
 
 ## HEK293 cells
 
@@ -104,3 +106,36 @@ and we have one sample per cell line:
 ind <- grep("HCT 116", ccle$cell_line)
 colData(ccle)[ind,]
 ```
+
+### Klijn et al., 2015
+
+Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from [Klijn et al., 2015](https://pubmed.ncbi.nlm.nih.gov/25485619) 
+as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
+(Accession: [E-MTAB-2706](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706))
+
+```{r klijn}
+klijn <- ExpressionAtlas::getAtlasData("E-MTAB-2706")
+klijn <- klijn$`E-MTAB-2706`$rnaseq
+klijn
+```
+
+We have raw read counts: 
+```{r klijn-assay}
+assay(klijn)[1:5,1:5]
+colData(klijn)
+```
+
+and we have one sample per cell line:
+
+```{r klijn-hct116}
+ind <- grep("HCT 116", klijn$cell_line)
+colData(klijn)[ind,]
+```
+
+# Downstream analysis
+
+## BioNet
+
+## GGEA
+
+## SGSeq
