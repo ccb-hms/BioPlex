@@ -7,6 +7,8 @@
 # 
 ############################################################
 
+#' @importFrom methods as
+#' @importFrom utils download.file unzip
 #' @export
 getCorum <- function(set = c("all", "core", "splice"),
                      cache = TRUE)
@@ -37,8 +39,8 @@ getCorum <- function(set = c("all", "core", "splice"),
 
 #' @export
 corum2list <- function(corum.df, 
-                       subunit.id.type = c("UNIPROT", "ENTREZID"),
-                       organism = "Human")
+                       organism = "Human",
+                       subunit.id.type = c("UNIPROT", "ENTREZID"))
 {
     subunit.id.type <- match.arg(subunit.id.type)
     stopifnot(organism %in% corum.df$Organism)

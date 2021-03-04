@@ -6,8 +6,9 @@ Authors@R:
            family = "Geistlinger",
            role = c("aut", "cre"),
            email = "ludwig_geistlinger@hms.harvard.edu")
-Description: Analysis of PPI data from Gygi lab
+Description: Analysis of PPI data from Gygi lab.
 Encoding: UTF-8
+License: Artistic-2.0
 VignetteBuilder: knitr
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -18,6 +19,8 @@ Depends:
 Imports: 
     BiocFileCache,
     GEOquery,
+    methods,
+    utils,
     vroom
 Suggests: 
     ComplexHeatmap,

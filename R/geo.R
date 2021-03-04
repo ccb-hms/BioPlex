@@ -8,6 +8,7 @@
 # 
 ############################################################
 
+#' @import SummarizedExperiment
 #' @export
 getGSE122425 <- function(cache = TRUE)
 {
@@ -49,9 +50,9 @@ getGSE122425 <- function(cache = TRUE)
 
     # store in an SE
     cdat <- colData(se)
-    se <- SummarizedExperiment(assays = list(raw = raw,
-                                             rpkm = rpkm),
-                               colData = cdat)
+    se <- SummarizedExperiment::SummarizedExperiment(assays = list(raw = raw,
+                                                     rpkm = rpkm),
+                                                     colData = cdat)
     anno.cols <- c("GeneSymbol", "KO", "GO", "length")
     rowData(se) <- cont[,anno.cols] 
 
