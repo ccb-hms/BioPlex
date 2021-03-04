@@ -25,7 +25,11 @@ Once you have the package installed, you can inspect the vignettes via:
 browseVignettes("BioPlex")
 ```
 
-## CORUM
+## Bioplex PPIs
+
+See [here](https://github.com/ccb-hms/BioPlex/blob/1eb7c039045a6d710bde7c8017cccedb98d5e9b5/vignettes/BioPlex.Rmd#L29) for how to access the BioPlex protein-protein interaction data from within the package.
+
+## CORUM complexes
 
 See [here](https://github.com/ccb-hms/BioPlex/blob/0ca36e34957a4e7b0d34ee66915e5f4e5989cee4/vignettes/BioPlex.Rmd#L16) for how to access the CORUM protein complex data from within the package.
 
