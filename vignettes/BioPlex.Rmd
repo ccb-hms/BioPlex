@@ -11,7 +11,9 @@ output:
 # Setup
 ```{r, message = FALSE}
 library(BioPlex)
+library(AnnotationDbi)
 library(ExpressionAtlas)
+library(org.Hs.eg.db)
 ```
 
 # Data resources
@@ -135,7 +137,7 @@ Alternatively: permutation test, i.e. repeatedly sample number of prey genes
 from the background, and assess how often we have as many or more than 9346 genes
 expressed:
 
-```{r prey-expression-perm}
+```{r prey-expression-293T-perm}
 permgr0 <- function(gr0, nr.genes = length(prey)) 
 {
     ind <- sample(seq_along(gr0), nr.genes)
@@ -204,6 +206,54 @@ and we have one sample per cell line:
 ```{r klijn-hct116}
 ind <- grep("HCT 116", klijn$cell_line)
 colData(klijn)[ind,]
+```
+
+Sanity check that the expressed genes are showing up as prey:
+
+```{r prey-expression-hct116}
+bait <- unique(bp.hct116$GeneA)
+length(bait)
+prey <- unique(bp.hct116$GeneB)
+length(prey)
+```
+
+Map prey to ENSEMBL gene IDs:
+
+```{r mapIDs-hct116}
+prey <- AnnotationDbi::mapIds(org.Hs.eg.db, 
+                              keytype = "ENTREZID", 
+                              column = "ENSEMBL",
+                              keys = as.character(prey))
+prey <- unlist(unname(prey))
+ind.prey <- match(prey, rownames(ccle))
+```
+
+Combine HCT-116 transcriptome from CCLE and Klijn et al. datasets:
+
+```{r comb-hct116}
+ind1 <- grep("HCT 116", ccle$cell_line)
+ind2 <- grep("HCT 116", klijn$cell_line)
+emat <- cbind(assay(ccle)[,ind1], assay(klijn)[,ind2])
+colnames(emat) <- c("ccle", "klijn")
+head(emat)
+```
+
+The CCLE and Klijn et al. measurements correlate very well:
+
+```{r cor-ccle-klijn}
+cor(emat[,"ccle"], emat[,"klijn"])
+```
+
+How many prey genes are expressed (raw read count > 0) in both CCLE and Klijn et al.?
+
+```{r prey-expression2-hct116}
+# background: how many genes in total are expressed in both measurements
+gr0 <- rowSums(emat > 0)
+table(gr0 == 2)
+# prey: expressed in both measurements
+table(gr0[ind.prey] == 2)
+# prey: expressed in at least one measurement
+table(gr0[ind.prey] > 0)
 ```
 
 # Downstream analysis

@@ -11,19 +11,12 @@ Then proceed from within R via:
 
 ```
 BiocManager::install("ccb-hms/BioPlex", 
-                     build_vignettes = TRUE,
                      auth_token = <your_auth_token>)
 ```
 
 NOTE: you will need the `remotes` package to install from github. 
 You will also need to provide the `auth_token` argument to 
 `remotes::install_github` as the repo is private.        
-
-Once you have the package installed, you can inspect the vignettes via:
-
-```
-browseVignettes("BioPlex")
-```
 
 ## Bioplex PPIs
 

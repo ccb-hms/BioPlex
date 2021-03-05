@@ -23,9 +23,11 @@ Imports:
     utils,
     vroom
 Suggests: 
+    AnnotationDbi,
     ComplexHeatmap,
     ExpressionAtlas,
     knitr,
+    org.Hs.eg.db,
     rmarkdown,
     pkgdown,
     BiocParallel,
