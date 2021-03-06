@@ -7,6 +7,7 @@
 # 
 ############################################################
 
+#' @importFrom utils read.delim
 #' @export
 getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        version = c("3.0", "1.0", "2.0"),
@@ -26,7 +27,7 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     # should a cache version be used?
     if(cache)
     {
-      bioplex <- getResourceFromCache(rname)
+      bioplex <- .getResourceFromCache(rname)
       if(!is.null(bioplex)) return(bioplex)        
     }
     
@@ -38,9 +39,9 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        `HCT116.1.0` = "HCT116_Network_5.5K_Dec_2019")
     file.ext <- paste(file.ext, "tsv", sep = ".")
     ppi.file <- paste0(bioplex.url, file.ext)
-    bioplex <- vroom::vroom(ppi.file)
+    bioplex <- read.delim(ppi.file)
     
     # clean up & cache
-    cacheResource(bioplex, rname)
+    .cacheResource(bioplex, rname)
     return(bioplex)
 }

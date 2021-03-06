@@ -16,7 +16,7 @@ getGSE122425 <- function(cache = TRUE)
     # should a cached version be used
     if(cache)
     {
-        se <- getResourceFromCache(rname)
+        se <- .getResourceFromCache(rname)
         if(!is.null(se)) return(se)
     }
 
@@ -31,14 +31,13 @@ getGSE122425 <- function(cache = TRUE)
     count.file <- "all.counts.293_vs_293NK.edgeR_all.xls.gz"
     count.file.prefix <- file.path(rname, rname)
     count.file <- paste(count.file.prefix, count.file, sep = "_")
-    cont <- vroom::vroom(count.file)  
-    cont <- as.data.frame(cont)
+    cont <- read.delim(count.file)  
 
     # we have raw counts and rpkms here in one matrix, ...
     # let's pull them out separately and make each one an assay
     ind <- rep("HEK293", 6)
     ind[4:6] <- paste0(ind[4:6], "NK")
-    ind <- paste(ind, "SEQ", sep = "-")
+    ind <- paste(ind, "SEQ", sep = ".")
     ind <- paste0(ind, rep(1:3, 2))    
 
     raw <- cont[,ind]    
@@ -57,7 +56,7 @@ getGSE122425 <- function(cache = TRUE)
     rowData(se) <- cont[,anno.cols] 
 
     # cache and clean up
-    cacheResource(se, rname)
+    .cacheResource(se, rname)
     rm.files <- list.files(rname, full.names = TRUE, all.files = TRUE)
     file.remove(rm.files[-c(1,2)])
     file.remove(rname)

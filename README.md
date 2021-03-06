@@ -18,6 +18,23 @@ NOTE: you will need the `remotes` package to install from github.
 You will also need to provide the `auth_token` argument to 
 `remotes::install_github` as the repo is private.        
 
+To build the package vignettes upon installation use:
+
+```
+BiocManager::install("ccb-hms/BioPlex",
+                     build_vignettes = TRUE,
+                     dependencies = TRUE,
+                     auth_token = <your_auth_token>)
+```
+
+Once you have the package installed, you can inspect the vignettes from within
+R via:
+
+```
+browseVignettes("BioPlex")
+```
+
+
 ## Bioplex PPIs
 
 See [here](https://github.com/ccb-hms/BioPlex/blob/1eb7c039045a6d710bde7c8017cccedb98d5e9b5/vignettes/BioPlex.Rmd#L29) for how to access the BioPlex protein-protein interaction data from within the package.

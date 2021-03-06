@@ -20,15 +20,11 @@ Imports:
     BiocFileCache,
     GEOquery,
     methods,
-    utils,
-    vroom
+    utils
 Suggests: 
     AnnotationDbi,
-    ComplexHeatmap,
     ExpressionAtlas,
     knitr,
     org.Hs.eg.db,
     rmarkdown,
-    pkgdown,
-    BiocParallel,
-    iSEE
+    pkgdown

@@ -7,8 +7,7 @@
 # 
 ############################################################
 
-#' @export
-cacheResource <- function(res, rname, ucdir="BioPlex")
+.cacheResource <- function(res, rname, ucdir="BioPlex")
 {
     # are we running interactively?
     cache.dir <- tools::R_user_dir(ucdir, which = "cache")
@@ -22,8 +21,7 @@ cacheResource <- function(res, rname, ucdir="BioPlex")
     saveRDS(res, file=cache.file)
 }
 
-#' @export
-getResourceFromCache <- function(rname, 
+.getResourceFromCache <- function(rname, 
     update.value=7, update.unit="days", ucdir="BioPlex")
 {
     # are we running interactively?

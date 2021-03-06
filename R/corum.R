@@ -20,7 +20,7 @@ getCorum <- function(set = c("all", "core", "splice"),
     # should a cache version be used?
     if(cache)
     {
-        corum <- getResourceFromCache(rname)
+        corum <- .getResourceFromCache(rname)
         if(!is.null(corum)) return(corum)        
     }
 
@@ -29,10 +29,10 @@ getCorum <- function(set = c("all", "core", "splice"),
     download.file(file.path(corum.url, set), destfile = set)
     unzip(set)
     set <- sub(".zip$", "", set)
-    corum <- vroom::vroom(set)
+    corum <- read.delim(set)
 
     # clean up & cache
-    cacheResource(corum, rname)
+    .cacheResource(corum, rname)
     file.remove(c(set, paste0(set, ".zip")))
     return(corum) 
 }
@@ -47,16 +47,10 @@ corum2list <- function(corum.df,
     
     corum.df <- subset(corum.df, Organism == organism)
     subunit.id.type <- ifelse(subunit.id.type == "UNIPROT", "UniProt", "Entrez")
-    id.col <- paste0("subunits(", subunit.id.type, " IDs)")
+    id.col <- paste0("subunits.", subunit.id.type, ".IDs.")
     
     gs <- strsplit(corum.df[[id.col]], " ?; ?")
     complex.name <- gsub(" ", "_", corum.df$ComplexName)
     names(gs) <- paste0("CORUM", corum.df$ComplexID, "_", complex.name)
     return(gs)
 }
-    
-corum2GeneSetCollection <- function(corum.df)
-{
-    
-}
-
