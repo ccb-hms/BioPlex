@@ -9,6 +9,7 @@
 ############################################################
 
 #' @import SummarizedExperiment
+#' @importFrom methods as
 #' @export
 getGSE122425 <- function(cache = TRUE)
 {

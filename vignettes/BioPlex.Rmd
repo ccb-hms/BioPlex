@@ -73,6 +73,17 @@ length(core.list)
 If we'd like to add metadata in a more structured form to each complex, a suitable option is a 
 [GeneSetCollection](https://bioconductor.org/packages/GSEABase).
 
+We can also represent the CORUM complexes as a list of graph instances,
+where all nodes of a complex are connected to all other nodes of that complex with undirected edges.
+
+```{r corum2glist}
+core.glist <- corum2graphlist(core, 
+                              organism = "Human", 
+                              subunit.id.type = "UNIPROT")
+head(core.glist)
+length(core.glist)
+```
+
 ## Transcriptome data
 
 ### HEK293 cells
@@ -151,6 +162,26 @@ permgr0 <- function(gr0, nr.genes = length(prey))
 perms <- replicate(permgr0(gr0), 1000)
 summary(perms)
 (sum(perms >= 9346) + 1) / 1001
+```
+
+Is there a relationship between prey frequency and prey expression level?
+```{r prey-freq}
+prey.freq <- sort(table(bp.293t$SymbolB), decreasing = TRUE)
+head(prey.freq)
+summary(as.vector(prey.freq))
+hist(prey.freq, breaks = 50)
+```
+
+```{r}
+ind <- match(names(prey.freq), rowData(se)[["GeneSymbol"]])
+par(pch = 20)
+plot( as.vector(prey.freq),
+      log2(assay(se, "rpkm") + 0.5)[ind, 1],
+      xlab = "prey frequency",
+      ylab = "log2 RPKM")
+cor(as.vector(prey.freq), 
+    log2(assay(se, "rpkm") + 0.5)[ind, 1],
+    use = "pairwise.complete.obs")
 ```
 
 ### HCT116 cells

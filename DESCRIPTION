@@ -19,6 +19,7 @@ Depends:
 Imports: 
     BiocFileCache,
     GEOquery,
+    graph,
     methods,
     utils
 Suggests: 

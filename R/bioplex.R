@@ -7,6 +7,33 @@
 # 
 ############################################################
 
+#' @title Obtain BioPlex protein-protein interaction data
+#' @description Functionality for retrieving the BioPlex protein-protein
+#' interaction data. Available networks include:
+#' \itemize{
+#' \item BioPlex 293T cells (versions 1.0, 2.0, and 3.0), 
+#' \item BioPlex HCT116 cells (version 1.0).
+#' } See references.
+#' @param cell.line character. Valid options include:
+#' \itemize{ 
+#' \item \code{"293T"}: derivative of human embryonic kidney 293 cell line,
+#' \item \code{"HCT116"}: human colon cancer cell line 116.
+#' }
+#' Defaults to \code{"293T"}.
+#' @param version character. Valid options include \code{"1.0"}, \code{"2.0"},
+#' and \code{"3.0"} for 293T cells. For HCT116 cells, only \code{"1.0"} is 
+#' available. 
+#' Defaults to \code{"3.0"}.
+#' @param cache logical. Should a locally cached version used if available?
+#' Defaults to \code{TRUE}.
+#' @return A \code{data.frame}. 
+#' @references BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
+#' @examples
+#' # (1) Obtain the latest version of the 293T PPI network
+#' bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
+#' 
+#' # (2) Obtain the latest version of the HCT116 PPI network
+#' bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
 #' @importFrom utils read.delim
 #' @export
 getBioPlex <- function(cell.line = c("293T", "HCT116"),
