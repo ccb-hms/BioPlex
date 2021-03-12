@@ -13,6 +13,7 @@ output:
 library(BioPlex)
 library(AnnotationDbi)
 library(ExpressionAtlas)
+library(graph)
 library(org.Hs.eg.db)
 ```
 
@@ -36,6 +37,16 @@ head(bp.293t)
 bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
 head(bp.hct116)
 ```
+### ID mapping
+
+Point out that those annotations might not be the best, they seem to leave out a bunch of mappings from Uniprot to EG (etc) that Bioc annotation finds.  
+
+Two options for remapping (AnnotationDbi + org.db package):
+
+1. vignette/suggests
+2. within `getBioPlex` (imports, logical argument `remap.gene.ids`) 
+
+I think we should just remap for now, but at some point we should check to see if they had a good reason to leave those out.
 
 ## CORUM complexes
 
@@ -61,6 +72,19 @@ splice <- getCorum(set = "splice")
 dim(splice)
 ```
 
+### ID mapping
+
+Point out that those annotations might not be the best, they seem to leave out a bunch of mappings from Uniprot to EG (etc) that Bioc annotation finds.  
+
+Two options for remapping (AnnotationDbi + org.db package):
+
+1. vignette/suggests
+2. within `getCorum` (imports, logical argument `remap.gene.ids`) 
+
+I think we should just remap for now, but at some point we should check to see if they had a good reason to leave those out.
+
+### Data structures for CORUM complexes 
+
 We can represent the CORUM complexes as list of character vectors.
 The names of the list are the complex IDs/names, and each element of the list is a vector of UniProt IDs for each complex.
 
@@ -82,6 +106,27 @@ core.glist <- corum2graphlist(core,
                               subunit.id.type = "UNIPROT")
 head(core.glist)
 length(core.glist)
+core.glist[[1]]@graphData
+graph::nodeData(core.glist[[1]])
+```
+
+Identify complexes that have a subunit of interest:
+```{r corum-subunit}
+has.cdk2 <- hasSubunit(core.glist, 
+                       subunit = "CDK2",
+                       id.type = "SYMBOL")
+```
+
+Check the answer:
+```{r corum-subunit2}
+table(has.cdk2)
+cdk2.glist <- core.glist[has.cdk2]
+lapply(cdk2.glist, function(g) unlist(graph::nodeData(g, attr = "SYMBOL")))
+```
+
+Inspect the graph:
+```{r corum-subunit3, message = FALSE}
+plot(cdk2.glist[[1]], main = cdk2.glist[[1]]@graphData$ComplexName)
 ```
 
 ## Transcriptome data
@@ -181,6 +226,39 @@ plot( as.vector(prey.freq),
       ylab = "log2 RPKM")
 cor(as.vector(prey.freq), 
     log2(assay(se, "rpkm") + 0.5)[ind, 1],
+    use = "pairwise.complete.obs")
+```
+
+Does gene length has an impact? 
+```{r, eval = FALSE}
+gc.gl <- EDASeq::getGeneLengthAndGCContent(names(se), 
+                                           org = "hsa", 
+                                           mode = "biomart")
+```
+
+```{r, eval = FALSE}
+rowData(se)$gc <- gc.gl$gc
+rowData(se)$length <- gc.gl$length
+ind <- !is.na(rowData(se)$length)
+se <- se[ind,]
+rowData(se)
+```
+
+```{r, eval = FALSE}
+cqn.res <- cqn::cqn(assay(se), 
+                lengths = rowData(se)$length,
+                x = rowData(se)$gc, 
+                sizeFactors = colSums(assay(se)))
+```
+
+```{r, eval = FALSE}
+assay(se, "rpkm.cqn") <- cqn.res$y + cqn.res$offset
+plot( as.vector(prey.freq),
+      log2(assay(se, "rpkm.cqn") + 0.5)[ind, 1],
+      xlab = "prey frequency",
+      ylab = "log2 RPKM (length-scaled)")
+cor(as.vector(prey.freq), 
+    log2(assay(se, "rpkm.cqn") + 0.5)[ind, 1],
     use = "pairwise.complete.obs")
 ```
 

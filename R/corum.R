@@ -93,7 +93,8 @@ corum2graphlist <- function(corum.df,
 # @param a gene 
 # @param SYMBOL and returns a logical vector indicating
 # @return which graphs have a node with the input gene SYMBOL
-.hasSubunit <- function(glist, subunit, id.type = "SYMBOL") 
+#' @export
+hasSubunit <- function(glist, subunit, id.type = "SYMBOL") 
 {
     .hasX <- function(x) grep(subunit, 
                                unlist(graph::nodeData(x, graph::nodes(x), id.type)), 
@@ -111,28 +112,35 @@ corum2graphlist <- function(corum.df,
 #        list item is ‘edgemode’ which indicates whether edges are
 #       ‘"directed"’ or ‘"undirected"’
 #
-.annotateGraphList <- function(glist, df, remap.node.ids = FALSE)
+.annotateGraphList <- function(glist, df)
 {
     # FIXME: Someone needs to fix the graph class accessors for graph attributes
     #- we should not need to access the slot directly
     go.ids <- strsplit(df[["GO.ID"]], " ?; ?")
-    for(i in seq_along(glist)) 
-        glist[[i]]@graphData <- c(glist[[i]]@graphData, 
-                                           ComplexID = df[i, "ComplexID"],
-                                           ComplexName = df[i, "ComplexName"], 
-                                           GO.ID = go.ids[[i]], 
-                                           PubMed.ID = df[i, "PubMed.ID"])
-    if(remap.node.ids) .annotateNodeIds(glist)
-    return(glist)
-}
-
-.annotateNodeIds <- function(glist, annotation, from = "UNIPROT", to = "SYMBOL")
-{
+    entrez.ids <- strsplit(df[["subunits.Entrez.IDs."]], " ?; ?")
+    symbols <- strsplit(df[["subunits.Gene.name."]], " ?; ?")
     for(i in seq_along(glist))
     {
-        graph::nodeDataDefaults(glist[[i]], to) <- NA 
-        #graph::nodeData(glist[[i]], graph::nodes(glist[[i]]), to) <- toEG[[i]]
-    }    
+        current <- glist[[i]]
+        gd <- list(ComplexID = df[i, "ComplexID"],
+                   ComplexName = df[i, "ComplexName"], 
+                   GO.ID = go.ids[[i]], 
+                   PubMed.ID = df[i, "PubMed.ID"])
+        glist[[i]]@graphData <- c(current@graphData, gd)
+        graph::nodeDataDefaults(glist[[i]], "ENTREZID") <- NA
+        
+        if(length(entrez.ids[[i]]) == graph::numNodes(current))
+            graph::nodeData(glist[[i]], 
+                            graph::nodes(glist[[i]]), 
+                            "ENTREZID") <- entrez.ids[[i]]
+        graph::nodeDataDefaults(glist[[i]], "SYMBOL") <- NA
+        if(length(symbols[[i]]) == graph::numNodes(current))
+            graph::nodeData(glist[[i]], 
+                            graph::nodes(glist[[i]]), 
+                            "SYMBOL") <- symbols[[i]]
+        
+    }
+    return(glist)
 }
 
 # since our complexes are completely connected we will need a little
