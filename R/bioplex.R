@@ -79,8 +79,6 @@ bioplex2graph <- function(bioplex.df)
 {
     stopifnot(is.data.frame(bioplex.df))
     
-    # get protein universe (= all proteins present in the network) 
-    # ie unique proteins being bait and/or prey 
     node.cols <- paste0("Uniprot", c("A", "B"))
     ftm <- as.matrix(bioplex.df[,node.cols])
     ind <- !duplicated(ftm)
@@ -92,7 +90,11 @@ bioplex2graph <- function(bioplex.df)
     
     # first approach before seeing that graph::ftM2graphNEL exists
     # maybe still useful for getting edge and node attribues onto the graph
+    #
+    # get protein universe (= all proteins present in the network) 
+    # ie unique proteins being bait and/or prey 
     # unodes <- unique(as.vector(ftm))
+    #
     # node.grid <- seq_along(unodes)
     # names(node.grid) <- unodes
     # 
@@ -155,8 +157,8 @@ bioplex2graph <- function(bioplex.df)
     # edge data annotation
     for(col in c("pW", "pNI", "pInt"))
     {
-      graph::edgeDataDefaults(gr, col) <- numeric(0L)
-      graph::edgeData(gr, df[,ucols[1]], df[,ucols[2]], col) <- df[,col]
+        graph::edgeDataDefaults(gr, col) <- numeric(0L)
+        graph::edgeData(gr, df[,ucols[1]], df[,ucols[2]], col) <- df[,col]
     }
       
     return(gr)

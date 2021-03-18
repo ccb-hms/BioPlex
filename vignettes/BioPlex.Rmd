@@ -457,10 +457,10 @@ cache.dir <- tools::R_user_dir("BioPlex", which = "cache")
 bfc <- BiocFileCache::BiocFileCache(cache.dir)
 ```
 
-and then as described in the 
+and then proceed as described in the
 [BiocFileCache vignette, Section 1.10](https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache)
 
-either via `cleanbfc()` or `removebfc()`.
+either via `cleanbfc()` to clean or `removebfc()` to remove your cache.
 
 To do a hard reset (use with caution!):
 
