@@ -5,11 +5,7 @@
 \title{basic data structure for sets of complexes or sets of pull-downs:
 a list of graph instances}
 \usage{
-corum2graphlist(
-  corum.df,
-  organism = "Human",
-  subunit.id.type = c("UNIPROT", "ENTREZID")
-)
+corum2graphlist(corum.df, subunit.id.type = c("UNIPROT", "ENTREZID"))
 }
 \description{
 basic data structure for sets of complexes or sets of pull-downs:

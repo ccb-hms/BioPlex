@@ -15,6 +15,8 @@ library(AnnotationDbi)
 library(ExpressionAtlas)
 library(graph)
 library(org.Hs.eg.db)
+library(ggplot2)
+library(ggnetwork)
 ```
 
 # Data resources
@@ -48,13 +50,41 @@ Two options for remapping (AnnotationDbi + org.db package):
 
 I think we should just remap for now, but at some point we should check to see if they had a good reason to leave those out.
 
+```{r}
+bp.293t$GeneA <- AnnotationDbi::mapIds(org.Hs.eg.db, 
+                                       keys = bp.293t$UniprotA, 
+                                       keytype = "UNIPROT",
+                                       column = "ENTREZID")
+bp.293t$GeneB <- AnnotationDbi::mapIds(org.Hs.eg.db, 
+                                       keys = bp.293t$UniprotB, 
+                                       keytype = "UNIPROT",
+                                       column = "ENTREZID")
+```
+
+### Data structures for Bioplex PPIs
+
+We can also represent a given version of the BioPlex PPI network for a given
+cell line, as one big graph where bait and prey relationship are represented 
+by directed edges from bait to prey.
+
+```{r bpgraph}
+bp.gr <- bioplex2graph(bp.293t)
+bp.gr
+head(graph::nodeData(bp.gr))
+head(graph::edgeData(bp.gr))
+```
+
+When starting off with ordinary dfs we'll be losing the ability
+to annotate graph-level annotation such as cell line, version, PMID, ...
+We might need to work with `DataFrame`s where we have `mcols` and `metadata`.
+
 ## CORUM complexes
 
 Complete set of
 [CORUM](http://mips.helmholtz-muenchen.de/corum/#download) complexes:
 
 ```{r corumALL}
-all <- getCorum(set = "all")
+all <- getCorum(set = "all", organism = "Human")
 dim(all)
 colnames(all)
 all[1:5, 1:5]
@@ -62,13 +92,13 @@ all[1:5, 1:5]
 
 Core set of complexes:
 ```{r corumCore}
-core <- getCorum(set = "core")
+core <- getCorum(set = "core", organism = "Human")
 dim(core)
 ```
 
 Complexes with splice variants:
 ```{r corumSplice}
-splice <- getCorum(set = "splice")
+splice <- getCorum(set = "splice", organism = "Human")
 dim(splice)
 ```
 
@@ -89,7 +119,7 @@ We can represent the CORUM complexes as list of character vectors.
 The names of the list are the complex IDs/names, and each element of the list is a vector of UniProt IDs for each complex.
 
 ```{r corum2list}
-core.list <- corum2list(core, organism = "Human", subunit.id.type = "UNIPROT")
+core.list <- corum2list(core, subunit.id.type = "UNIPROT")
 head(core.list)
 length(core.list)
 ```
@@ -101,9 +131,7 @@ We can also represent the CORUM complexes as a list of graph instances,
 where all nodes of a complex are connected to all other nodes of that complex with undirected edges.
 
 ```{r corum2glist}
-core.glist <- corum2graphlist(core, 
-                              organism = "Human", 
-                              subunit.id.type = "UNIPROT")
+core.glist <- corum2graphlist(core, subunit.id.type = "UNIPROT")
 head(core.glist)
 length(core.glist)
 core.glist[[1]]@graphData
@@ -129,13 +157,53 @@ Inspect the graph:
 plot(cdk2.glist[[1]], main = cdk2.glist[[1]]@graphData$ComplexName)
 ```
 
+We can easily convert a 
+[graph](https://bioconductor.org/packages/graph) object into an 
+[igraph](https://cran.r-project.org/package=igraph) object:
+
+```{r}
+ig <- igraph::graph_from_graphnel(core.glist[[4]])
+ig
+```
+
+This is, for example, useful for applying `igraph`-based plotting
+utilities such as 
+(ggnetwork)[https://cran.r-project.org/package=igraph]:
+
+```{r}
+ggplot(ig, aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_edges() +
+  geom_nodelabel(aes(label = SYMBOL)) +
+  theme_blank()
+```
+
+Now we can also easily pull out a BioPlex subnetwork for a CORUM complex
+of interest:
+
+```{r}
+n <- graph::nodes(cdk2.glist[[1]])
+bp.sgr <- graph::subGraph(n, bp.gr)
+bp.sgr
+```
+
+There seems to be an issue with BioPlex Uniprot IDs though, as they sometimes
+extend official Uniprot IDs such as Q8N7W2 via Q8N7W2-1, Q8N7W2-2, ... which
+are at least not in the Bioc mappings
+
+```{r}
+valid.uids <- AnnotationDbi::keys(org.Hs.eg.db, keytype = "UNIPROT")
+"Q8N7W2" %in% valid.uids
+"Q8N7W2-1" %in% valid.uids
+"Q8N7W2-2" %in% valid.uids
+```
+
 ## Transcriptome data
 
 ### HEK293 cells
 
 #### GSE122425
 
-Get RNA-seq data for HEK293 cells from GEO: 
+##### Get RNA-seq data for HEK293 cells from GEO: 
 [GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425)
 
 ```{r gse122425}
@@ -147,7 +215,7 @@ colData(se)
 rowData(se)
 ```
 
-Sanity check that the expressed genes are showing up as prey:
+##### Sanity check that the expressed genes are showing up as prey:
 
 ```{r prey-expression}
 bait <- unique(bp.293t$SymbolA)
@@ -209,7 +277,7 @@ summary(perms)
 (sum(perms >= 9346) + 1) / 1001
 ```
 
-Is there a relationship between prey frequency and prey expression level?
+##### Is there a relationship between prey frequency and prey expression level?
 ```{r prey-freq}
 prey.freq <- sort(table(bp.293t$SymbolB), decreasing = TRUE)
 head(prey.freq)
@@ -232,8 +300,7 @@ cor(as.vector(prey.freq),
 Does gene length has an impact? 
 ```{r, eval = FALSE}
 gc.gl <- EDASeq::getGeneLengthAndGCContent(names(se), 
-                                           org = "hsa", 
-                                           mode = "biomart")
+                                           org = "hsa")
 ```
 
 ```{r, eval = FALSE}
@@ -374,3 +441,35 @@ table(gr0[ind.prey] > 0)
 ## GGEA
 
 ## SGSeq
+
+# Advanced 
+
+## Caching
+
+Note that calling functions like `getCorum` or `getBioPlex` with argument
+`cache = FALSE` will automatically overwrite the corresponding object in your 
+cache. It is thus typically not required for a user to interact with the cache.
+
+For more extended control of the cache, use from within R:
+
+```{r cache}
+cache.dir <- tools::R_user_dir("BioPlex", which = "cache") 
+bfc <- BiocFileCache::BiocFileCache(cache.dir)
+```
+
+and then as described in the 
+[BiocFileCache vignette, Section 1.10](https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache)
+
+either via `cleanbfc()` or `removebfc()`.
+
+To do a hard reset (use with caution!):
+
+```{r rmCache, eval = FALSE}
+BiocFileCache::removebfc(bfc)
+```
+
+## SessionInfo
+
+```{r sessionInfo}
+sessionInfo()
+```

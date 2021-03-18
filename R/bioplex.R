@@ -38,6 +38,7 @@
 #' @export
 getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        version = c("3.0", "1.0", "2.0"),
+                       remap.gene.ids = FALSE,
                        cache = TRUE)
 {
     bioplex.url <- "https://bioplex.hms.harvard.edu/data/BioPlex_"
@@ -71,4 +72,92 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     # clean up & cache
     .cacheResource(bioplex, rname)
     return(bioplex)
+}
+
+#' @export
+bioplex2graph <- function(bioplex.df) 
+{
+    stopifnot(is.data.frame(bioplex.df))
+    
+    # get protein universe (= all proteins present in the network) 
+    # ie unique proteins being bait and/or prey 
+    node.cols <- paste0("Uniprot", c("A", "B"))
+    ftm <- as.matrix(bioplex.df[,node.cols])
+    ind <- !duplicated(ftm)
+    ftm <- ftm[ind,]
+    bioplex.df <- bioplex.df[ind,]
+    gr <- graph::ftM2graphNEL(ftm, edgemode = "directed")
+    gr <- .annotateBioplexGraph(gr, bioplex.df)
+    return(gr)
+    
+    # first approach before seeing that graph::ftM2graphNEL exists
+    # maybe still useful for getting edge and node attribues onto the graph
+    # unodes <- unique(as.vector(ftm))
+    # node.grid <- seq_along(unodes)
+    # names(node.grid) <- unodes
+    # 
+    # bait <- bioplex.df[,node.cols[1]]
+    # prey <- bioplex.df[,node.cols[2]]
+    # 
+    # indA <- node.grid[bait]
+    # indB <- node.grid[prey]
+    # 
+    # edgeL <- split(indB, indA)
+    # names(edgeL) <- unique(bait)
+    # 
+    # prey.only <- setdiff(prey, bait)
+    # prey.only.edgeL <- replicate(length(prey.only), integer(0L), simplify = FALSE)
+    # names(prey.only.edgeL) <- prey.only
+    # edgeL <- c(edgeL, prey.only.edgeL)
+    # graph::graphNEL(nodes = unodes, edgeL = edgeL, edgemode = "directed")
+}
+
+# we will want to annotate these somewhat
+#     ‘edgeData’: An ‘attrData’ instance for edge attributes.
+#
+#    ‘nodeData’: An ‘attrData’ instance for node attributes.
+#
+#    ‘graphData’: A ‘list’ for graph-level attributes. Only mandatory
+#        list item is ‘edgemode’ which indicates whether edges are
+#       ‘"directed"’ or ‘"undirected"’
+#
+.annotateBioplexGraph <- function(gr, df)
+{
+    # create maps to annotate node data:
+    # 1. uniprot -> symbol
+    # 2. uniprot -> entrez
+    ucols <- paste0("Uniprot", c("A", "B"))
+    scols <- paste0("Symbol", c("A", "B"))
+    ecols <- paste0("Gene", c("A", "B"))
+    
+    uids <- unlist(df[,ucols])
+    sids <- unlist(df[,scols])
+    eids <- unlist(df[,ecols])
+    
+    ind <- !duplicated(uids)
+    uids <- uids[ind]
+    up2sym <- sids[ind]
+    names(up2sym) <- uids
+    up2eg <- eids[ind]
+    names(up2eg) <- uids
+    
+    # graph data annotation
+    # when starting off with a ordinary dfs we'll be losing the ability
+    # to annotate graph-level annotation such as cell.line, version, PMID, ...
+    # we might need to work with DataFrames where we have mcols and metadata
+    
+    # node data annotation             
+    graph::nodeDataDefaults(gr, "ENTREZID") <- NA
+    graph::nodeData(gr, graph::nodes(gr), "ENTREZID") <- up2eg[graph::nodes(gr)]
+    graph::nodeDataDefaults(gr, "SYMBOL") <- NA
+    graph::nodeData(gr, graph::nodes(gr), "SYMBOL") <- up2sym[graph::nodes(gr)]
+    
+    # edge data annotation
+    for(col in c("pW", "pNI", "pInt"))
+    {
+      graph::edgeDataDefaults(gr, col) <- numeric(0L)
+      graph::edgeData(gr, df[,ucols[1]], df[,ucols[2]], col) <- df[,col]
+    }
+      
+    return(gr)
 }

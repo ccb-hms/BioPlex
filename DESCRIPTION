@@ -25,6 +25,9 @@ Imports:
 Suggests: 
     AnnotationDbi,
     ExpressionAtlas,
+    ggnetwork,
+    ggplot2,
+    igraph,
     knitr,
     org.Hs.eg.db,
     rmarkdown,

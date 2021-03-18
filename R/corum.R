@@ -32,6 +32,8 @@
 #' @importFrom utils download.file unzip
 #' @export
 getCorum <- function(set = c("all", "core", "splice"),
+                     organism = "Human",
+                     remap.gene.ids = FALSE,
                      cache = TRUE)
 {
     corum.url <- "http://mips.helmholtz-muenchen.de/corum/download"
@@ -51,22 +53,37 @@ getCorum <- function(set = c("all", "core", "splice"),
     unzip(set)
     set <- sub(".zip$", "", set)
     corum <- read.delim(set)
-
+    
+    # organism
+    if(!is.null(organism))
+    {
+        stopifnot(organism %in% corum.df$Organism)
+        corum <- subset(corum, Organism %in% organism)
+    }
+    
+    # remap gene ids
+    if(remap.gene.ids) corum <- .remapGeneIds(corum)
+    
     # clean up & cache
     .cacheResource(corum, rname)
     file.remove(c(set, paste0(set, ".zip")))
     return(corum) 
 }
 
+.remapGeneIds <- function(df, what = c("corum", "bioplex"))
+{
+    if(any(df$Organism != "Human")) 
+        stop("Gene ID re-mapping is currently only supported for human")
+    return(df)
+}
+
+
 #' @export
 corum2list <- function(corum.df, 
-                       organism = "Human",
                        subunit.id.type = c("UNIPROT", "ENTREZID"))
 {
+    stopifnot(is.data.frame(corum.df))
     subunit.id.type <- match.arg(subunit.id.type)
-    stopifnot(organism %in% corum.df$Organism)
-    
-    corum.df <- subset(corum.df, Organism == organism)
     subunit.id.type <- ifelse(subunit.id.type == "UNIPROT", "UniProt", "Entrez")
     id.col <- paste0("subunits.", subunit.id.type, ".IDs.")
     
@@ -80,10 +97,9 @@ corum2list <- function(corum.df,
 #' a list of graph instances
 #' @export
 corum2graphlist <- function(corum.df, 
-                            organism = "Human",
                             subunit.id.type = c("UNIPROT", "ENTREZID"))
 {
-    cl <- corum2list(corum.df, organism, subunit.id.type)
+    cl <- corum2list(corum.df, subunit.id.type)
     gl <- lapply(cl, .completelyConnected)
     gl <- .annotateGraphList(gl, corum.df)
     return(gl)

@@ -74,3 +74,24 @@ The STAR genome index is saved in our group folder:
 
 Each sample's fastq file was ~30 GB, and each alignment took ~15 minutes of wall time and 30 GB of RAM, running with 16 threads on O2.
 
+## Cleaning your cache 
+
+Note that calling functions like `getCorum` or `getBioPlex` with argument
+`cache = FALSE` will automatically overwrite the corresponding object in your 
+cache. It is thus typically not required for a user to interact with the cache.
+
+For more extended control of the cache, use from within R:
+
+```
+cache.dir <- tools::R_user_dir("BioPlex", which = "cache") 
+bfc <- BiocFileCache::BiocFileCache(cache.dir)
+```
+
+and then as described in the
+[BiocFileCache vignette, Section 1.10](https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache)
+
+either via `cleanbfc()` or `removebfc()`
+
+To do a hard reset (use with caution!):
+
+BiocFileCache::removebfc(bfc)

@@ -4,7 +4,12 @@
 \alias{getCorum}
 \title{Obtain CORUM protein complex data}
 \usage{
-getCorum(set = c("all", "core", "splice"), cache = TRUE)
+getCorum(
+  set = c("all", "core", "splice"),
+  organism = "Human",
+  remap.gene.ids = FALSE,
+  cache = TRUE
+)
 }
 \arguments{
 \item{set}{character. Valid options include:

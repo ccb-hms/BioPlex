@@ -7,6 +7,7 @@
 getBioPlex(
   cell.line = c("293T", "HCT116"),
   version = c("3.0", "1.0", "2.0"),
+  remap.gene.ids = FALSE,
   cache = TRUE
 )
 }
