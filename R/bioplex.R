@@ -24,6 +24,11 @@
 #' and \code{"3.0"} for 293T cells. For HCT116 cells, only \code{"1.0"} is 
 #' available. 
 #' Defaults to \code{"3.0"}.
+#' @param remap.uniprot.ids logical. Should the protein-to-gene mappings from CORUM
+#' (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
+#' functionality? Currently only supported in combination with \code{organism = "Human"}.
+#' Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
+#' See details.
 #' @param cache logical. Should a locally cached version used if available?
 #' Defaults to \code{TRUE}.
 #' @return A \code{data.frame}. 
@@ -38,7 +43,7 @@
 #' @export
 getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        version = c("3.0", "1.0", "2.0"),
-                       remap.gene.ids = FALSE,
+                       remap.uniprot.ids = FALSE,
                        cache = TRUE)
 {
     bioplex.url <- "https://bioplex.hms.harvard.edu/data/BioPlex_"

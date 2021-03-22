@@ -12,10 +12,9 @@ output:
 ```{r, message = FALSE}
 library(BioPlex)
 library(AnnotationDbi)
+library(AnnotationHub)
 library(ExpressionAtlas)
 library(graph)
-library(org.Hs.eg.db)
-library(ggplot2)
 library(ggnetwork)
 ```
 
@@ -49,17 +48,6 @@ Two options for remapping (AnnotationDbi + org.db package):
 2. within `getBioPlex` (imports, logical argument `remap.gene.ids`) 
 
 I think we should just remap for now, but at some point we should check to see if they had a good reason to leave those out.
-
-```{r}
-bp.293t$GeneA <- AnnotationDbi::mapIds(org.Hs.eg.db, 
-                                       keys = bp.293t$UniprotA, 
-                                       keytype = "UNIPROT",
-                                       column = "ENTREZID")
-bp.293t$GeneB <- AnnotationDbi::mapIds(org.Hs.eg.db, 
-                                       keys = bp.293t$UniprotB, 
-                                       keytype = "UNIPROT",
-                                       column = "ENTREZID")
-```
 
 ### Data structures for Bioplex PPIs
 
@@ -188,10 +176,17 @@ bp.sgr
 
 There seems to be an issue with BioPlex Uniprot IDs though, as they sometimes
 extend official Uniprot IDs such as Q8N7W2 via Q8N7W2-1, Q8N7W2-2, ... which
-are at least not in the Bioc mappings
+are at least not in the Bioc mappings 
+(update: I think we need to use here the Ensembl mapping instead)
 
 ```{r}
-valid.uids <- AnnotationDbi::keys(org.Hs.eg.db, keytype = "UNIPROT")
+ah <- AnnotationHub::AnnotationHub()
+ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+orgdb <- ahdb[[length(ahdb)]]
+```
+
+```{r}
+valid.uids <- AnnotationDbi::keys(orgdb, keytype = "UNIPROT")
 "Q8N7W2" %in% valid.uids
 "Q8N7W2-1" %in% valid.uids
 "Q8N7W2-2" %in% valid.uids
@@ -398,7 +393,7 @@ length(prey)
 Map prey to ENSEMBL gene IDs:
 
 ```{r mapIDs-hct116}
-prey <- AnnotationDbi::mapIds(org.Hs.eg.db, 
+prey <- AnnotationDbi::mapIds(orgdb, 
                               keytype = "ENTREZID", 
                               column = "ENSEMBL",
                               keys = as.character(prey))

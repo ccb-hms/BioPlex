@@ -24,11 +24,9 @@ Imports:
     utils
 Suggests: 
     AnnotationDbi,
+    AnnotationHub,
     ExpressionAtlas,
     ggnetwork,
-    ggplot2,
     igraph,
     knitr,
-    org.Hs.eg.db,
-    rmarkdown,
-    pkgdown
+    rmarkdown

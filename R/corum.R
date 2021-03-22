@@ -22,6 +22,14 @@
 #' \item \code{"splice"}: complexes with splice variants.
 #' }
 #' Defaults to \code{"all"}.
+#' @param organism character. Use \code{NULL} to not subset by organism.
+#' Defaults to \code{"Human"} which restricts the data to human protein complexes
+#' only.
+#' @param remap.uniprot.ids logical. Should the protein-to-gene mappings from CORUM
+#' (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
+#' functionality? Currently only supported in combination with \code{organism = "Human"}.
+#' Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
+#' See details.
 #' @param cache logical. Should a locally cached version used if available?
 #' Defaults to \code{TRUE}.
 #' @return A \code{data.frame}. 
@@ -29,16 +37,20 @@
 #' @examples
 #' # Obtain the core set of CORUM complexes
 #' core <- getCorum(set = "core")
-#' @importFrom utils download.file unzip
+#' @importFrom utils download.file relist unzip
 #' @export
 getCorum <- function(set = c("all", "core", "splice"),
                      organism = "Human",
-                     remap.gene.ids = FALSE,
+                     remap.uniprot.ids = FALSE,
                      cache = TRUE)
 {
     corum.url <- "http://mips.helmholtz-muenchen.de/corum/download"
     set <- match.arg(set)
-    rname <- paste("corum", set, sep = "-")
+    rname <- paste("corum", 
+                   set,
+                   ifelse(is.null(organism), "all", organism),
+                   ifelse(remap.uniprot.ids, "remapped", "original"),
+                   sep = "-")
 
     # should a cache version be used?
     if(cache)
@@ -57,12 +69,12 @@ getCorum <- function(set = c("all", "core", "splice"),
     # organism
     if(!is.null(organism))
     {
-        stopifnot(organism %in% corum.df$Organism)
+        stopifnot(organism %in% corum$Organism)
         corum <- subset(corum, Organism %in% organism)
     }
     
     # remap gene ids
-    if(remap.gene.ids) corum <- .remapGeneIds(corum)
+    if(remap.uniprot.ids) corum <- .remapUniprotIds(corum)
     
     # clean up & cache
     .cacheResource(corum, rname)
@@ -70,10 +82,47 @@ getCorum <- function(set = c("all", "core", "splice"),
     return(corum) 
 }
 
-.remapGeneIds <- function(df, what = c("corum", "bioplex"))
+.remapUniprotIds <- function(df)
 {
     if(any(df$Organism != "Human")) 
         stop("Gene ID re-mapping is currently only supported for human")
+    if(!requireNamespace("AnnotationHub"))
+        stop("Please install the 'AnnotationHub' package for gene ID mapping")
+
+    # relevant column names
+    id.col <- "subunits.UniProt.IDs."
+    eg.col <- "subunits.Entrez.IDs."
+    sym.col <- "subunits.Gene.name."
+    
+    # obtain latest ensembl mappings from AnnotationHub
+    suppressMessages({
+        ah <- AnnotationHub::AnnotationHub()
+        ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+        orgdb <- ahdb[[length(ahdb)]]
+    })
+    
+    # map Uniprot IDs to Entrez IDs and to symbols
+    unip <- strsplit(df[[id.col]], " ?; ?")
+    ulnip <- unlist(unip)
+    uunip <- unique(ulnip)
+    
+    suppressMessages({
+        egs <- AnnotationDbi::mapIds(orgdb,
+                                      keys = uunip,
+                                      keytype = "UNIPROT",
+                                      column = "ENTREZID")
+        syms <- AnnotationDbi::mapIds(orgdb, 
+                                      keys = uunip, 
+                                      keytype = "UNIPROT", 
+                                      column = "SYMBOL")
+    })
+    
+    # replace corresponding columns in corum df
+    egl <- relist(unname(egs[ulnip]), unip)
+    df[[eg.col]] <- vapply(egl, paste, character(1), collapse = ";") 
+    syl <- relist(unname(syms[ulnip]), unip)
+    df[[sym.col]] <- vapply(syl, paste, character(1), collapse = ";")
+    
     return(df)
 }
 

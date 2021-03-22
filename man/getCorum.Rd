@@ -7,7 +7,7 @@
 getCorum(
   set = c("all", "core", "splice"),
   organism = "Human",
-  remap.gene.ids = FALSE,
+  remap.uniprot.ids = FALSE,
   cache = TRUE
 )
 }
@@ -19,6 +19,16 @@ getCorum(
 \item \code{"splice"}: complexes with splice variants.
 }
 Defaults to \code{"all"}.}
+
+\item{organism}{character. Use \code{NULL} to not subset by organism.
+Defaults to \code{"Human"} which restricts the data to human protein complexes
+only.}
+
+\item{remap.uniprot.ids}{logical. Should the protein-to-gene mappings from CORUM
+(i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
+functionality? Currently only supported in combination with \code{organism = "Human"}.
+Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
+See details.}
 
 \item{cache}{logical. Should a locally cached version used if available?
 Defaults to \code{TRUE}.}
