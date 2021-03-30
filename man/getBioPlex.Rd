@@ -24,10 +24,10 @@ and \code{"3.0"} for 293T cells. For HCT116 cells, only \code{"1.0"} is
 available.
 Defaults to \code{"3.0"}.}
 
-\item{remap.uniprot.ids}{logical. Should the protein-to-gene mappings from CORUM
+\item{remap.uniprot.ids}{logical. Should the protein-to-gene mappings from BioPlex
 (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
-functionality? Currently only supported in combination with \code{organism = "Human"}.
-Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
+functionality?
+Defaults to \code{FALSE} which will then keep the mappings provided by BioPlex.
 See details.}
 
 \item{cache}{logical. Should a locally cached version used if available?

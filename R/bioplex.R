@@ -24,10 +24,10 @@
 #' and \code{"3.0"} for 293T cells. For HCT116 cells, only \code{"1.0"} is 
 #' available. 
 #' Defaults to \code{"3.0"}.
-#' @param remap.uniprot.ids logical. Should the protein-to-gene mappings from CORUM
+#' @param remap.uniprot.ids logical. Should the protein-to-gene mappings from BioPlex
 #' (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
-#' functionality? Currently only supported in combination with \code{organism = "Human"}.
-#' Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
+#' functionality?
+#' Defaults to \code{FALSE} which will then keep the mappings provided by BioPlex.
 #' See details.
 #' @param cache logical. Should a locally cached version used if available?
 #' Defaults to \code{TRUE}.
@@ -74,16 +74,33 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     ppi.file <- paste0(bioplex.url, file.ext)
     bioplex <- read.delim(ppi.file)
     
+    # remap gene ids
+    if(remap.uniprot.ids) bioplex <- .remapUniprotIdsBP(bioplex)
+    
     # clean up & cache
     .cacheResource(bioplex, rname)
     return(bioplex)
 }
 
+#' @title Representation of BioPlex PPIs in a graph data structure
+#' @description Representation of BioPlex PPIs in a \code{graphNEL} object
+#' from the \code{graph} package.
+#' @param bioplex.df a \code{data.frame} storing the Bioplex PPIs in a flat
+#' from-to format. Typically obtained via \code{\link{getBioplex}}.
+#' @return An object of class \code{graphNEL}. 
+#' @references BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
+#' @seealso \code{\link{getBioplex}}, \code{\link{ftM2graphNEL}}
+#' @examples
+#' # (1) Obtain the latest version of the 293T PPI network
+#' bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
+#' 
+#' # (2) Turn the data into a graph 
+#' bp.gr <- bioplex2graph(bp.293t)
+#' 
 #' @export
 bioplex2graph <- function(bioplex.df) 
 {
     stopifnot(is.data.frame(bioplex.df))
-    
     node.cols <- paste0("Uniprot", c("A", "B"))
     ftm <- as.matrix(bioplex.df[,node.cols])
     ind <- !duplicated(ftm)
@@ -117,6 +134,21 @@ bioplex2graph <- function(bioplex.df)
     # names(prey.only.edgeL) <- prey.only
     # edgeL <- c(edgeL, prey.only.edgeL)
     # graph::graphNEL(nodes = unodes, edgeL = edgeL, edgemode = "directed")
+}
+
+#' @export
+annotatePFAM <- function(bp.gr, orgdb, mode = c("bioc", "uniprot"))
+{
+  mode <- match.arg(mode)
+  uids <- sub("-[0-9]+$", "", graph::nodes(bp.gr))
+  up2pfam <- AnnotationDbi::mapIds(orgdb, 
+                                   keys = uids, 
+                                   keytype = "UNIPROT", 
+                                   column = "PFAM", 
+                                   multiVals = "list")
+  graph::nodeDataDefaults(bp.gr, "PFAM") <- NA
+  graph::nodeData(bp.gr, graph::nodes(bp.gr), "PFAM") <- up2pfam
+  return(bp.gr)
 }
 
 # we will want to annotate these somewhat
@@ -168,3 +200,39 @@ bioplex2graph <- function(bioplex.df)
       
     return(gr)
 }
+
+.remapUniprotIdsBP <- function(df)
+{
+    stopifnot(is.data.frame(df))
+    uids1 <- sub("-[0-9]+$", "", df$UniprotA)
+    uids2 <- sub("-[0-9]+$", "", df$UniprotB)
+    
+    suppressMessages({
+      ah <- AnnotationHub::AnnotationHub()
+      ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+      orgdb <- ahdb[[length(ahdb)]]
+    })
+    
+    suppressMessages({
+      df$GeneA <- AnnotationDbi::mapIds(orgdb,
+                                   keys = uids1,
+                                   keytype = "UNIPROT",
+                                   column = "ENTREZID")
+      df$GeneB <- AnnotationDbi::mapIds(orgdb,
+                                        keys = uids2,
+                                        keytype = "UNIPROT",
+                                        column = "ENTREZID")
+      df$SymbolA <- AnnotationDbi::mapIds(orgdb, 
+                                          keys = uids1, 
+                                          keytype = "UNIPROT", 
+                                          column = "SYMBOL")
+      df$SymbolB <- AnnotationDbi::mapIds(orgdb, 
+                                          keys = uids2, 
+                                          keytype = "UNIPROT", 
+                                          column = "SYMBOL")
+    })
+    
+    return(df)
+}
+
+

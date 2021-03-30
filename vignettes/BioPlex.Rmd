@@ -20,10 +20,30 @@ library(ggnetwork)
 
 # Data resources
 
+## General
+
+OrgDb package for human:
+```{r}
+ah <- AnnotationHub::AnnotationHub()
+ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+orgdb <- ahdb[[length(ahdb)]]
+orgdb
+keytypes(orgdb)
+```
+
+
+EnsDb package for human:
+```{r}
+ahdb <- AnnotationHub::query(ah, c("ensDb", "Homo sapiens"))
+ensdb <- ahdb[[length(ahdb)]]
+ensdb
+keytypes(ensdb)
+```
+
+
 ## BioPlex PPIs
 
 [Available networks](https://bioplex.hms.harvard.edu/interactions.php) include: 
-
 * BioPlex 293T cells (versions 1.0, 2.0, and 3.0)
 * BioPlex HCT116 cells (version 1.0)
 
@@ -38,21 +58,31 @@ head(bp.293t)
 bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
 head(bp.hct116)
 ```
+Note: 
+
 ### ID mapping
 
-Point out that those annotations might not be the best, they seem to leave out a bunch of mappings from Uniprot to EG (etc) that Bioc annotation finds.  
+The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot
 
-Two options for remapping (AnnotationDbi + org.db package):
+We can update those based on Bioc annotation functionality:  
 
-1. vignette/suggests
-2. within `getBioPlex` (imports, logical argument `remap.gene.ids`) 
+```{r bioplex-remap, eval = FALSE}
+bp.293t.remapped <- getBioPlex(cell.line = "293T",
+                               version = "3.0",
+                               remap.uniprot.ids = TRUE)
+```
 
-I think we should just remap for now, but at some point we should check to see if they had a good reason to leave those out.
+Note: this is currently based on the gene-level mappings in the
+orgdb package for human, and those might not be optimal for mapping UniPprot
+isoform identifiers (eg. "Q8N7W2-1" and "Q8N7W2-2") used in BioPlex. 
+The remapping currently simply drops the dash-N extension and we thus might
+want to rather base that at one point on the official 
+[UniProt ID mapping file](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping).
 
-### Data structures for Bioplex PPIs
+### Data structures for BioPlex PPIs
 
 We can also represent a given version of the BioPlex PPI network for a given
-cell line, as one big graph where bait and prey relationship are represented 
+cell line as one big graph where bait and prey relationship are represented 
 by directed edges from bait to prey.
 
 ```{r bpgraph}
@@ -65,6 +95,16 @@ head(graph::edgeData(bp.gr))
 When starting off with ordinary dfs we'll be losing the ability
 to annotate graph-level annotation such as cell line, version, PMID, ...
 We might need to work with `DataFrame`s where we have `mcols` and `metadata`.
+
+
+### PFAM domains
+
+We can easily add PFAM domain annotations to the node metadata:
+
+```{r pfam}
+bp.gr <- annotatePFAM(bp.gr, orgdb)
+head(graph::nodeData(bp.gr, graph::nodes(bp.gr), "PFAM"))
+```
 
 ## CORUM complexes
 
@@ -92,19 +132,21 @@ dim(splice)
 
 ### ID mapping
 
-Point out that those annotations might not be the best, they seem to leave out a bunch of mappings from Uniprot to EG (etc) that Bioc annotation finds.  
+The protein-to-gene mappings from CORUM (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) might not be fully up-to-date. 
 
-Two options for remapping (AnnotationDbi + org.db package):
+We can update those based on Bioc annotation functionality:  
 
-1. vignette/suggests
-2. within `getCorum` (imports, logical argument `remap.gene.ids`) 
-
-I think we should just remap for now, but at some point we should check to see if they had a good reason to leave those out.
+```{r corum-remap}
+core.remapped <- getCorum(set = "core", 
+                          organism = "Human",
+                          remap.uniprot.ids = TRUE)
+```
 
 ### Data structures for CORUM complexes 
 
 We can represent the CORUM complexes as list of character vectors.
-The names of the list are the complex IDs/names, and each element of the list is a vector of UniProt IDs for each complex.
+The names of the list are the complex IDs/names, and each element of the list is
+a vector of UniProt IDs for each complex.
 
 ```{r corum2list}
 core.list <- corum2list(core, subunit.id.type = "UNIPROT")
@@ -112,11 +154,13 @@ head(core.list)
 length(core.list)
 ```
 
-If we'd like to add metadata in a more structured form to each complex, a suitable option is a 
+If we'd like to add metadata in a more structured form to each complex,
+a suitable option is a 
 [GeneSetCollection](https://bioconductor.org/packages/GSEABase).
 
 We can also represent the CORUM complexes as a list of graph instances,
-where all nodes of a complex are connected to all other nodes of that complex with undirected edges.
+where all nodes of a complex are connected to all other nodes of that complex
+with undirected edges.
 
 ```{r corum2glist}
 core.glist <- corum2graphlist(core, subunit.id.type = "UNIPROT")
@@ -177,13 +221,6 @@ bp.sgr
 There seems to be an issue with BioPlex Uniprot IDs though, as they sometimes
 extend official Uniprot IDs such as Q8N7W2 via Q8N7W2-1, Q8N7W2-2, ... which
 are at least not in the Bioc mappings 
-(update: I think we need to use here the Ensembl mapping instead)
-
-```{r}
-ah <- AnnotationHub::AnnotationHub()
-ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-orgdb <- ahdb[[length(ahdb)]]
-```
 
 ```{r}
 valid.uids <- AnnotationDbi::keys(orgdb, keytype = "UNIPROT")
@@ -191,6 +228,8 @@ valid.uids <- AnnotationDbi::keys(orgdb, keytype = "UNIPROT")
 "Q8N7W2-1" %in% valid.uids
 "Q8N7W2-2" %in% valid.uids
 ```
+
+Update: I think we need to use here the Ensembl mapping instead
 
 ## Transcriptome data
 
@@ -454,7 +493,6 @@ bfc <- BiocFileCache::BiocFileCache(cache.dir)
 
 and then proceed as described in the
 [BiocFileCache vignette, Section 1.10](https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache)
-
 either via `cleanbfc()` to clean or `removebfc()` to remove your cache.
 
 To do a hard reset (use with caution!):
