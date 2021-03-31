@@ -22,24 +22,35 @@ library(ggnetwork)
 
 ## General
 
-OrgDb package for human:
-```{r}
+Connect to 
+[AnnotationHub](http://bioconductor.org/packages/AnnotationHub):
+
+```{r ahub}
 ah <- AnnotationHub::AnnotationHub()
+```
+
+Connect to 
+[ExperimentHub](http://bioconductor.org/packages/ExperimentHub):
+
+```{r ehub}
+eh <- ExperimentHub::ExperimentHub()
+```
+
+OrgDb package for human:
+```{r orgdb}
 ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
 orgdb <- ahdb[[length(ahdb)]]
 orgdb
 keytypes(orgdb)
 ```
 
-
 EnsDb package for human:
-```{r}
+```{r ensdb}
 ahdb <- AnnotationHub::query(ah, c("ensDb", "Homo sapiens"))
 ensdb <- ahdb[[length(ahdb)]]
 ensdb
 keytypes(ensdb)
 ```
-
 
 ## BioPlex PPIs
 
@@ -467,6 +478,49 @@ table(gr0[ind.prey] == 2)
 # prey: expressed in at least one measurement
 table(gr0[ind.prey] > 0)
 ```
+
+## Proteome data
+
+### CCLE
+
+Pull the data from ExperimentHub:
+```{r ccle-proteom}
+ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
+ccle.prot <- ehdb[[length(ehdb)]]
+ccle.prot <- as.data.frame(ccle.prot)
+```
+Explore the data:
+```{r ccle-proteom2}
+dim(ccle.prot)
+colnames(ccle.prot)
+head(ccle.prot)
+```
+
+Restrict to HCT116:
+
+```{r ccle-prot-hct116}
+ccle.prot.hct116 <- subset(ccle.prot, cell_line == "HCT116_LARGE_INTESTINE")
+dim(ccle.prot.hct116)
+head(ccle.prot.hct116)
+```
+
+Or turn into a `SummarizedExperiment` for convenience (we can restrict
+this to selected cell lines, but here we keep all cell lines):
+
+```{r ccle-prot-se}
+se <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
+assay(se)[1:5, 1:5]
+assay(se)[1:5, "HCT116"]
+rowData(se)
+```
+
+### Relative protein expression data (preprint)
+
+Huttlin_BioPlex3_Table_S4.xlsx contains the relative protein expression data comparing 293T and HCT116 cells.
+
+That should live on O2 for the moment, and can be wrapped into an R data
+package or uploaded to ExperimentHub. Once published there will be other
+avenues to pull the data (web request, reference DB, ...).
 
 # Downstream analysis
 
