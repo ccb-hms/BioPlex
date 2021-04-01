@@ -516,11 +516,21 @@ rowData(se)
 
 ### Relative protein expression data (preprint)
 
-Huttlin_BioPlex3_Table_S4.xlsx contains the relative protein expression data comparing 293T and HCT116 cells.
+Huttlin_BioPlex3_Table_S4.xlsx contains the relative protein expression data comparing 293T and HCT116 cells. This is a supplementary table that will be published with the upcoming BioPlex 3 paper. 
 
-That should live on O2 for the moment, and can be wrapped into an R data
+That lives on dropbox for the moment, and can be wrapped into an R data
 package or uploaded to ExperimentHub. Once published there will be other
 avenues to pull the data (web request, reference DB, ...).
+
+```{r bp.prot}
+bp.prot <- getBioplexProteome()
+assay(bp.prot)[1:5,1:5]
+colData(bp.prot)
+rowData(bp.prot)
+```
+
+There are 10 channels - 5 replicates for 293T and 5 for HCT116.
+Based on the way we collect these data, we end up viewing them so that they're scaled to add up to 100%.  Essentially, we think of them as ten variably-sized slices of a pie, with five each allotted to each cell line. Modeling the data this way presents some statistical complications, as I'm sure you can imagine, but it most closely aligns with how our data work.
 
 # Downstream analysis
 

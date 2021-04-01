@@ -78,3 +78,51 @@ ccleProteome2SummarizedExperiment <- function(df, cell.line = "HCT116")
     
     return(se)
 }
+
+#' @title Obtain BioPlex3 proteome data
+#' @description Functionality for retrieving the BioPlex3 protein expression 
+#' data comparing expression in the HCT116 and the 293T cell lines.
+#' @param cache logical. Should a locally cached version used if available?
+#' Defaults to \code{TRUE}.
+#' @return A \code{\linkS4class{SummarizedExperiment}} storing protein expression
+#' data for the both cell line(s) with 5 replicates each. 
+#' @references BioPlex: \url{https://bioplex.hms.harvard.edu}
+#' @examples
+#' 
+#'   se <- getBioplexProteome()
+#'   
+#' @export
+getBioplexProteome <- function(cache = TRUE)
+{
+    drop.url <- file.path("https://dl.dropboxusercontent.com/s",
+                        "bqgmouq4jl1p0ks/BioPlex3_HCT_vs_HEK_proteomics.csv")
+  
+    # should a cached version be used?
+    rname <- "bp.prot"
+    if(cache)
+    {   
+        se <- .getResourceFromCache(rname)
+        if(!is.null(se)) return(se)
+    }   
+  
+    # read and extract the data
+    dat <- read.csv(drop.url)
+    ind <- grep("scaled$", colnames(dat))
+    emat <- dat[,ind]
+    
+    ids <- strsplit(dat[,"Protein.Id"], "\\|")
+    ids <- vapply(ids, `[`, character(1), x = 2)
+    rownames(emat) <- ids
+    colnames(emat) <- sub(".scaled$", "", colnames(emat))
+    
+    # turn into a SummarizedExperiment
+    se <- SummarizedExperiment(assays = list(exprs = emat))
+    se$cell.line <- rep(c("HCT116", "293T"), each = 5)
+    rcols <- c("GeneID", "Gene.Symbol", "X..Peps", "Log2ratio", "AdjPValue")
+    rowData(se) <- dat[,rcols]
+    colnames(rowData(se)) <- c("ENTREZID", "SYMBOL", 
+                               "nr.peptides", "log2ratio", "adj.pvalue")
+    rowData(se)$ENTREZID <- as.character(rowData(se)$ENTREZID)
+    .cacheResource(se, rname)
+    return(se)
+}
