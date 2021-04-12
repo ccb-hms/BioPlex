@@ -484,13 +484,14 @@ table(gr0[ind.prey] > 0)
 ### CCLE
 
 Pull the data from ExperimentHub:
-```{r ccle-proteom}
+```{r ccle-proteom, eval = FALSE}
 ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
 ccle.prot <- ehdb[[length(ehdb)]]
 ccle.prot <- as.data.frame(ccle.prot)
 ```
+
 Explore the data:
-```{r ccle-proteom2}
+```{r ccle-proteom2, eval = FALSE}
 dim(ccle.prot)
 colnames(ccle.prot)
 head(ccle.prot)
@@ -498,7 +499,7 @@ head(ccle.prot)
 
 Restrict to HCT116:
 
-```{r ccle-prot-hct116}
+```{r ccle-prot-hct116, eval = FALSE}
 ccle.prot.hct116 <- subset(ccle.prot, cell_line == "HCT116_LARGE_INTESTINE")
 dim(ccle.prot.hct116)
 head(ccle.prot.hct116)
@@ -507,7 +508,7 @@ head(ccle.prot.hct116)
 Or turn into a `SummarizedExperiment` for convenience (we can restrict
 this to selected cell lines, but here we keep all cell lines):
 
-```{r ccle-prot-se}
+```{r ccle-prot-se, eval = FALSE}
 se <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
 assay(se)[1:5, 1:5]
 assay(se)[1:5, "HCT116"]
@@ -522,7 +523,7 @@ That lives on dropbox for the moment, and can be wrapped into an R data
 package or uploaded to ExperimentHub. Once published there will be other
 avenues to pull the data (web request, reference DB, ...).
 
-```{r bp.prot}
+```{r bp.prot, eval = FALSE}
 bp.prot <- getBioplexProteome()
 assay(bp.prot)[1:5,1:5]
 colData(bp.prot)
