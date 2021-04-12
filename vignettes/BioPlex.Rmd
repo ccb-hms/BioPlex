@@ -25,19 +25,19 @@ library(ggnetwork)
 Connect to 
 [AnnotationHub](http://bioconductor.org/packages/AnnotationHub):
 
-```{r ahub}
+```{r ahub, message = FALSE}
 ah <- AnnotationHub::AnnotationHub()
 ```
 
 Connect to 
 [ExperimentHub](http://bioconductor.org/packages/ExperimentHub):
 
-```{r ehub}
+```{r ehub, message = FALSE}
 eh <- ExperimentHub::ExperimentHub()
 ```
 
 OrgDb package for human:
-```{r orgdb}
+```{r orgdb, message = FALSE}
 ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
 orgdb <- ahdb[[length(ahdb)]]
 orgdb
@@ -45,7 +45,7 @@ keytypes(orgdb)
 ```
 
 EnsDb package for human:
-```{r ensdb}
+```{r ensdb, message = FALSE}
 ahdb <- AnnotationHub::query(ah, c("ensDb", "Homo sapiens"))
 ensdb <- ahdb[[length(ahdb)]]
 ensdb
