@@ -1,5 +1,5 @@
 # BioPlex
-Analysis of PPI data from Gygi lab
+R-side access to PPI data from Gygi lab
 
 ## Installation
 
