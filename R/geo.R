@@ -41,9 +41,9 @@ getGSE122425 <- function(cache = TRUE)
     ind <- paste(ind, "SEQ", sep = ".")
     ind <- paste0(ind, rep(1:3, 2))    
 
-    raw <- cont[,ind]    
+    raw <- as.matrix(cont[,ind])    
     ind <- paste(ind, "RPKM", sep = "_")
-    rpkm <- cont[,ind]    
+    rpkm <- as.matrix(cont[,ind])    
 
     colnames(raw) <- colnames(rpkm) <- colnames(se)
     rownames(raw) <- rownames(rpkm) <- cont$gene_id
