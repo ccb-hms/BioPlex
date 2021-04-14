@@ -1,12 +1,14 @@
 Package: BioPlex
-Title: Analysis of PPI data from Gygi lab
+Title: R-side access to PPI data from Gygi lab
 Version: 0.99.1
 Authors@R: 
-    person(given = "Ludwig",
-           family = "Geistlinger",
-           role = c("aut", "cre"),
-           email = "ludwig_geistlinger@hms.harvard.edu")
-Description: Analysis of PPI data from Gygi lab.
+    c(person("Ludwig", "Geistlinger",
+             role = c("aut", "cre"),
+             email = "ludwig_geistlinger@hms.harvard.edu"),
+      person("Robert", "Gentleman",
+             role = "aut",
+             email = "robert_gentleman@hms.harvard.edu"))
+Description: R-side access to PPI data from Gygi lab.
 Encoding: UTF-8
 License: Artistic-2.0
 VignetteBuilder: knitr
