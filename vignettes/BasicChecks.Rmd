@@ -1,0 +1,369 @@
+---
+vignette: >
+  % \VignetteIndexEntry{Data checks}
+  % \VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    mathjax: null   
+---
+
+# Setup
+
+```{r, message = FALSE}
+library(BioPlex)
+library(AnnotationDbi)
+library(AnnotationHub)
+library(ExpressionAtlas)
+library(graph)
+```
+
+Connect to 
+[AnnotationHub](http://bioconductor.org/packages/AnnotationHub):
+
+```{r ahub, message = FALSE}
+ah <- AnnotationHub::AnnotationHub()
+```
+
+Connect to 
+[ExperimentHub](http://bioconductor.org/packages/ExperimentHub):
+
+```{r ehub, message = FALSE}
+eh <- ExperimentHub::ExperimentHub()
+```
+
+OrgDb package for human:
+```{r orgdb, message = FALSE}
+ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+orgdb <- ahdb[[length(ahdb)]]
+orgdb
+keytypes(orgdb)
+```
+
+EnsDb package for human:
+```{r ensdb, message = FALSE}
+ahdb <- AnnotationHub::query(ah, c("ensDb", "Homo sapiens"))
+ensdb <- ahdb[[length(ahdb)]]
+ensdb
+keytypes(ensdb)
+```
+
+# Check: identify CORUM complexes that have a subunit of interest
+
+Get core set of complexes:
+```{r corumCore}
+core <- getCorum(set = "core", organism = "Human")
+```
+
+Turn the CORUM complexes into a list of graph instances,
+where all nodes of a complex are connected to all other nodes of that complex
+with undirected edges.
+
+```{r corum2glist}
+core.glist <- corum2graphlist(core, subunit.id.type = "UNIPROT")
+```
+
+Identify complexes that have a subunit of interest:
+```{r corum-subunit}
+has.cdk2 <- hasSubunit(core.glist, 
+                       subunit = "CDK2",
+                       id.type = "SYMBOL")
+```
+
+Check the answer:
+```{r corum-subunit2}
+table(has.cdk2)
+cdk2.glist <- core.glist[has.cdk2]
+lapply(cdk2.glist, function(g) unlist(graph::nodeData(g, attr = "SYMBOL")))
+```
+
+Inspect the graph:
+```{r corum-subunit3, message = FALSE}
+plot(cdk2.glist[[1]], main = cdk2.glist[[1]]@graphData$ComplexName)
+```
+
+# Check: extract BioPlex PPIs for a CORUM complex
+
+Get the latest version of the 293T PPI network:
+
+```{r bioplex293T}
+bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
+```
+
+Turn the BioPlex PPI network into one big graph where bait and prey relationship
+are represented by directed edges from bait to prey.
+
+```{r bpgraph}
+bp.gr <- bioplex2graph(bp.293t)
+```
+
+Now we can also easily pull out a BioPlex subnetwork for a CORUM complex
+of interest:
+
+```{r}
+n <- graph::nodes(cdk2.glist[[1]])
+bp.sgr <- graph::subGraph(n, bp.gr)
+bp.sgr
+```
+
+There seems to be an issue with BioPlex Uniprot IDs though, as they sometimes
+extend official Uniprot IDs such as Q8N7W2 via Q8N7W2-1, Q8N7W2-2, ... which
+are at least not in the Bioc mappings 
+
+```{r}
+valid.uids <- AnnotationDbi::keys(orgdb, keytype = "UNIPROT")
+"Q8N7W2" %in% valid.uids
+"Q8N7W2-1" %in% valid.uids
+"Q8N7W2-2" %in% valid.uids
+```
+
+# Check: PFAM domains
+
+Annotate PFAM domains to the node metadata:
+
+```{r pfam}
+bp.gr <- annotatePFAM(bp.gr, orgdb)
+```
+
+More to come ...
+
+# Check: expressed genes are showing up as prey (293T cells)
+
+Get RNA-seq data for HEK293 cells from GEO: 
+[GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425)
+
+```{r gse122425}
+se <- getGSE122425()
+se
+```
+
+Inspect expression of prey genes:
+
+```{r prey-expression}
+bait <- unique(bp.293t$SymbolA)
+length(bait)
+prey <- unique(bp.293t$SymbolB)
+length(prey)
+```
+
+```{r}
+ind <- match(prey, rowData(se)$SYMBOL)
+par(las = 2)
+boxplot(log2(assay(se, "rpkm") + 0.5)[ind,], 
+        names = se$title, 
+        ylab = "log2 RPKM")
+```
+
+How many prey genes are expressed (raw read count > 0) in all 3 WT reps:
+
+```{r prey-expression2}
+# background: how many genes in total are expressed in all three WT reps
+gr0 <- rowSums(assay(se)[,1:3] > 0)
+table(gr0 == 3)
+# prey: expressed in all three WT reps
+table(gr0[ind] == 3)
+# prey: expressed in at least one WT rep
+table(gr0[ind] > 0)
+```
+
+Are prey genes overrepresented in the expressed genes?
+```{r prey-expression-ora}
+exprTable <-
+     matrix(c(9346, 1076, 14717, 32766),
+            nrow = 2,
+            dimnames = list(c("Expressed", "Not.expressed"),
+                            c("In.prey.set", "Not.in.prey.set")))
+exprTable
+```
+
+Test using hypergeometric test (i.e. one-sided Fisher's exact test):
+```{r prey-expression-ora2}
+fisher.test(exprTable, alternative = "greater")
+```
+
+Alternatively: permutation test, i.e. repeatedly sample number of prey genes 
+from the background, and assess how often we have as many or more than 9346 genes
+expressed:
+
+```{r prey-expression-293T-perm}
+permgr0 <- function(gr0, nr.genes = length(prey)) 
+{
+    ind <- sample(seq_along(gr0), nr.genes)
+    sum(gr0[ind] == 3)
+}
+```
+
+```{r prey-expression-perm2}
+perms <- replicate(permgr0(gr0), 1000)
+summary(perms)
+(sum(perms >= 9346) + 1) / 1001
+```
+
+# Check: is there a relationship between prey frequency and prey expression level?
+
+```{r prey-freq}
+prey.freq <- sort(table(bp.293t$SymbolB), decreasing = TRUE)
+head(prey.freq)
+summary(as.vector(prey.freq))
+hist(prey.freq, breaks = 50)
+```
+
+```{r}
+ind <- match(names(prey.freq), rowData(se)$SYMBOL)
+par(pch = 20)
+plot( as.vector(prey.freq),
+      log2(assay(se, "rpkm") + 0.5)[ind, 1],
+      xlab = "prey frequency",
+      ylab = "log2 RPKM")
+cor(as.vector(prey.freq), 
+    log2(assay(se, "rpkm") + 0.5)[ind, 1],
+    use = "pairwise.complete.obs")
+```
+
+Does gene length has an impact? 
+```{r, eval = FALSE}
+gc.gl <- EDASeq::getGeneLengthAndGCContent(names(se), 
+                                           org = "hsa")
+```
+
+```{r, eval = FALSE}
+rowData(se)$gc <- gc.gl$gc
+rowData(se)$length <- gc.gl$length
+ind <- !is.na(rowData(se)$length)
+se <- se[ind,]
+rowData(se)
+```
+
+```{r, eval = FALSE}
+cqn.res <- cqn::cqn(assay(se), 
+                lengths = rowData(se)$length,
+                x = rowData(se)$gc, 
+                sizeFactors = colSums(assay(se)))
+```
+
+```{r, eval = FALSE}
+assay(se, "rpkm.cqn") <- cqn.res$y + cqn.res$offset
+plot( as.vector(prey.freq),
+      log2(assay(se, "rpkm.cqn") + 0.5)[ind, 1],
+      xlab = "prey frequency",
+      ylab = "log2 RPKM (length-scaled)")
+cor(as.vector(prey.freq), 
+    log2(assay(se, "rpkm.cqn") + 0.5)[ind, 1],
+    use = "pairwise.complete.obs")
+```
+
+# Check: expressed genes are showing up as prey (HCT116 cells)
+
+Get the latest version of the HCT116 PPI network:
+
+```{r bioplexHCT116}
+bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
+head(bp.hct116)
+```
+
+Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the 
+[Cancer Cell Line Encyclopedia](https://portals.broadinstitute.org/ccle) 
+as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
+(Accession: [E-MTAB-2770](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770))
+
+```{r CCLE}
+atlasRes <- ExpressionAtlas::searchAtlasExperiments(
+              properties = "Cancer Cell Line Encyclopedia", 
+              species = "human" )
+atlasRes
+ccle <- ExpressionAtlas::getAtlasData(atlasRes$Accession)
+ccle <- ccle$`E-MTAB-2770`$rnaseq
+ccle
+```
+
+Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from [Klijn et al., 2015](https://pubmed.ncbi.nlm.nih.gov/25485619) 
+as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
+(Accession: [E-MTAB-2706](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706))
+
+```{r klijn}
+klijn <- ExpressionAtlas::getAtlasData("E-MTAB-2706")
+klijn <- klijn$`E-MTAB-2706`$rnaseq
+klijn
+```
+
+Sanity check that the expressed genes are showing up as prey:
+
+```{r prey-expression-hct116}
+bait <- unique(bp.hct116$GeneA)
+length(bait)
+prey <- unique(bp.hct116$GeneB)
+length(prey)
+```
+
+Map prey to ENSEMBL gene IDs:
+
+```{r mapIDs-hct116}
+prey <- AnnotationDbi::mapIds(orgdb, 
+                              keytype = "ENTREZID", 
+                              column = "ENSEMBL",
+                              keys = as.character(prey))
+prey <- unlist(unname(prey))
+ind.prey <- match(prey, rownames(ccle))
+```
+
+Combine HCT-116 transcriptome from CCLE and Klijn et al. datasets:
+
+```{r comb-hct116}
+ind1 <- grep("HCT 116", ccle$cell_line)
+ind2 <- grep("HCT 116", klijn$cell_line)
+emat <- cbind(assay(ccle)[,ind1], assay(klijn)[,ind2])
+colnames(emat) <- c("ccle", "klijn")
+head(emat)
+```
+
+The CCLE and Klijn et al. measurements correlate very well:
+
+```{r cor-ccle-klijn}
+cor(emat[,"ccle"], emat[,"klijn"])
+```
+
+How many prey genes are expressed (raw read count > 0) in both CCLE and Klijn et al.?
+
+```{r prey-expression2-hct116}
+# background: how many genes in total are expressed in both measurements
+gr0 <- rowSums(emat > 0)
+table(gr0 == 2)
+# prey: expressed in both measurements
+table(gr0[ind.prey] == 2)
+# prey: expressed in at least one measurement
+table(gr0[ind.prey] > 0)
+```
+
+# Check: Proteome data
+
+Get the CCLE proteome data from ExperimentHub:
+
+```{r ccle-proteom, eval = FALSE}
+ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
+ccle.prot <- ehdb[[length(ehdb)]]
+ccle.prot <- as.data.frame(ccle.prot)
+```
+
+Turn into a `SummarizedExperiment` for convenience (we can restrict
+this to selected cell lines, but here we keep all cell lines):
+
+```{r ccle-prot-se, eval = FALSE}
+se <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
+assay(se)[1:5, "HCT116"]
+```
+
+Get the relative protein expression data comparing 293T and HCT116 cells
+from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper): 
+
+```{r bp.prot, eval = FALSE}
+bp.prot <- getBioplexProteome()
+bp.prot
+```
+
+More to come ...
+
+# SessionInfo
+
+```{r sessionInfo}
+sessionInfo()
+```

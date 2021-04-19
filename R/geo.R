@@ -55,6 +55,7 @@ getGSE122425 <- function(cache = TRUE)
                                                      colData = cdat)
     anno.cols <- c("GeneSymbol", "KO", "GO", "length")
     rowData(se) <- cont[,anno.cols] 
+    colnames(rowData(se))[1] <- "SYMBOL"
 
     # cache and clean up
     .cacheResource(se, rname)

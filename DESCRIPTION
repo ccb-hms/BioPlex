@@ -29,7 +29,5 @@ Suggests:
     AnnotationHub,
     ExperimentHub,
     ExpressionAtlas,
-    ggnetwork,
-    igraph,
     knitr,
     rmarkdown
