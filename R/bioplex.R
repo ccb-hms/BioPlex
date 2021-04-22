@@ -89,7 +89,7 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
 #' from-to format. Typically obtained via \code{\link{getBioplex}}.
 #' @return An object of class \code{graphNEL}. 
 #' @references BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
-#' @seealso \code{\link{getBioplex}}, \code{\link{ftM2graphNEL}}
+#' @seealso \code{\link{getBioPlex}}, \code{\link{ftM2graphNEL}}
 #' @examples
 #' # (1) Obtain the latest version of the 293T PPI network
 #' bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
@@ -103,6 +103,7 @@ bioplex2graph <- function(bioplex.df)
     stopifnot(is.data.frame(bioplex.df))
     node.cols <- paste0("Uniprot", c("A", "B"))
     ftm <- as.matrix(bioplex.df[,node.cols])
+    ftm <- sub("-[0-9]+$", "", ftm)
     ind <- !duplicated(ftm)
     ftm <- ftm[ind,]
     bioplex.df <- bioplex.df[ind,]
@@ -137,12 +138,10 @@ bioplex2graph <- function(bioplex.df)
 }
 
 #' @export
-annotatePFAM <- function(bp.gr, orgdb, mode = c("bioc", "uniprot"))
+annotatePFAM <- function(bp.gr, orgdb)
 {
-  mode <- match.arg(mode)
-  uids <- sub("-[0-9]+$", "", graph::nodes(bp.gr))
   up2pfam <- AnnotationDbi::mapIds(orgdb, 
-                                   keys = uids, 
+                                   keys = graph::nodes(bp.gr), 
                                    keytype = "UNIPROT", 
                                    column = "PFAM", 
                                    multiVals = "list")
@@ -169,16 +168,16 @@ annotatePFAM <- function(bp.gr, orgdb, mode = c("bioc", "uniprot"))
     scols <- paste0("Symbol", c("A", "B"))
     ecols <- paste0("Gene", c("A", "B"))
     
-    uids <- unlist(df[,ucols])
+    iids <- unlist(df[,ucols])
     sids <- unlist(df[,scols])
     eids <- unlist(df[,ecols])
     
-    ind <- !duplicated(uids)
-    uids <- uids[ind]
+    ind <- !duplicated(iids)
+    iids <- iids[ind]
+    uids <- sub("-[0-9]+$", "", iids)
     up2sym <- sids[ind]
-    names(up2sym) <- uids
     up2eg <- eids[ind]
-    names(up2eg) <- uids
+    names(iids) <- names(up2eg) <- names(up2sym) <- uids
     
     # graph data annotation
     # when starting off with a ordinary dfs we'll be losing the ability
@@ -190,8 +189,11 @@ annotatePFAM <- function(bp.gr, orgdb, mode = c("bioc", "uniprot"))
     graph::nodeData(gr, graph::nodes(gr), "ENTREZID") <- up2eg[graph::nodes(gr)]
     graph::nodeDataDefaults(gr, "SYMBOL") <- NA
     graph::nodeData(gr, graph::nodes(gr), "SYMBOL") <- up2sym[graph::nodes(gr)]
+    graph::nodeDataDefaults(gr, "ISOFORM") <- NA
+    graph::nodeData(gr, graph::nodes(gr), "ISOFORM") <- iids[graph::nodes(gr)]
     
     # edge data annotation
+    for(col in ucols) df[,col] <- sub("-[0-9]+$", "", df[,col])
     for(col in c("pW", "pNI", "pInt"))
     {
         graph::edgeDataDefaults(gr, col) <- numeric(0L)

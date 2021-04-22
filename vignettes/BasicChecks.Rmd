@@ -106,17 +106,6 @@ bp.sgr <- graph::subGraph(n, bp.gr)
 bp.sgr
 ```
 
-There seems to be an issue with BioPlex Uniprot IDs though, as they sometimes
-extend official Uniprot IDs such as Q8N7W2 via Q8N7W2-1, Q8N7W2-2, ... which
-are at least not in the Bioc mappings 
-
-```{r}
-valid.uids <- AnnotationDbi::keys(orgdb, keytype = "UNIPROT")
-"Q8N7W2" %in% valid.uids
-"Q8N7W2-1" %in% valid.uids
-"Q8N7W2-2" %in% valid.uids
-```
-
 # Check: PFAM domains
 
 Annotate PFAM domains to the node metadata:

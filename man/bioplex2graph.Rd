@@ -29,5 +29,5 @@ bp.gr <- bioplex2graph(bp.293t)
 BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
 }
 \seealso{
-\code{\link{getBioplex}}, \code{\link{ftM2graphNEL}}
+\code{\link{getBioPlex}}, \code{\link{ftM2graphNEL}}
 }

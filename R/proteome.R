@@ -91,6 +91,7 @@ ccleProteome2SummarizedExperiment <- function(df, cell.line = "HCT116")
 #' 
 #'   se <- getBioplexProteome()
 #'   
+#' @importFrom utils read.csv
 #' @export
 getBioplexProteome <- function(cache = TRUE)
 {

@@ -12,6 +12,8 @@ navbar:
   left:
     - text: Data retrieval
       href: articles/BioPlex.html
+    - text: Data checks
+      href: articles/BasicChecks.html
   right:
     - icon: fa-github
       href: https://github.com/ccb-hms/BioPlex

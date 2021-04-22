@@ -82,13 +82,6 @@ bp.293t.remapped <- getBioPlex(cell.line = "293T",
                                remap.uniprot.ids = TRUE)
 ```
 
-Note: this is currently based on the gene-level mappings in the
-orgdb package for human, and those might not be optimal for mapping UniPprot
-isoform identifiers (eg. "Q8N7W2-1" and "Q8N7W2-2") used in BioPlex. 
-The remapping currently simply drops the dash-N extension and we thus might
-want to rather base that at one point on the official 
-[UniProt ID mapping file](https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping).
-
 ### Data structures for BioPlex PPIs
 
 We can also represent a given version of the BioPlex PPI network for a given
