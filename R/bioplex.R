@@ -72,7 +72,9 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        `HCT116.1.0` = "HCT116_Network_5.5K_Dec_2019")
     file.ext <- paste(file.ext, "tsv", sep = ".")
     ppi.file <- paste0(bioplex.url, file.ext)
-    bioplex <- read.delim(ppi.file)
+    bioplex <- read.delim(ppi.file,
+                          colClasses = c(GeneA = "character",
+                                         GeneB = "character"))
     
     # remap gene ids
     if(remap.uniprot.ids) bioplex <- .remapUniprotIdsBP(bioplex)
@@ -200,6 +202,61 @@ annotatePFAM <- function(bp.gr, orgdb)
         graph::edgeData(gr, df[,ucols[1]], df[,ucols[2]], col) <- df[,col]
     }
       
+    return(gr)
+}
+
+#' @title Map experimental data onto a graph
+#' @description Functionality for mapping experimental data stored in
+#' a \code{\linkS4class{SummarizedExperiment}} onto a 
+#' \code{\linkS4class{graph}} object. 
+#' @param gr an object of class \code{\linkS4class{graph}}.
+#' @param se an object of class \code{\linkS4class{SummarizedExperiment}}.
+#' @return An object of class \code{\linkS4class{graph}}. 
+#' @examples
+#' # (1) Obtain the latest version of the 293T PPI network ...
+#' bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
+#' 
+#' # (2) ... and turn into a graph
+#' bp.gr <- bioplex2graph(bp.293t)
+#' 
+#' # (3) Obtain the BioPlex3 proteome data ...
+#' se <- getBioplexProteome()
+#' 
+#' # (4) ... and map onto the graph
+#' bp.gr <- mapSummarizedExperimentOntoGraph(bp.gr, se)
+#' @export
+mapSummarizedExperimentOntoGraph <- function(gr, se,
+                                             col.names = NULL,
+                                             rowdata.cols = NULL,
+                                             prefix = "")
+{
+    isect <- intersect(rownames(se), graph::nodes(gr))
+    if(!length(isect)) stop("SummarizedExperiment (se)", " and ",
+                            "graph (gr) have no node IDs in common")
+    
+    if(is.null(col.names)) col.names <- colnames(se)
+    else if(!all(col.names %in% colnames(se)))
+        stop("Invalid col.names provided")
+      
+    if(is.null(rowdata.cols)) rowdata.cols <- colnames(rowData(se))
+    else if(!all(rowdata.cols %in% colnames(rowData(se))))
+        stop("Invalid rowdata.cols provided")
+    
+    # map assay data onto nodes
+    for(n in col.names)
+    {  
+        gn <- paste0(prefix, n)
+        graph::nodeDataDefaults(gr, gn) <- NA
+        graph::nodeData(gr, isect, gn) <- assay(se)[isect, n]
+    }
+    
+    # map rowData onto nodes
+    for(n in rowdata.cols)
+    {  
+        gn <- paste0(prefix, n)
+        graph::nodeDataDefaults(gr, gn) <- NA
+        graph::nodeData(gr, isect, gn) <- rowData(se)[isect, n]
+    }
     return(gr)
 }
 
