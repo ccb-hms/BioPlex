@@ -88,7 +88,7 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
 #' @description Representation of BioPlex PPIs in a \code{graphNEL} object
 #' from the \code{graph} package.
 #' @param bioplex.df a \code{data.frame} storing the Bioplex PPIs in a flat
-#' from-to format. Typically obtained via \code{\link{getBioplex}}.
+#' from-to format. Typically obtained via \code{\link{getBioPlex}}.
 #' @return An object of class \code{graphNEL}. 
 #' @references BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
 #' @seealso \code{\link{getBioPlex}}, \code{\link{ftM2graphNEL}}
@@ -139,6 +139,35 @@ bioplex2graph <- function(bioplex.df)
     # graph::graphNEL(nodes = unodes, edgeL = edgeL, edgemode = "directed")
 }
 
+
+#' @title Annotate PFAM domains to BioPlex PPI graph
+#' @description This function adds PFAM domain annotations to the node metadata
+#' of the BioPlex PPI graph.
+#' @param bp.gr an object of class \code{\linkS4class{graph}} storing the
+#' BioPlex PPIs. Typically obtained via \code{\link{bioplex2graph}}.
+#' @param orgdb an \code{orgdb} object storing annotation data for human.
+#' @return An object of class \code{graphNEL} containing PFAM domain annotations
+#' in the \code{nodeData}. 
+#' @references 
+#'  BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
+#'
+#'  PFAM: \url{http://pfam.xfam.org}
+#' @seealso \code{\link{bioplex2graph}}, \code{\link{ftM2graphNEL}}
+#' @examples
+#' # (1) Obtain the latest version of the 293T PPI network
+#' bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
+#' 
+#' # (2) Turn the data into a graph 
+#' bp.gr <- bioplex2graph(bp.293t)
+#' 
+#' # (3) Obtain orgdb package from AnnotationHub
+#' ah <- AnnotationHub::AnnotationHub()
+#' ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+#' orgdb <- ahdb[[length(ahdb)]]
+#' 
+#' # (4) Annotate PFAM domains
+#' bp.gr <- annotatePFAM(bp.gr, orgdb)
+#'
 #' @export
 annotatePFAM <- function(bp.gr, orgdb)
 {
@@ -211,6 +240,16 @@ annotatePFAM <- function(bp.gr, orgdb)
 #' \code{\linkS4class{graph}} object. 
 #' @param gr an object of class \code{\linkS4class{graph}}.
 #' @param se an object of class \code{\linkS4class{SummarizedExperiment}}.
+#' @param col.names character. Column names of \code{se} for which assay
+#' data should be mapped onto the nodes of \code{gr}. Defaults to \code{NULL}
+#' which will then use all column names of \code{se}.
+#' @param rowdata.cols character. Column names of \code{rowData(se)} which
+#' should be mapped onto the nodes of \code{gr}. Defaults to \code{NULL}
+#' which will then use all column names of \code{rowData(se)}.
+#' @param prefix character. Informative prefix that should be pasted together
+#' with the selected \code{col.names} and \code{rowdata.cols} to allow easy
+#' identification of columns of interest when mapping from multiple experimental
+#' datasets.
 #' @return An object of class \code{\linkS4class{graph}}. 
 #' @examples
 #' # (1) Obtain the latest version of the 293T PPI network ...

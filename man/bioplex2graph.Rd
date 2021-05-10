@@ -8,7 +8,7 @@ bioplex2graph(bioplex.df)
 }
 \arguments{
 \item{bioplex.df}{a \code{data.frame} storing the Bioplex PPIs in a flat
-from-to format. Typically obtained via \code{\link{getBioplex}}.}
+from-to format. Typically obtained via \code{\link{getBioPlex}}.}
 }
 \value{
 An object of class \code{graphNEL}.

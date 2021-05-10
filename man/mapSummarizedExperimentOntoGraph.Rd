@@ -16,6 +16,19 @@ mapSummarizedExperimentOntoGraph(
 \item{gr}{an object of class \code{\linkS4class{graph}}.}
 
 \item{se}{an object of class \code{\linkS4class{SummarizedExperiment}}.}
+
+\item{col.names}{character. Column names of \code{se} for which assay
+data should be mapped onto the nodes of \code{gr}. Defaults to \code{NULL}
+which will then use all column names of \code{se}.}
+
+\item{rowdata.cols}{character. Column names of \code{rowData(se)} which
+should be mapped onto the nodes of \code{gr}. Defaults to \code{NULL}
+which will then use all column names of \code{rowData(se)}.}
+
+\item{prefix}{character. Informative prefix that should be pasted together
+with the selected \code{col.names} and \code{rowdata.cols} to allow easy
+identification of columns of interest when mapping from multiple experimental
+datasets.}
 }
 \value{
 An object of class \code{\linkS4class{graph}}.
