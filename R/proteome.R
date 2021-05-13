@@ -115,6 +115,7 @@ getBioplexProteome <- function(cache = TRUE)
     ids <- vapply(ids, `[`, character(1), x = 2)
     rownames(emat) <- ids
     colnames(emat) <- sub(".scaled$", "", colnames(emat))
+    emat <- as.matrix(emat)
     
     # turn into a SummarizedExperiment
     se <- SummarizedExperiment(assays = list(exprs = emat))

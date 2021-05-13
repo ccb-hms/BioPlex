@@ -82,6 +82,62 @@ getCorum <- function(set = c("all", "core", "splice"),
     return(corum) 
 }
 
+#' @title Represent CORUM protein complex data as a simple list
+#' @description Functionality for storing CORUM protein complex data in a
+#' \code{list}.
+#' @param corum.df A \code{data.frame} storing the CORUM protein complex data.
+#' Typically obtained via \code{\link{getCorum}}.
+#' @param subunit.id.type character. Supported options include \code{"UNIPROT"}
+#' (default) and \code{"ENTREZID"}.
+#' @return A \code{list} with an entry for each complex. Each entry is a 
+#' character vector of subunit IDs. 
+#' @references CORUM: \url{http://mips.helmholtz-muenchen.de/corum/#download}
+#' @examples
+#'  # (1) Obtain the core set of CORUM complexes ...
+#'  core <- getCorum(set = "core")
+#'  # (2) ... turn into a list
+#'  core.list <- corum2list(core)
+#' @export
+corum2list <- function(corum.df, 
+                       subunit.id.type = c("UNIPROT", "ENTREZID"))
+{
+    stopifnot(is.data.frame(corum.df))
+    subunit.id.type <- match.arg(subunit.id.type)
+    subunit.id.type <- ifelse(subunit.id.type == "UNIPROT", "UniProt", "Entrez")
+    id.col <- paste0("subunits.", subunit.id.type, ".IDs.")
+    
+    gs <- strsplit(corum.df[[id.col]], " ?; ?")
+    complex.name <- gsub(" ", "_", corum.df$ComplexName)
+    names(gs) <- paste0("CORUM", corum.df$ComplexID, "_", complex.name)
+    return(gs)
+}
+
+#' basic data structure for sets of complexes or sets of pull-downs:
+#' a list of graph instances
+#' @export
+corum2graphlist <- function(corum.df, 
+                            subunit.id.type = c("UNIPROT", "ENTREZID"))
+{
+    cl <- corum2list(corum.df, subunit.id.type)
+    gl <- lapply(cl, .completelyConnected)
+    gl <- .annotateGraphList(gl, corum.df)
+    return(gl)
+}
+
+# @param glist a list of graphs
+# @param a gene 
+# @param SYMBOL and returns a logical vector indicating
+# @return which graphs have a node with the input gene SYMBOL
+#' @export
+hasSubunit <- function(glist, subunit, id.type = "SYMBOL") 
+{
+    .hasX <- function(x) grep(subunit, 
+                               unlist(graph::nodeData(x, graph::nodes(x), id.type)), 
+                               ignore.case = TRUE)
+    res <- lapply(glist, .hasX) 
+    lengths(res) > 0
+} 
+
 .remapUniprotIds <- function(df)
 {
     if(any(df$Organism != "Human")) 
@@ -125,48 +181,6 @@ getCorum <- function(set = c("all", "core", "splice"),
     
     return(df)
 }
-
-
-#' @export
-corum2list <- function(corum.df, 
-                       subunit.id.type = c("UNIPROT", "ENTREZID"))
-{
-    stopifnot(is.data.frame(corum.df))
-    subunit.id.type <- match.arg(subunit.id.type)
-    subunit.id.type <- ifelse(subunit.id.type == "UNIPROT", "UniProt", "Entrez")
-    id.col <- paste0("subunits.", subunit.id.type, ".IDs.")
-    
-    gs <- strsplit(corum.df[[id.col]], " ?; ?")
-    complex.name <- gsub(" ", "_", corum.df$ComplexName)
-    names(gs) <- paste0("CORUM", corum.df$ComplexID, "_", complex.name)
-    return(gs)
-}
-
-#' basic data structure for sets of complexes or sets of pull-downs:
-#' a list of graph instances
-#' @export
-corum2graphlist <- function(corum.df, 
-                            subunit.id.type = c("UNIPROT", "ENTREZID"))
-{
-    cl <- corum2list(corum.df, subunit.id.type)
-    gl <- lapply(cl, .completelyConnected)
-    gl <- .annotateGraphList(gl, corum.df)
-    return(gl)
-}
-
-# @param glist a list of graphs
-# @param a gene 
-# @param SYMBOL and returns a logical vector indicating
-# @return which graphs have a node with the input gene SYMBOL
-#' @export
-hasSubunit <- function(glist, subunit, id.type = "SYMBOL") 
-{
-    .hasX <- function(x) grep(subunit, 
-                               unlist(graph::nodeData(x, graph::nodes(x), id.type)), 
-                               ignore.case = TRUE)
-    res <- lapply(glist, .hasX) 
-    lengths(res) > 0
-} 
 
 # we will want to annotate these somewhat
 #     ‘edgeData’: An ‘attrData’ instance for edge attributes.
