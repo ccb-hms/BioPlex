@@ -108,11 +108,6 @@ bp.sgr
 
 # Check: PFAM domains
 
-Annotate PFAM domains to the node metadata:
-
-```{r pfam}
-bp.gr <- annotatePFAM(bp.gr, orgdb)
-```
 
 More to come ...
 
@@ -347,11 +342,27 @@ from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper
 ```{r bp.prot, eval = FALSE}
 bp.prot <- getBioplexProteome()
 bp.prot
+rowData(bp.prot)
 ```
 
-More to come ...
+A couple of quick sanity checks:
 
-# SessionInfo
+1. `log2ratio` is really just the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):
+
+```{r}
+ratio <- rowMeans(assay(bp.prot)[1:5, 1:5]) / rowMeans(assay(bp.prot)[1:5, 6:10])
+log2(ratio)
+```
+
+2. `adj.pvalue` is really just a BH-adjusted t-test derived p-value:
+
+```{r}
+tt <- genefilter::rowttests(assay(bp.prot), as.factor(bp.prot$cell.line))
+padj <- p.adjust(tt$p.value, method = "BH")
+head(padj)
+```
+
+# SessionInfo?
 
 ```{r sessionInfo}
 sessionInfo()
