@@ -40,14 +40,6 @@ orgdb
 keytypes(orgdb)
 ```
 
-EnsDb package for human:
-```{r ensdb, message = FALSE}
-ahdb <- AnnotationHub::query(ah, c("ensDb", "Homo sapiens"))
-ensdb <- ahdb[[length(ahdb)]]
-ensdb
-keytypes(ensdb)
-```
-
 # Check: identify CORUM complexes that have a subunit of interest
 
 Get core set of complexes:
