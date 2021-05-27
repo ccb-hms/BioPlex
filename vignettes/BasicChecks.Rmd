@@ -69,8 +69,11 @@ cdk2.glist <- core.glist[has.cdk2]
 lapply(cdk2.glist, function(g) unlist(graph::nodeData(g, attr = "SYMBOL")))
 ```
 
-Inspect the graph:
-```{r corum-subunit3, message = FALSE}
+We can then also inspect the graph with plotting utilities from the 
+[Rgraphviz](https://bioconductor.org/packages/Rgraphviz)
+package:
+
+```{r corum-subunit3, message = FALSE, eval = FALSE}
 plot(cdk2.glist[[1]], main = cdk2.glist[[1]]@graphData$ComplexName)
 ```
 
