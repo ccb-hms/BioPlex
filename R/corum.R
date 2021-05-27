@@ -126,7 +126,7 @@ corum2list <- function(corum.df,
 #' @examples
 #'  # (1) Obtain the core set of CORUM complexes ...
 #'  core <- getCorum(set = "core")
-#'  # (2) ... turn into a list
+#'  # (2) ... turn into a list of graphs
 #'  core.glist <- corum2graphlist(core)
 #' @export
 corum2graphlist <- function(corum.df, 
@@ -138,10 +138,22 @@ corum2graphlist <- function(corum.df,
     return(gl)
 }
 
-# @param glist a list of graphs
-# @param a gene 
-# @param SYMBOL and returns a logical vector indicating
-# @return which graphs have a node with the input gene SYMBOL
+#' @title Identify CORUM complexes that have a subunit of interest
+#' @description Screens a \code{list} of \code{graph} instances storing 
+#' CORUM protein complex data for a subunit of choice
+#' @param glist A \code{list} of \code{graph}s storing CORUM complexes.
+#' Typically obtained via \code{\link{corum2graphlist}}. 
+#' @param subunit character. A gene ID corresponding to the subunit of interest. 
+#' @param id.type character. Gene ID type of the given subunit. Defaults to \code{"SYMBOL"}. 
+#' @return a logical vector indicating which graphs have a node with the given 
+#' subunit.
+#' @examples
+#' # (1) Obtain the core set of CORUM complexes ...
+#' core <- getCorum(set = "core")
+#' # (2) ... turn into a list of graphs ...
+#' core.glist <- corum2graphlist(core)
+#' # (3) .. check for a particular subunit of interest
+#' has.cdk2 <- hasSubunit(core.glist, subunit = "CDK2")
 #' @export
 hasSubunit <- function(glist, subunit, id.type = "SYMBOL") 
 {

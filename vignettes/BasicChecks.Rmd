@@ -334,7 +334,7 @@ assay(se)[1:5, "HCT116"]
 Get the relative protein expression data comparing 293T and HCT116 cells
 from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper): 
 
-```{r bp.prot, eval = FALSE}
+```{r bp.prot}
 bp.prot <- getBioplexProteome()
 bp.prot
 rowData(bp.prot)
@@ -347,14 +347,6 @@ A couple of quick sanity checks:
 ```{r}
 ratio <- rowMeans(assay(bp.prot)[1:5, 1:5]) / rowMeans(assay(bp.prot)[1:5, 6:10])
 log2(ratio)
-```
-
-2. `adj.pvalue` is really just a BH-adjusted t-test derived p-value:
-
-```{r}
-tt <- genefilter::rowttests(assay(bp.prot), as.factor(bp.prot$cell.line))
-padj <- p.adjust(tt$p.value, method = "BH")
-head(padj)
 ```
 
 # SessionInfo?
