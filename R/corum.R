@@ -112,8 +112,22 @@ corum2list <- function(corum.df,
     return(gs)
 }
 
-#' basic data structure for sets of complexes or sets of pull-downs:
-#' a list of graph instances
+#' @title Represent CORUM protein complex data as a list of graph instances
+#' @description Functionality for storing CORUM protein complex data in a
+#' \code{list} of \code{graph} instances.
+#' @param corum.df A \code{data.frame} storing the CORUM protein complex data.
+#' Typically obtained via \code{\link{getCorum}}.
+#' @param subunit.id.type character. Supported options include \code{"UNIPROT"}
+#' (default) and \code{"ENTREZID"}.
+#' @return A \code{list} with an entry for each complex. Each entry is an 
+#' object of class \code{graphNEL} connecting all subunit IDs with each other
+#' by undirected edges. 
+#' @references CORUM: \url{http://mips.helmholtz-muenchen.de/corum/#download}
+#' @examples
+#'  # (1) Obtain the core set of CORUM complexes ...
+#'  core <- getCorum(set = "core")
+#'  # (2) ... turn into a list
+#'  core.glist <- corum2graphlist(core)
 #' @export
 corum2graphlist <- function(corum.df, 
                             subunit.id.type = c("UNIPROT", "ENTREZID"))
