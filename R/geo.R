@@ -8,6 +8,21 @@
 # 
 ############################################################
 
+#' @title Convenient access to 293T transcriptome data from GEO
+#' @description Functionality for storing the 293T RNA-seq data
+#' from GSE122425 in a 
+#' \code{\linkS4class{SummarizedExperiment}}. The dataset includes three
+#' wild type samples and three NSUN2 knockout samples.
+#' @param cache logical. Should a locally cached version used if available?
+#' Defaults to \code{TRUE}.
+#' @return A \code{\linkS4class{SummarizedExperiment}} storing RNA-seq
+#' data for the 293T cell line. 
+#' @references GSE122425: \url{https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425}
+#' @examples
+#' 
+#'   # Obtain the data as a SummarizedExperiment
+#'   se <- getGSE122425()
+#'  
 #' @import SummarizedExperiment
 #' @importFrom methods as
 #' @export

@@ -180,54 +180,34 @@ summary(perms)
 
 # Check: is there a relationship between prey frequency and prey expression level?
 
+Check which genes turn up most frequently as prey:
+
 ```{r prey-freq}
 prey.freq <- sort(table(bp.293t$SymbolB), decreasing = TRUE)
+preys <- names(prey.freq)
+prey.freq <- as.vector(prey.freq)
+names(prey.freq) <- preys
 head(prey.freq)
-summary(as.vector(prey.freq))
-hist(prey.freq, breaks = 50)
+summary(prey.freq)
+hist(prey.freq, breaks = 50, main = "", xlab = "Number of PPIs", ylab = "Number of genes")
 ```
+
+Prey genes are involved `r round(mean(as.vector(prey.freq)))` PPIs on average.
+
+There doesn't seem to be a strong correlation between expression level and the 
+frequency of gene to turn up as prey: 
 
 ```{r}
 ind <- match(names(prey.freq), rowData(se)$SYMBOL)
+rmeans <- rowMeans(assay(se, "rpkm")[ind, 1:3])
+log.rmeans <- log2(rmeans + 0.5)
 par(pch = 20)
-plot( as.vector(prey.freq),
-      log2(assay(se, "rpkm") + 0.5)[ind, 1],
+plot( x = prey.freq,
+      y = log.rmeans,
       xlab = "prey frequency",
       ylab = "log2 RPKM")
-cor(as.vector(prey.freq), 
-    log2(assay(se, "rpkm") + 0.5)[ind, 1],
-    use = "pairwise.complete.obs")
-```
-
-Does gene length has an impact? 
-```{r, eval = FALSE}
-gc.gl <- EDASeq::getGeneLengthAndGCContent(names(se), 
-                                           org = "hsa")
-```
-
-```{r, eval = FALSE}
-rowData(se)$gc <- gc.gl$gc
-rowData(se)$length <- gc.gl$length
-ind <- !is.na(rowData(se)$length)
-se <- se[ind,]
-rowData(se)
-```
-
-```{r, eval = FALSE}
-cqn.res <- cqn::cqn(assay(se), 
-                lengths = rowData(se)$length,
-                x = rowData(se)$gc, 
-                sizeFactors = colSums(assay(se)))
-```
-
-```{r, eval = FALSE}
-assay(se, "rpkm.cqn") <- cqn.res$y + cqn.res$offset
-plot( as.vector(prey.freq),
-      log2(assay(se, "rpkm.cqn") + 0.5)[ind, 1],
-      xlab = "prey frequency",
-      ylab = "log2 RPKM (length-scaled)")
-cor(as.vector(prey.freq), 
-    log2(assay(se, "rpkm.cqn") + 0.5)[ind, 1],
+cor(prey.freq, 
+    log.rmeans,
     use = "pairwise.complete.obs")
 ```
 
@@ -317,7 +297,7 @@ table(gr0[ind.prey] > 0)
 
 Get the CCLE proteome data from ExperimentHub:
 
-```{r ccle-proteom, eval = FALSE}
+```{r ccle-proteom}
 ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
 ccle.prot <- ehdb[[length(ehdb)]]
 ccle.prot <- as.data.frame(ccle.prot)
@@ -326,7 +306,7 @@ ccle.prot <- as.data.frame(ccle.prot)
 Turn into a `SummarizedExperiment` for convenience (we can restrict
 this to selected cell lines, but here we keep all cell lines):
 
-```{r ccle-prot-se, eval = FALSE}
+```{r ccle-prot-se}
 se <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
 assay(se)[1:5, "HCT116"]
 ```
@@ -342,14 +322,14 @@ rowData(bp.prot)
 
 A couple of quick sanity checks:
 
-1. `log2ratio` is really just the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):
+`log2ratio` is just the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):
 
 ```{r}
 ratio <- rowMeans(assay(bp.prot)[1:5, 1:5]) / rowMeans(assay(bp.prot)[1:5, 6:10])
 log2(ratio)
 ```
 
-# SessionInfo?
+# SessionInfo
 
 ```{r sessionInfo}
 sessionInfo()
