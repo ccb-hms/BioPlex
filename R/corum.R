@@ -29,7 +29,6 @@
 #' (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
 #' functionality? Currently only supported in combination with \code{organism = "Human"}.
 #' Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
-#' See details.
 #' @param cache logical. Should a locally cached version used if available?
 #' Defaults to \code{TRUE}.
 #' @return A \code{data.frame}. 
@@ -95,6 +94,7 @@ getCorum <- function(set = c("all", "core", "splice"),
 #' @examples
 #'  # (1) Obtain the core set of CORUM complexes ...
 #'  core <- getCorum(set = "core")
+#'  
 #'  # (2) ... turn into a list
 #'  core.list <- corum2list(core)
 #' @export
@@ -126,6 +126,7 @@ corum2list <- function(corum.df,
 #' @examples
 #'  # (1) Obtain the core set of CORUM complexes ...
 #'  core <- getCorum(set = "core")
+#'  
 #'  # (2) ... turn into a list of graphs
 #'  core.glist <- corum2graphlist(core)
 #' @export
@@ -140,18 +141,20 @@ corum2graphlist <- function(corum.df,
 
 #' @title Identify CORUM complexes that have a subunit of interest
 #' @description Screens a \code{list} of \code{graph} instances storing 
-#' CORUM protein complex data for a subunit of choice
+#' CORUM protein complex data for a subunit of choice.
 #' @param glist A \code{list} of \code{graph}s storing CORUM complexes.
 #' Typically obtained via \code{\link{corum2graphlist}}. 
 #' @param subunit character. A gene ID corresponding to the subunit of interest. 
 #' @param id.type character. Gene ID type of the given subunit. Defaults to \code{"SYMBOL"}. 
-#' @return a logical vector indicating which graphs have a node with the given 
+#' @return A logical vector indicating which graphs have a node with the given 
 #' subunit.
 #' @examples
 #' # (1) Obtain the core set of CORUM complexes ...
 #' core <- getCorum(set = "core")
+#' 
 #' # (2) ... turn into a list of graphs ...
 #' core.glist <- corum2graphlist(core)
+#' 
 #' # (3) .. check for a particular subunit of interest
 #' has.cdk2 <- hasSubunit(core.glist, subunit = "CDK2")
 #' @export

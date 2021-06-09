@@ -24,6 +24,7 @@ Functionality for storing CORUM protein complex data in a
 \examples{
  # (1) Obtain the core set of CORUM complexes ...
  core <- getCorum(set = "core")
+ 
  # (2) ... turn into a list
  core.list <- corum2list(core)
 }

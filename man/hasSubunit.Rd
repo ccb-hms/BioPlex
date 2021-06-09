@@ -15,18 +15,20 @@ Typically obtained via \code{\link{corum2graphlist}}.}
 \item{id.type}{character. Gene ID type of the given subunit. Defaults to \code{"SYMBOL"}.}
 }
 \value{
-a logical vector indicating which graphs have a node with the given
+A logical vector indicating which graphs have a node with the given
 subunit.
 }
 \description{
 Screens a \code{list} of \code{graph} instances storing
-CORUM protein complex data for a subunit of choice
+CORUM protein complex data for a subunit of choice.
 }
 \examples{
 # (1) Obtain the core set of CORUM complexes ...
 core <- getCorum(set = "core")
+
 # (2) ... turn into a list of graphs ...
 core.glist <- corum2graphlist(core)
+
 # (3) .. check for a particular subunit of interest
 has.cdk2 <- hasSubunit(core.glist, subunit = "CDK2")
 }

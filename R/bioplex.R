@@ -28,7 +28,6 @@
 #' (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
 #' functionality?
 #' Defaults to \code{FALSE} which will then keep the mappings provided by BioPlex.
-#' See details.
 #' @param cache logical. Should a locally cached version used if available?
 #' Defaults to \code{TRUE}.
 #' @return A \code{data.frame}. 
@@ -152,7 +151,7 @@ bioplex2graph <- function(bioplex.df)
 #'  BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
 #'
 #'  PFAM: \url{http://pfam.xfam.org}
-#' @seealso \code{\link{bioplex2graph}}, \code{\link{ftM2graphNEL}}
+#' @seealso \code{\link{nodeData}}
 #' @examples
 #' # (1) Obtain the latest version of the 293T PPI network
 #' bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
@@ -171,11 +170,11 @@ bioplex2graph <- function(bioplex.df)
 #' @export
 annotatePFAM <- function(bp.gr, orgdb)
 {
-  up2pfam <- AnnotationDbi::mapIds(orgdb, 
+  up2pfam <- suppressMessages(AnnotationDbi::mapIds(orgdb, 
                                    keys = graph::nodes(bp.gr), 
                                    keytype = "UNIPROT", 
                                    column = "PFAM", 
-                                   multiVals = "list")
+                                   multiVals = "list"))
   graph::nodeDataDefaults(bp.gr, "PFAM") <- NA
   graph::nodeData(bp.gr, graph::nodes(bp.gr), "PFAM") <- up2pfam
   return(bp.gr)

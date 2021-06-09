@@ -27,8 +27,7 @@ Defaults to \code{"3.0"}.}
 \item{remap.uniprot.ids}{logical. Should the protein-to-gene mappings from BioPlex
 (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
 functionality?
-Defaults to \code{FALSE} which will then keep the mappings provided by BioPlex.
-See details.}
+Defaults to \code{FALSE} which will then keep the mappings provided by BioPlex.}
 
 \item{cache}{logical. Should a locally cached version used if available?
 Defaults to \code{TRUE}.}

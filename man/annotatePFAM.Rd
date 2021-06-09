@@ -42,5 +42,5 @@ BioPlex: \url{https://bioplex.hms.harvard.edu/interactions.php}
 PFAM: \url{http://pfam.xfam.org}
 }
 \seealso{
-\code{\link{bioplex2graph}}, \code{\link{ftM2graphNEL}}
+\code{\link{nodeData}}
 }

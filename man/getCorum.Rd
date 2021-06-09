@@ -27,8 +27,7 @@ only.}
 \item{remap.uniprot.ids}{logical. Should the protein-to-gene mappings from CORUM
 (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
 functionality? Currently only supported in combination with \code{organism = "Human"}.
-Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
-See details.}
+Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.}
 
 \item{cache}{logical. Should a locally cached version used if available?
 Defaults to \code{TRUE}.}

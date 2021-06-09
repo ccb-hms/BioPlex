@@ -55,16 +55,18 @@ Let's get the latest version of the 293T PPI network:
 ```{r bioplex293T}
 bp.293t <- getBioPlex(cell.line = "293T", version = "3.0")
 head(bp.293t)
+nrow(bp.293t)
 ```
 
 ```{r bioplexHCT116}
 bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
 head(bp.hct116)
+nrow(bp.hct116)
 ```
 
 ### ID mapping
 
-The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot
+The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot.
 
 We can update those based on Bioc annotation functionality:  
 
@@ -103,8 +105,8 @@ head(graph::nodeData(bp.gr, graph::nodes(bp.gr), "PFAM"))
 
 ## CORUM complexes
 
-Complete set of
-[CORUM](http://mips.helmholtz-muenchen.de/corum/#download) complexes:
+Obtain the complete set of human protein complexes from
+[CORUM](http://mips.helmholtz-muenchen.de/corum/#download):
 
 ```{r corumALL}
 all <- getCorum(set = "all", organism = "Human")
@@ -176,7 +178,8 @@ Note that we can easily convert a
 
 #### GSE122425
 
-[GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425)
+Obtain transcriptome data for 293T cells from GEO dataset:
+[GSE122425](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425).
 
 ```{r gse122425}
 se <- getGSE122425()
@@ -187,6 +190,8 @@ colData(se)
 rowData(se)
 ```
 
+The dataset includes three wild type samples and three NSUN2 knockout samples.
+
 ### HCT116 cells
 
 #### Cancer Cell Line Encyclopedia (CCLE)
@@ -194,9 +199,9 @@ rowData(se)
 Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the 
 [Cancer Cell Line Encyclopedia](https://portals.broadinstitute.org/ccle) 
 as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
-(Accession: [E-MTAB-2770](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770))
+(Accession: [E-MTAB-2770](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770)).
 
-```{r CCLE}
+```{r CCLE, message = FALSE}
 atlasRes <- ExpressionAtlas::searchAtlasExperiments(
               properties = "Cancer Cell Line Encyclopedia", 
               species = "human" )
@@ -225,7 +230,7 @@ Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) fro
 as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
 (Accession: [E-MTAB-2706](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706))
 
-```{r klijn}
+```{r klijn, message = FALSE}
 klijn <- ExpressionAtlas::getAtlasData("E-MTAB-2706")
 klijn <- klijn$`E-MTAB-2706`$rnaseq
 klijn
@@ -258,7 +263,8 @@ head(emat)
 
 ### CCLE
 
-Pull the data from ExperimentHub:
+Pull the [CCLE proteome data](https://doi.org/10.1016/j.cell.2019.12.023) from ExperimentHub. The dataset profiles 12,755 proteins by mass spectrometry across 375 cancer cell lines.
+
 ```{r ccle-proteom}
 ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
 ccle.prot <- ehdb[[length(ehdb)]]
@@ -331,7 +337,7 @@ To do a hard reset (use with caution!):
 BiocFileCache::removebfc(bfc)
 ```
 
-## SessionInfo
+# SessionInfo
 
 ```{r sessionInfo}
 sessionInfo()
