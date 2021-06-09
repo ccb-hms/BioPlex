@@ -151,7 +151,7 @@
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:48:46</code></pre>
+<pre><code>## Using cached version from 2021-06-09 17:04:57</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
 <pre><code>##    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI
@@ -169,9 +169,12 @@
 ## 5 0.7993621
 ## 6 0.9989736</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:49:00</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">nrow</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 118162</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span></code></pre></div>
+<pre><code>## Using cached version from 2021-06-09 17:05:12</code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span></code></pre></div>
 <pre><code>##   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI
 ## 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05
@@ -187,28 +190,31 @@
 ## 4 0.9998713
 ## 5 0.9985036
 ## 6 0.9979294</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">nrow</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 70966</code></pre>
 <div id="id-mapping" class="section level3">
 <h3 class="hasAnchor">
 <a href="#id-mapping" class="anchor"></a>ID mapping</h3>
-<p>The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot</p>
+<p>The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot.</p>
 <p>We can update those based on Bioc annotation functionality:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:48:46</code></pre>
+<pre><code>## Using cached version from 2021-06-09 17:04:57</code></pre>
 </div>
 <div id="data-structures-for-bioplex-ppis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-structures-for-bioplex-ppis" class="anchor"></a>Data structures for BioPlex PPIs</h3>
 <p>We can also represent a given version of the BioPlex PPI network for a given cell line as one big graph where bait and prey relationship are represented by directed edges from bait to prey.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioplex2graph.html">bioplex2graph</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="va">bp.gr</span></code></pre></div>
 <pre><code>## A graphNEL graph with directed edges
 ## Number of Nodes = 13689 
 ## Number of Edges = 115868</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $P00813
 ## $P00813$ENTREZID
@@ -274,7 +280,7 @@
 ## 
 ## $Q17R55$ISOFORM
 ## [1] "Q17R55"</code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/edgeData-methods.html">edgeData</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $`P00813|A5A3E0`
 ## $`P00813|A5A3E0`$weight
@@ -364,11 +370,9 @@
 <h3 class="hasAnchor">
 <a href="#pfam-domains" class="anchor"></a>PFAM domains</h3>
 <p>We can easily add PFAM domain annotations to the node metadata:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotatePFAM.html">annotatePFAM</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="va">orgdb</span><span class="op">)</span></code></pre></div>
-<pre><code>## 'select()' returned 1:many mapping between keys and columns</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/graphNEL-class.html">nodes</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span>, <span class="st">"PFAM"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotatePFAM.html">annotatePFAM</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="va">orgdb</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/graphNEL-class.html">nodes</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span>, <span class="st">"PFAM"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## $P00813
 ## [1] "PF00962"
 ## 
@@ -391,14 +395,14 @@
 <div id="corum-complexes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#corum-complexes" class="anchor"></a>CORUM complexes</h2>
-<p>Complete set of <a href="http://mips.helmholtz-muenchen.de/corum/#download">CORUM</a> complexes:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:50:43</code></pre>
+<p>Obtain the complete set of human protein complexes from <a href="http://mips.helmholtz-muenchen.de/corum/#download">CORUM</a>:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
+<pre><code>## Using cached version from 2021-06-09 17:07:00</code></pre>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2916   20</code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span></code></pre></div>
 <pre><code>##  [1] "ComplexID"                           "ComplexName"                        
 ##  [3] "Organism"                            "Synonyms"                           
@@ -410,7 +414,7 @@
 ## [15] "PubMed.ID"                           "Complex.comment"                    
 ## [17] "Disease.comment"                     "SWISSPROT.organism"                 
 ## [19] "subunits.Gene.name.syn."             "subunits.Protein.name."</code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
 <pre><code>##   ComplexID                           ComplexName Organism
 ## 1         1                    BCL6-HDAC4 complex    Human
@@ -425,17 +429,17 @@
 ## 4                  None      None
 ## 6 13S condensin complex      None</code></pre>
 <p>Core set of complexes:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:48:41</code></pre>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
+<pre><code>## Using cached version from 2021-06-09 17:04:52</code></pre>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2417   20</code></pre>
 <p>Complexes with splice variants:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:50:45</code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
+<pre><code>## Using cached version from 2021-06-09 17:07:01</code></pre>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 44 20</code></pre>
 <div id="id-mapping-1" class="section level3">
@@ -443,17 +447,17 @@
 <a href="#id-mapping-1" class="anchor"></a>ID mapping</h3>
 <p>The protein-to-gene mappings from CORUM (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) might not be fully up-to-date.</p>
 <p>We can update those based on Bioc annotation functionality:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:50:50</code></pre>
+<pre><code>## Using cached version from 2021-06-09 17:07:08</code></pre>
 </div>
 <div id="data-structures-for-corum-complexes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-structures-for-corum-complexes" class="anchor"></a>Data structures for CORUM complexes</h3>
 <p>We can represent the CORUM complexes as a list of character vectors. The names of the list are the complex IDs/names, and each element of the list is a vector of UniProt IDs for each complex.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corum2list.html">corum2list</a></span><span class="op">(</span><span class="va">core</span>, subunit.id.type <span class="op">=</span> <span class="st">"UNIPROT"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">core.list</span><span class="op">)</span></code></pre></div>
 <pre><code>## $`CORUM1_BCL6-HDAC4_complex`
@@ -473,12 +477,12 @@
 ## 
 ## $`CORUM12_BLOC-2_(biogenesis_of_lysosome-related_organelles_complex_2)`
 ## [1] "Q86YV9" "Q969F9" "Q9UPZ3"</code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">core.list</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2417</code></pre>
 <p>If we’d like to add metadata in a more structured form to each complex, a suitable option is a <a href="https://bioconductor.org/packages/GSEABase">GeneSetCollection</a>.</p>
 <p>We can also represent the CORUM complexes as a list of graph instances, where all nodes of a complex are connected to all other nodes of that complex with undirected edges.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.glist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corum2graphlist.html">corum2graphlist</a></span><span class="op">(</span><span class="va">core</span>, subunit.id.type <span class="op">=</span> <span class="st">"UNIPROT"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">)</span></code></pre></div>
 <pre><code>## $`CORUM1_BCL6-HDAC4_complex`
@@ -510,10 +514,10 @@
 ## A graphNEL graph with undirected edges
 ## Number of Nodes = 3 
 ## Number of Edges = 3</code></pre>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2417</code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.glist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">graphData</span></code></pre></div>
 <pre><code>## $edgemode
 ## [1] "undirected"
@@ -530,7 +534,7 @@
 ## 
 ## $PubMed.ID
 ## [1] 11929873</code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <pre><code>## $P41182
 ## $P41182$ENTREZID
@@ -558,11 +562,11 @@
 <div id="gse122425" class="section level4">
 <h4 class="hasAnchor">
 <a href="#gse122425" class="anchor"></a>GSE122425</h4>
-<p><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a></p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:48:57</code></pre>
+<p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a>.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## Using cached version from 2021-06-09 17:05:09</code></pre>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span></code></pre></div>
 <pre><code>## class: SummarizedExperiment 
 ## dim: 57905 6 
@@ -573,7 +577,7 @@
 ## rowData names(4): SYMBOL KO GO length
 ## colnames(6): GSM3466389 GSM3466390 ... GSM3466393 GSM3466394
 ## colData names(41): title geo_accession ... passages.ch1 strain.ch1</code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"raw"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##                 GSM3466389 GSM3466390 GSM3466391 GSM3466392 GSM3466393
 ## ENSG00000223972          1          2          2          0          0
@@ -589,7 +593,7 @@
 ## ENSG00000237613          0
 ## ENSG00000268020          0
 ## ENSG00000240361          1</code></pre>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##                 GSM3466389 GSM3466390 GSM3466391 GSM3466392 GSM3466393
 ## ENSG00000223972       0.01       0.01       0.01       0.00       0.00
@@ -605,7 +609,7 @@
 ## ENSG00000237613       0.00
 ## ENSG00000268020       0.00
 ## ENSG00000240361       0.02</code></pre>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 6 rows and 41 columns
 ##                    title geo_accession                status submission_date
@@ -704,7 +708,7 @@
 ## GSM3466392                 NONE         8-12      HEK293
 ## GSM3466393                 NONE         8-12      HEK293
 ## GSM3466394                 NONE         8-12      HEK293</code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 57905 rows and 4 columns
 ##                      SYMBOL          KO          GO    length
@@ -720,6 +724,7 @@
 ## ENSG00000237917     PARP4P1      K10798           _     39802
 ## ENSG00000231514     FAM58CP           _           _       640
 ## ENSG00000235857     CTBP2P1      K04496           _       245</code></pre>
+<p>The dataset includes three wild type samples and three NSUN2 knockout samples.</p>
 </div>
 </div>
 <div id="hct116-cells" class="section level3">
@@ -728,27 +733,19 @@
 <div id="cancer-cell-line-encyclopedia-ccle" class="section level4">
 <h4 class="hasAnchor">
 <a href="#cancer-cell-line-encyclopedia-ccle" class="anchor"></a>Cancer Cell Line Encyclopedia (CCLE)</h4>
-<p>Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the <a href="https://portals.broadinstitute.org/ccle">Cancer Cell Line Encyclopedia</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770">E-MTAB-2770</a>)</p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<p>Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the <a href="https://portals.broadinstitute.org/ccle">Cancer Cell Line Encyclopedia</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770">E-MTAB-2770</a>).</p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">atlasRes</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/searchAtlasExperiments.html">searchAtlasExperiments</a></span><span class="op">(</span>
               properties <span class="op">=</span> <span class="st">"Cancer Cell Line Encyclopedia"</span>, 
-              species <span class="op">=</span> <span class="st">"human"</span> <span class="op">)</span></code></pre></div>
-<pre><code>## Searching for Expression Atlas experiments matching your query ...</code></pre>
-<pre><code>## Query successful.</code></pre>
-<pre><code>## Found 1 experiments matching your query.</code></pre>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">atlasRes</span></code></pre></div>
+              species <span class="op">=</span> <span class="st">"human"</span> <span class="op">)</span>
+<span class="va">atlasRes</span></code></pre></div>
 <pre><code>## DataFrame with 1 row and 4 columns
 ##     Accession      Species                  Type                  Title
 ##   &lt;character&gt;  &lt;character&gt;           &lt;character&gt;            &lt;character&gt;
 ## 1 E-MTAB-2770 Homo sapiens RNA-seq of coding RNA RNA-seq of 934 human..</code></pre>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="va">atlasRes</span><span class="op">$</span><span class="va">Accession</span><span class="op">)</span></code></pre></div>
-<pre><code>## Downloading Expression Atlas experiment summary from:
-##  ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/atlas/experiments/E-MTAB-2770/E-MTAB-2770-atlasExperimentSummary.Rdata</code></pre>
-<pre><code>## Successfully downloaded experiment summary object for E-MTAB-2770</code></pre>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="va">ccle</span><span class="op">$</span><span class="va">`E-MTAB-2770`</span><span class="op">$</span><span class="va">rnaseq</span>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="va">atlasRes</span><span class="op">$</span><span class="va">Accession</span><span class="op">)</span>
+<span class="va">ccle</span> <span class="op">&lt;-</span> <span class="va">ccle</span><span class="op">$</span><span class="va">`E-MTAB-2770`</span><span class="op">$</span><span class="va">rnaseq</span>
 <span class="va">ccle</span></code></pre></div>
 <pre><code>## class: RangedSummarizedExperiment 
 ## dim: 65217 934 
@@ -761,7 +758,7 @@
 ##   run_ZR_75_30.1
 ## colData names(4): AtlasAssayGroup organism cell_line disease</code></pre>
 <p>We have raw read counts:</p>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
 <pre><code>##                 run_22Rv1.2 run_23132_87.2 run_253J_BV.1 run_253J.1
 ## ENSG00000000003         532            574          2287       2533
@@ -775,7 +772,7 @@
 ## ENSG00000000419           3590
 ## ENSG00000000457            461
 ## ENSG00000000460            789</code></pre>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 934 rows and 4 columns
 ##                AtlasAssayGroup     organism   cell_line                disease
@@ -792,7 +789,7 @@
 ## run_ZR_75_1.1             g932 Homo sapiens     ZR-75-1 invasive ductal carc..
 ## run_ZR_75_30.1            g933 Homo sapiens    ZR-75-30 invasive ductal carc..</code></pre>
 <p>and we have one sample per cell line:</p>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">ccle</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="fu">colData</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span></code></pre></div>
 <pre><code>## DataFrame with 1 row and 4 columns
@@ -804,13 +801,9 @@
 <h4 class="hasAnchor">
 <a href="#klijn-et-al--2015" class="anchor"></a>Klijn et al., 2015</h4>
 <p>Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from <a href="https://pubmed.ncbi.nlm.nih.gov/25485619">Klijn et al., 2015</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706">E-MTAB-2706</a>)</p>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="st">"E-MTAB-2706"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Downloading Expression Atlas experiment summary from:
-##  ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/atlas/experiments/E-MTAB-2706/E-MTAB-2706-atlasExperimentSummary.Rdata</code></pre>
-<pre><code>## Successfully downloaded experiment summary object for E-MTAB-2706</code></pre>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="va">klijn</span><span class="op">$</span><span class="va">`E-MTAB-2706`</span><span class="op">$</span><span class="va">rnaseq</span>
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="st">"E-MTAB-2706"</span><span class="op">)</span>
+<span class="va">klijn</span> <span class="op">&lt;-</span> <span class="va">klijn</span><span class="op">$</span><span class="va">`E-MTAB-2706`</span><span class="op">$</span><span class="va">rnaseq</span>
 <span class="va">klijn</span></code></pre></div>
 <pre><code>## class: RangedSummarizedExperiment 
 ## dim: 65217 622 
@@ -822,7 +815,7 @@
 ## colnames(622): ERR413347 ERR413348 ... ERR414020 ERR415514
 ## colData names(12): AtlasAssayGroup organism ... media freeze_media</code></pre>
 <p>We have raw read counts:</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
 <pre><code>##                 ERR413347 ERR413348 ERR413349 ERR413350 ERR413351
 ## ENSG00000000003       890      1172      6514       559       489
@@ -830,7 +823,7 @@
 ## ENSG00000000419      2122      2933     10245      2624      1338
 ## ENSG00000000457       240       248       903       763       216
 ## ENSG00000000460       740       654      3082       640       570</code></pre>
-<div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 622 rows and 12 columns
 ##           AtlasAssayGroup     organism   cell_line tissue_supergroup
@@ -886,7 +879,7 @@
 ## ERR414020 Complete growth medi..
 ## ERR415514 Complete growth medi..</code></pre>
 <p>and we have one sample per cell line:</p>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">klijn</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="fu">colData</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span></code></pre></div>
 <pre><code>## DataFrame with 1 row and 12 columns
@@ -903,7 +896,7 @@
 ##                      &lt;character&gt;
 ## ERR413569 50% FBS, 40% media, ..</code></pre>
 <p>Combine HCT-116 transcriptome from CCLE and Klijn et al. datasets:</p>
-<div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">ccle</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="va">ind2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">klijn</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="va">emat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span>,<span class="va">ind1</span><span class="op">]</span>, <span class="fu">assay</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span>,<span class="va">ind2</span><span class="op">]</span><span class="op">)</span>
@@ -925,26 +918,26 @@
 <div id="ccle" class="section level3">
 <h3 class="hasAnchor">
 <a href="#ccle" class="anchor"></a>CCLE</h3>
-<p>Pull the data from ExperimentHub:</p>
-<div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
+<p>Pull the <a href="https://doi.org/10.1016/j.cell.2019.12.023">CCLE proteome data</a> from ExperimentHub. The dataset profiles 12,755 proteins by mass spectrometry across 375 cancer cell lines.</p>
+<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ehdb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">eh</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gygi"</span>, <span class="st">"depmap"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="va">ehdb</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ehdb</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></code></pre></div>
 <pre><code>## snapshotDate(): 2021-05-18</code></pre>
 <pre><code>## see ?depmap and browseVignettes('depmap') for documentation</code></pre>
 <pre><code>## loading from cache</code></pre>
-<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
 <p>Explore the data:</p>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 4821390      12</code></pre>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
 <pre><code>##  [1] "depmap_id"          "gene_name"          "entrez_id"         
 ##  [4] "protein"            "protein_expression" "protein_id"        
 ##  [7] "desc"               "group_id"           "uniprot"           
 ## [10] "uniprot_acc"        "TenPx"              "cell_line"</code></pre>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
 <pre><code>##    depmap_id gene_name entrez_id                 protein protein_expression
 ## 1 ACH-000849   SLC12A2      6558 MDAMB468_BREAST_TenPx01         2.11134846
@@ -968,11 +961,11 @@
 ## 5 S12A2_HUMAN      P55011 TenPx01    CAL51_BREAST
 ## 6 S12A2_HUMAN      P55011 TenPx01   RPMI7951_SKIN</code></pre>
 <p>Restrict to HCT116:</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ccle.prot.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">ccle.prot</span>, <span class="va">cell_line</span> <span class="op">==</span> <span class="st">"HCT116_LARGE_INTESTINE"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 12755    12</code></pre>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span></code></pre></div>
 <pre><code>##       depmap_id gene_name entrez_id                        protein
 ## 28   ACH-000971   SLC12A2      6558 HCT116_LARGE_INTESTINE_TenPx04
@@ -1003,7 +996,7 @@
 ## 1540      P48431 TenPx04 HCT116_LARGE_INTESTINE
 ## 1918      P41225 TenPx04 HCT116_LARGE_INTESTINE</code></pre>
 <p>Or turn into a <code>SummarizedExperiment</code> for convenience (we can restrict this to selected cell lines, but here we keep all cell lines):</p>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ccleProteome2SummarizedExperiment.html">ccleProteome2SummarizedExperiment</a></span><span class="op">(</span><span class="va">ccle.prot</span>, cell.line <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 <span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
 <pre><code>##             22RV1         697       769P       786O      8305C
@@ -1012,11 +1005,11 @@
 ## O60341 -0.3379936  0.37121437 -0.8170886 -0.9183874  0.1141192
 ## O00570         NA          NA         NA -0.5043593         NA
 ## P48431 -1.2617033          NA         NA -3.4006509         NA</code></pre>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"HCT116"</span><span class="op">]</span></code></pre></div>
 <pre><code>##     P55011     P35453     O60341     O00570     P48431 
 ## -0.2422502         NA -0.1941110         NA -1.5306584</code></pre>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 12755 rows and 2 columns
 ##             SYMBOL  ENTREZID
@@ -1038,10 +1031,10 @@
 <a href="#relative-protein-expression-data-preprint" class="anchor"></a>Relative protein expression data (preprint)</h3>
 <p>Huttlin_BioPlex3_Table_S4.xlsx contains the relative protein expression data comparing 293T and HCT116 cells. This is a supplementary table that will be published with the upcoming BioPlex 3 paper.</p>
 <p>That lives on dropbox for the moment, and can be wrapped into an R data package or uploaded to ExperimentHub. Once published there will be other avenues to pull the data (web request, reference DB, …).</p>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-09 05:50:28</code></pre>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
+<pre><code>## Using cached version from 2021-06-09 17:06:44</code></pre>
+<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
 <pre><code>##               HCT1      HCT2      HCT3      HCT4      HCT5
 ## P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410
@@ -1049,7 +1042,7 @@
 ## P55011   12.570100 11.637500 12.495700 11.374500 12.377400
 ## O60341    8.914910  9.677760  8.397850  8.745780  8.746410
 ## O14654    0.196305  0.277787  0.425389  0.199624  0.491558</code></pre>
-<div class="sourceCode" id="cb125"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 10 rows and 1 column
 ##        cell.line
@@ -1064,7 +1057,7 @@
 ## HEK3        293T
 ## HEK4        293T
 ## HEK5        293T</code></pre>
-<div class="sourceCode" id="cb127"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">rowData</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 9604 rows and 5 columns
 ##             ENTREZID      SYMBOL nr.peptides log2ratio  adj.pvalue
@@ -1089,17 +1082,18 @@
 <a href="#caching" class="anchor"></a>Caching</h1>
 <p>Note that calling functions like <code>getCorum</code> or <code>getBioPlex</code> with argument <code>cache = FALSE</code> will automatically overwrite the corresponding object in your cache. It is thus typically not required for a user to interact with the cache.</p>
 <p>For more extended control of the cache, use from within R:</p>
-<div class="sourceCode" id="cb129"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cache.dir</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html">R_user_dir</a></span><span class="op">(</span><span class="st">"BioPlex"</span>, which <span class="op">=</span> <span class="st">"cache"</span><span class="op">)</span> 
 <span class="va">bfc</span> <span class="op">&lt;-</span> <span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">BiocFileCache</a></span><span class="op">(</span><span class="va">cache.dir</span><span class="op">)</span></code></pre></div>
 <p>and then proceed as described in the <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache">BiocFileCache vignette, Section 1.10</a> either via <code>cleanbfc()</code> to clean or <code>removebfc()</code> to remove your cache.</p>
 <p>To do a hard reset (use with caution!):</p>
-<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">removebfc</a></span><span class="op">(</span><span class="va">bfc</span><span class="op">)</span></code></pre></div>
-<div id="sessioninfo" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sessioninfo" class="anchor"></a>SessionInfo</h2>
-<div class="sourceCode" id="cb131"><pre class="downlit sourceCode r">
+</div>
+<div id="sessioninfo" class="section level1">
+<h1 class="hasAnchor">
+<a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## R version 4.1.0 (2021-05-18)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
@@ -1172,7 +1166,6 @@
 ## [71] Rcpp_1.0.6                    png_0.1-7                    
 ## [73] vctrs_0.3.8                   tidyselect_1.1.1             
 ## [75] xfun_0.23</code></pre>
-</div>
 </div>
   </div>
 

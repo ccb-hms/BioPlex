@@ -142,12 +142,12 @@ in the <code>nodeData</code>.</p>
 <p>PFAM: <a href='http://pfam.xfam.org'>http://pfam.xfam.org</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='bioplex2graph.html'>bioplex2graph</a></code>, <code>ftM2graphNEL</code></p></div>
+    <div class='dont-index'><p><code>nodeData</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># (1) Obtain the latest version of the 293T PPI network</span>
 <span class='va'>bp.293t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getBioPlex.html'>getBioPlex</a></span><span class='op'>(</span>cell.line <span class='op'>=</span> <span class='st'>"293T"</span>, version <span class='op'>=</span> <span class='st'>"3.0"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using cached version from 2021-06-09 05:48:46</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Using cached version from 2021-06-09 17:04:57</span></div><div class='input'>
 <span class='co'># (2) Turn the data into a graph </span>
 <span class='va'>bp.gr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bioplex2graph.html'>bioplex2graph</a></span><span class='op'>(</span><span class='va'>bp.293t</span><span class='op'>)</span>
 
@@ -158,7 +158,7 @@ in the <code>nodeData</code>.</p>
 </div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: AnnotationDbi</span></div><div class='input'>
 <span class='co'># (4) Annotate PFAM domains</span>
 <span class='va'>bp.gr</span> <span class='op'>&lt;-</span> <span class='fu'>annotatePFAM</span><span class='op'>(</span><span class='va'>bp.gr</span>, <span class='va'>orgdb</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>'select()' returned 1:many mapping between keys and columns</span></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
