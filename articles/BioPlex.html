@@ -151,7 +151,7 @@
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:02:24</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:48:46</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
 <pre><code>##    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI
@@ -170,7 +170,7 @@
 ## 6 0.9989736</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:02:39</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:49:00</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span></code></pre></div>
 <pre><code>##   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI
@@ -196,7 +196,7 @@
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:02:24</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:48:46</code></pre>
 </div>
 <div id="data-structures-for-bioplex-ppis" class="section level3">
 <h3 class="hasAnchor">
@@ -394,7 +394,7 @@
 <p>Complete set of <a href="http://mips.helmholtz-muenchen.de/corum/#download">CORUM</a> complexes:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:04:27</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:50:43</code></pre>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2916   20</code></pre>
@@ -427,14 +427,14 @@
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:02:18</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:48:41</code></pre>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2417   20</code></pre>
 <p>Complexes with splice variants:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:04:29</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:50:45</code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 44 20</code></pre>
@@ -447,7 +447,7 @@
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:04:35</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:50:50</code></pre>
 </div>
 <div id="data-structures-for-corum-complexes" class="section level3">
 <h3 class="hasAnchor">
@@ -561,7 +561,7 @@
 <p><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a></p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:02:36</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:48:57</code></pre>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span></code></pre></div>
 <pre><code>## class: SummarizedExperiment 
@@ -1040,7 +1040,7 @@
 <p>That lives on dropbox for the moment, and can be wrapped into an R data package or uploaded to ExperimentHub. Once published there will be other avenues to pull the data (web request, reference DB, …).</p>
 <div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-08 06:04:11</code></pre>
+<pre><code>## Using cached version from 2021-06-09 05:50:28</code></pre>
 <div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
 <pre><code>##               HCT1      HCT2      HCT3      HCT4      HCT5
