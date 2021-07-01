@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> • BioPlex</title>
+<title>Import and representation of BioPlex PPI data and related resources • BioPlex</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Import and representation of BioPlex PPI data and related resources">
 <meta property="og:description" content="BioPlex">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -64,10 +64,12 @@
       </header><script src="BioPlex_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip></h1>
+      <h1 data-toc-skip>Import and representation of BioPlex PPI data and related resources</h1>
+                        <h4 class="author">Ludwig Geistlinger and Robert Gentleman</h4>
             
+            <h4 class="date">1 July 2021</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/ccb-hms/BioPlex/blob/master/vignettes/BioPlex.Rmd"><code>vignettes/BioPlex.Rmd</code></a></small>
       <div class="hidden name"><code>BioPlex.Rmd</code></div>
 
     </div>
@@ -77,8 +79,19 @@
 <div id="setup" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h1>
+<p>The <a href="https://bioplex.hms.harvard.edu/">BioPlex project</a> uses affinity-purification mass spectrometry to profile protein-protein interactions (PPIs) in human cell lines.</p>
+<p>To date, the BioPlex project has created two proteome-scale, cell-line-specific PPI networks. The first, BioPlex 3.0, results from affinity purification of 10,128 human proteins —- half the proteome —- in 293T cells and includes 118,162 interactions among 14,586 proteins. The second results from 5,522 immunoprecipitations in HCT116 cells and includes 70,966 interactions between 10,531 proteins.</p>
+<p>For more information, please see:</p>
+<ul>
+<li>Huttlin et al. <a href="https://doi.org/10.1016/j.cell.2015.06.043">The BioPlex network: a systematic exploration of the human interactome</a>. <em>Cell</em>, 2015.</li>
+<li>Huttlin et al. <a href="https://doi.org/10.1038/nature22366">Architecture of the human interactome defines protein communities and disease networks</a>, <em>Nature</em>, 2017.</li>
+<li>Huttlin et al. <a href="https://doi.org/10.1016/j.cell.2021.04.011">Dual proteome-scale networks reveal cell-specific remodeling of the human interactome</a>, <em>Cell</em>, 2021.</li>
+</ul>
+<p>The <a href="https://github.com/ccb-hms/BioPlex">BioPlex R package</a> implements access to the BioPlex protein-protein interaction networks and related resources from within R. Besides protein-protein interaction networks for 293T and HCT116 cells, this includes access to <a href="http://mips.helmholtz-muenchen.de/corum">CORUM</a> protein complex data, and transcriptome and proteome data for the two cell lines.</p>
+<p>Functionality focuses on importing these data resources and storing them in dedicated Bioconductor data structures, as a foundation for integrative downstream analysis of the data. For a set of downstream analyses and applications, please see the <a href="https://github.com/ccb-hms/BioPlexAnalysis">BioPlexAnalysis package</a> and <a href="https://ccb-hms.github.io/BioPlexAnalysis/">analysis vignettes</a>.</p>
+<p>We start by loading the package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">BioPlex</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ccb-hms/BioPlex">BioPlex</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">AnnotationHub</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExperimentHub</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">ExpressionAtlas</span><span class="op">)</span>
@@ -100,456 +113,442 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ahdb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"orgDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="va">ahdb</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ahdb</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>
-<span class="va">orgdb</span></code></pre></div>
-<pre><code>## OrgDb object:
-## | DBSCHEMAVERSION: 2.1
-## | Db type: OrgDb
-## | Supporting package: AnnotationDbi
-## | DBSCHEMA: HUMAN_DB
-## | ORGANISM: Homo sapiens
-## | SPECIES: Human
-## | EGSOURCEDATE: 2021-Apr14
-## | EGSOURCENAME: Entrez Gene
-## | EGSOURCEURL: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA
-## | CENTRALID: EG
-## | TAXID: 9606
-## | GOSOURCENAME: Gene Ontology
-## | GOSOURCEURL: http://current.geneontology.org/ontology/go-basic.obo
-## | GOSOURCEDATE: 2021-02-01
-## | GOEGSOURCEDATE: 2021-Apr14
-## | GOEGSOURCENAME: Entrez Gene
-## | GOEGSOURCEURL: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA
-## | KEGGSOURCENAME: KEGG GENOME
-## | KEGGSOURCEURL: ftp://ftp.genome.jp/pub/kegg/genomes
-## | KEGGSOURCEDATE: 2011-Mar15
-## | GPSOURCENAME: UCSC Genome Bioinformatics (Homo sapiens)
-## | GPSOURCEURL: 
-## | GPSOURCEDATE: 2021-Feb16
-## | ENSOURCEDATE: 2021-Feb16
-## | ENSOURCENAME: Ensembl
-## | ENSOURCEURL: ftp://ftp.ensembl.org/pub/current_fasta
-## | UPSOURCENAME: Uniprot
-## | UPSOURCEURL: http://www.UniProt.org/
-## | UPSOURCEDATE: Mon Apr 26 21:53:12 2021</code></pre>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">keytypes</a></span><span class="op">(</span><span class="va">orgdb</span><span class="op">)</span></code></pre></div>
-<pre><code>##  [1] "ACCNUM"       "ALIAS"        "ENSEMBL"      "ENSEMBLPROT"  "ENSEMBLTRANS"
-##  [6] "ENTREZID"     "ENZYME"       "EVIDENCE"     "EVIDENCEALL"  "GENENAME"    
-## [11] "GENETYPE"     "GO"           "GOALL"        "IPI"          "MAP"         
-## [16] "OMIM"         "ONTOLOGY"     "ONTOLOGYALL"  "PATH"         "PFAM"        
-## [21] "PMID"         "PROSITE"      "REFSEQ"       "SYMBOL"       "UCSCKG"      
-## [26] "UNIPROT"</code></pre>
+<span class="va">orgdb</span>
+<span class="co">#&gt; OrgDb object:</span>
+<span class="co">#&gt; | DBSCHEMAVERSION: 2.1</span>
+<span class="co">#&gt; | Db type: OrgDb</span>
+<span class="co">#&gt; | Supporting package: AnnotationDbi</span>
+<span class="co">#&gt; | DBSCHEMA: HUMAN_DB</span>
+<span class="co">#&gt; | ORGANISM: Homo sapiens</span>
+<span class="co">#&gt; | SPECIES: Human</span>
+<span class="co">#&gt; | EGSOURCEDATE: 2021-Apr14</span>
+<span class="co">#&gt; | EGSOURCENAME: Entrez Gene</span>
+<span class="co">#&gt; | EGSOURCEURL: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA</span>
+<span class="co">#&gt; | CENTRALID: EG</span>
+<span class="co">#&gt; | TAXID: 9606</span>
+<span class="co">#&gt; | GOSOURCENAME: Gene Ontology</span>
+<span class="co">#&gt; | GOSOURCEURL: http://current.geneontology.org/ontology/go-basic.obo</span>
+<span class="co">#&gt; | GOSOURCEDATE: 2021-02-01</span>
+<span class="co">#&gt; | GOEGSOURCEDATE: 2021-Apr14</span>
+<span class="co">#&gt; | GOEGSOURCENAME: Entrez Gene</span>
+<span class="co">#&gt; | GOEGSOURCEURL: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA</span>
+<span class="co">#&gt; | KEGGSOURCENAME: KEGG GENOME</span>
+<span class="co">#&gt; | KEGGSOURCEURL: ftp://ftp.genome.jp/pub/kegg/genomes</span>
+<span class="co">#&gt; | KEGGSOURCEDATE: 2011-Mar15</span>
+<span class="co">#&gt; | GPSOURCENAME: UCSC Genome Bioinformatics (Homo sapiens)</span>
+<span class="co">#&gt; | GPSOURCEURL: </span>
+<span class="co">#&gt; | GPSOURCEDATE: 2021-Feb16</span>
+<span class="co">#&gt; | ENSOURCEDATE: 2021-Feb16</span>
+<span class="co">#&gt; | ENSOURCENAME: Ensembl</span>
+<span class="co">#&gt; | ENSOURCEURL: ftp://ftp.ensembl.org/pub/current_fasta</span>
+<span class="co">#&gt; | UPSOURCENAME: Uniprot</span>
+<span class="co">#&gt; | UPSOURCEURL: http://www.UniProt.org/</span>
+<span class="co">#&gt; | UPSOURCEDATE: Mon Apr 26 21:53:12 2021</span>
+<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">keytypes</a></span><span class="op">(</span><span class="va">orgdb</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "ACCNUM"       "ALIAS"        "ENSEMBL"      "ENSEMBLPROT"  "ENSEMBLTRANS"</span>
+<span class="co">#&gt;  [6] "ENTREZID"     "ENZYME"       "EVIDENCE"     "EVIDENCEALL"  "GENENAME"    </span>
+<span class="co">#&gt; [11] "GENETYPE"     "GO"           "GOALL"        "IPI"          "MAP"         </span>
+<span class="co">#&gt; [16] "OMIM"         "ONTOLOGY"     "ONTOLOGYALL"  "PATH"         "PFAM"        </span>
+<span class="co">#&gt; [21] "PMID"         "PROSITE"      "REFSEQ"       "SYMBOL"       "UCSCKG"      </span>
+<span class="co">#&gt; [26] "UNIPROT"</span></code></pre></div>
 </div>
 <div id="bioplex-ppis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bioplex-ppis" class="anchor"></a>BioPlex PPIs</h2>
 <p><a href="https://bioplex.hms.harvard.edu/interactions.php">Available networks</a> include:</p>
 <ul>
-<li>BioPlex 293T cells (versions 1.0, 2.0, and 3.0)</li>
-<li>BioPlex HCT116 cells (version 1.0)</li>
+<li>BioPlex PPI network for human embryonic kidney <a href="https://en.wikipedia.org/wiki/293T">293T</a> cells (versions 1.0, 2.0, and 3.0)</li>
+<li>BioPlex PPI network for human colon cancer <a href="https://en.wikipedia.org/wiki/HCT116_cells">HCT116</a> cells (version 1.0)</li>
 </ul>
 <p>Let’s get the latest version of the 293T PPI network:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:25:53</code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
-<pre><code>##    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI
-## 1    100 728378   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357
-## 2 222389   6137 Q8N7W2-2   P26373   BEND7   RPL13 1.340380e-18 0.2256644741
-## 3 222389   5928 Q8N7W2-2 Q09028-3   BEND7   RBBP4 7.221401e-21 0.0000641669
-## 4 222389  25873 Q8N7W2-2   Q9Y3U8   BEND7   RPL36 7.058372e-17 0.1281827343
-## 5 222389   6124 Q8N7W2-2   P36578   BEND7    RPL4 1.632313e-22 0.2006379109
-## 6 222389   6188 Q8N7W2-2   P23396   BEND7    RPS3 3.986270e-26 0.0010264311
-##        pInt
-## 1 0.9998824
-## 2 0.7743355
-## 3 0.9999358
-## 4 0.8718173
-## 5 0.7993621
-## 6 0.9989736</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">nrow</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 118162</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:26:09</code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span></code></pre></div>
-<pre><code>##   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI
-## 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05
-## 2 88455 115106   Q8IZ07   Q96CS2 ANKRD13A   HAUS1 4.488473e-02 1.934731e-03
-## 3 88455  23086   Q8IZ07 Q8NEV8-2 ANKRD13A   EXPH5 7.402394e-05 9.296226e-04
-## 4 88455  54930   Q8IZ07   Q9H6D7 ANKRD13A   HAUS4 9.180959e-07 1.278318e-04
-## 5 88455  79441   Q8IZ07   Q68CZ6 ANKRD13A   HAUS3 8.709394e-07 1.495480e-03
-## 6 88455  93323   Q8IZ07 Q9BT25-2 ANKRD13A   HAUS8 9.147659e-06 2.061483e-03
-##        pInt
-## 1 0.9995711
-## 2 0.9531805
-## 3 0.9989964
-## 4 0.9998713
-## 5 0.9985036
-## 6 0.9979294</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">nrow</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 70966</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:11:11</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
+<span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
+<span class="co">#&gt; 1    100 728378   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
+<span class="co">#&gt; 2 222389   6137 Q8N7W2-2   P26373   BEND7   RPL13 1.340380e-18 0.2256644741</span>
+<span class="co">#&gt; 3 222389   5928 Q8N7W2-2 Q09028-3   BEND7   RBBP4 7.221401e-21 0.0000641669</span>
+<span class="co">#&gt; 4 222389  25873 Q8N7W2-2   Q9Y3U8   BEND7   RPL36 7.058372e-17 0.1281827343</span>
+<span class="co">#&gt; 5 222389   6124 Q8N7W2-2   P36578   BEND7    RPL4 1.632313e-22 0.2006379109</span>
+<span class="co">#&gt; 6 222389   6188 Q8N7W2-2   P23396   BEND7    RPS3 3.986270e-26 0.0010264311</span>
+<span class="co">#&gt;        pInt</span>
+<span class="co">#&gt; 1 0.9998824</span>
+<span class="co">#&gt; 2 0.7743355</span>
+<span class="co">#&gt; 3 0.9999358</span>
+<span class="co">#&gt; 4 0.8718173</span>
+<span class="co">#&gt; 5 0.7993621</span>
+<span class="co">#&gt; 6 0.9989736</span>
+<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">nrow</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
+<span class="co">#&gt; [1] 118162</span></code></pre></div>
+<p>Each row corresponds to a PPI between a bait protein A and a prey protein B, for which NCBI Entrez Gene IDs, Uniprot IDs, and gene symbols are annotated. The last three columns reflect the likelihood that each interaction resulted from either an incorrect protein identification (<code>pW</code>), background (<code>pNI</code>), or a bona fide interacting partner (<code>pInt</code>) as determined using the <a href="https://github.com/dnusinow/cRomppass">CompPASS algorithm</a>.</p>
+<p>Analgously, we can obtain the latest version of the HCT116 PPI network:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:11:27</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
+<span class="co">#&gt;   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
+<span class="co">#&gt; 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
+<span class="co">#&gt; 2 88455 115106   Q8IZ07   Q96CS2 ANKRD13A   HAUS1 4.488473e-02 1.934731e-03</span>
+<span class="co">#&gt; 3 88455  23086   Q8IZ07 Q8NEV8-2 ANKRD13A   EXPH5 7.402394e-05 9.296226e-04</span>
+<span class="co">#&gt; 4 88455  54930   Q8IZ07   Q9H6D7 ANKRD13A   HAUS4 9.180959e-07 1.278318e-04</span>
+<span class="co">#&gt; 5 88455  79441   Q8IZ07   Q68CZ6 ANKRD13A   HAUS3 8.709394e-07 1.495480e-03</span>
+<span class="co">#&gt; 6 88455  93323   Q8IZ07 Q9BT25-2 ANKRD13A   HAUS8 9.147659e-06 2.061483e-03</span>
+<span class="co">#&gt;        pInt</span>
+<span class="co">#&gt; 1 0.9995711</span>
+<span class="co">#&gt; 2 0.9531805</span>
+<span class="co">#&gt; 3 0.9989964</span>
+<span class="co">#&gt; 4 0.9998713</span>
+<span class="co">#&gt; 5 0.9985036</span>
+<span class="co">#&gt; 6 0.9979294</span>
+<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">nrow</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
+<span class="co">#&gt; [1] 70966</span></code></pre></div>
 <div id="id-mapping" class="section level3">
 <h3 class="hasAnchor">
 <a href="#id-mapping" class="anchor"></a>ID mapping</h3>
-<p>The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot.</p>
+<p>The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot at the time of publication of the BioPlex 3.0 networks.</p>
 <p>We can update those based on Bioc annotation functionality:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
-                               remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:25:53</code></pre>
+                               remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:11:11</span></code></pre></div>
 </div>
 <div id="data-structures-for-bioplex-ppis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-structures-for-bioplex-ppis" class="anchor"></a>Data structures for BioPlex PPIs</h3>
 <p>We can also represent a given version of the BioPlex PPI network for a given cell line as one big graph where bait and prey relationship are represented by directed edges from bait to prey.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioplex2graph.html">bioplex2graph</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
-<span class="va">bp.gr</span></code></pre></div>
-<pre><code>## A graphNEL graph with directed edges
-## Number of Nodes = 13689 
-## Number of Edges = 115868</code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## $P00813
-## $P00813$ENTREZID
-## [1] "100"
-## 
-## $P00813$SYMBOL
-## [1] "ADA"
-## 
-## $P00813$ISOFORM
-## [1] "P00813"
-## 
-## 
-## $Q8N7W2
-## $Q8N7W2$ENTREZID
-## [1] "222389"
-## 
-## $Q8N7W2$SYMBOL
-## [1] "BEND7"
-## 
-## $Q8N7W2$ISOFORM
-## [1] "Q8N7W2-2"
-## 
-## 
-## $Q6ZMN8
-## $Q6ZMN8$ENTREZID
-## [1] "645121"
-## 
-## $Q6ZMN8$SYMBOL
-## [1] "CCNI2"
-## 
-## $Q6ZMN8$ISOFORM
-## [1] "Q6ZMN8"
-## 
-## 
-## $P20138
-## $P20138$ENTREZID
-## [1] "945"
-## 
-## $P20138$SYMBOL
-## [1] "CD33"
-## 
-## $P20138$ISOFORM
-## [1] "P20138"
-## 
-## 
-## $P55039
-## $P55039$ENTREZID
-## [1] "1819"
-## 
-## $P55039$SYMBOL
-## [1] "DRG2"
-## 
-## $P55039$ISOFORM
-## [1] "P55039"
-## 
-## 
-## $Q17R55
-## $Q17R55$ENTREZID
-## [1] "148109"
-## 
-## $Q17R55$SYMBOL
-## [1] "FAM187B"
-## 
-## $Q17R55$ISOFORM
-## [1] "Q17R55"</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/edgeData-methods.html">edgeData</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## $`P00813|A5A3E0`
-## $`P00813|A5A3E0`$weight
-## [1] 1
-## 
-## $`P00813|A5A3E0`$pW
-## [1] 6.881844e-10
-## 
-## $`P00813|A5A3E0`$pNI
-## [1] 0.0001176357
-## 
-## $`P00813|A5A3E0`$pInt
-## [1] 0.9998824
-## 
-## 
-## $`Q8N7W2|P26373`
-## $`Q8N7W2|P26373`$weight
-## [1] 1
-## 
-## $`Q8N7W2|P26373`$pW
-## [1] 1.34038e-18
-## 
-## $`Q8N7W2|P26373`$pNI
-## [1] 0.2256645
-## 
-## $`Q8N7W2|P26373`$pInt
-## [1] 0.7743355
-## 
-## 
-## $`Q8N7W2|Q09028`
-## $`Q8N7W2|Q09028`$weight
-## [1] 1
-## 
-## $`Q8N7W2|Q09028`$pW
-## [1] 7.221401e-21
-## 
-## $`Q8N7W2|Q09028`$pNI
-## [1] 6.41669e-05
-## 
-## $`Q8N7W2|Q09028`$pInt
-## [1] 0.9999358
-## 
-## 
-## $`Q8N7W2|Q9Y3U8`
-## $`Q8N7W2|Q9Y3U8`$weight
-## [1] 1
-## 
-## $`Q8N7W2|Q9Y3U8`$pW
-## [1] 7.058372e-17
-## 
-## $`Q8N7W2|Q9Y3U8`$pNI
-## [1] 0.1281827
-## 
-## $`Q8N7W2|Q9Y3U8`$pInt
-## [1] 0.8718173
-## 
-## 
-## $`Q8N7W2|P36578`
-## $`Q8N7W2|P36578`$weight
-## [1] 1
-## 
-## $`Q8N7W2|P36578`$pW
-## [1] 1.632313e-22
-## 
-## $`Q8N7W2|P36578`$pNI
-## [1] 0.2006379
-## 
-## $`Q8N7W2|P36578`$pInt
-## [1] 0.7993621
-## 
-## 
-## $`Q8N7W2|P23396`
-## $`Q8N7W2|P23396`$weight
-## [1] 1
-## 
-## $`Q8N7W2|P23396`$pW
-## [1] 3.98627e-26
-## 
-## $`Q8N7W2|P23396`$pNI
-## [1] 0.001026431
-## 
-## $`Q8N7W2|P23396`$pInt
-## [1] 0.9989736</code></pre>
+<span class="va">bp.gr</span>
+<span class="co">#&gt; A graphNEL graph with directed edges</span>
+<span class="co">#&gt; Number of Nodes = 13689 </span>
+<span class="co">#&gt; Number of Edges = 115868</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; $P00813</span>
+<span class="co">#&gt; $P00813$ENTREZID</span>
+<span class="co">#&gt; [1] "100"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P00813$SYMBOL</span>
+<span class="co">#&gt; [1] "ADA"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P00813$ISOFORM</span>
+<span class="co">#&gt; [1] "P00813"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q8N7W2</span>
+<span class="co">#&gt; $Q8N7W2$ENTREZID</span>
+<span class="co">#&gt; [1] "222389"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q8N7W2$SYMBOL</span>
+<span class="co">#&gt; [1] "BEND7"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q8N7W2$ISOFORM</span>
+<span class="co">#&gt; [1] "Q8N7W2-2"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q6ZMN8</span>
+<span class="co">#&gt; $Q6ZMN8$ENTREZID</span>
+<span class="co">#&gt; [1] "645121"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q6ZMN8$SYMBOL</span>
+<span class="co">#&gt; [1] "CCNI2"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q6ZMN8$ISOFORM</span>
+<span class="co">#&gt; [1] "Q6ZMN8"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P20138</span>
+<span class="co">#&gt; $P20138$ENTREZID</span>
+<span class="co">#&gt; [1] "945"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P20138$SYMBOL</span>
+<span class="co">#&gt; [1] "CD33"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P20138$ISOFORM</span>
+<span class="co">#&gt; [1] "P20138"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P55039</span>
+<span class="co">#&gt; $P55039$ENTREZID</span>
+<span class="co">#&gt; [1] "1819"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P55039$SYMBOL</span>
+<span class="co">#&gt; [1] "DRG2"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P55039$ISOFORM</span>
+<span class="co">#&gt; [1] "P55039"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q17R55</span>
+<span class="co">#&gt; $Q17R55$ENTREZID</span>
+<span class="co">#&gt; [1] "148109"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q17R55$SYMBOL</span>
+<span class="co">#&gt; [1] "FAM187B"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q17R55$ISOFORM</span>
+<span class="co">#&gt; [1] "Q17R55"</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/edgeData-methods.html">edgeData</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; $`P00813|A5A3E0`</span>
+<span class="co">#&gt; $`P00813|A5A3E0`$weight</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`P00813|A5A3E0`$pW</span>
+<span class="co">#&gt; [1] 6.881844e-10</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`P00813|A5A3E0`$pNI</span>
+<span class="co">#&gt; [1] 0.0001176357</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`P00813|A5A3E0`$pInt</span>
+<span class="co">#&gt; [1] 0.9998824</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P26373`</span>
+<span class="co">#&gt; $`Q8N7W2|P26373`$weight</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P26373`$pW</span>
+<span class="co">#&gt; [1] 1.34038e-18</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P26373`$pNI</span>
+<span class="co">#&gt; [1] 0.2256645</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P26373`$pInt</span>
+<span class="co">#&gt; [1] 0.7743355</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q09028`</span>
+<span class="co">#&gt; $`Q8N7W2|Q09028`$weight</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q09028`$pW</span>
+<span class="co">#&gt; [1] 7.221401e-21</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q09028`$pNI</span>
+<span class="co">#&gt; [1] 6.41669e-05</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q09028`$pInt</span>
+<span class="co">#&gt; [1] 0.9999358</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q9Y3U8`</span>
+<span class="co">#&gt; $`Q8N7W2|Q9Y3U8`$weight</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q9Y3U8`$pW</span>
+<span class="co">#&gt; [1] 7.058372e-17</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q9Y3U8`$pNI</span>
+<span class="co">#&gt; [1] 0.1281827</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|Q9Y3U8`$pInt</span>
+<span class="co">#&gt; [1] 0.8718173</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P36578`</span>
+<span class="co">#&gt; $`Q8N7W2|P36578`$weight</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P36578`$pW</span>
+<span class="co">#&gt; [1] 1.632313e-22</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P36578`$pNI</span>
+<span class="co">#&gt; [1] 0.2006379</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P36578`$pInt</span>
+<span class="co">#&gt; [1] 0.7993621</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P23396`</span>
+<span class="co">#&gt; $`Q8N7W2|P23396`$weight</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P23396`$pW</span>
+<span class="co">#&gt; [1] 3.98627e-26</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P23396`$pNI</span>
+<span class="co">#&gt; [1] 0.001026431</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`Q8N7W2|P23396`$pInt</span>
+<span class="co">#&gt; [1] 0.9989736</span></code></pre></div>
 <p>When starting off with ordinary dfs we’ll be losing the ability to annotate graph-level annotation such as cell line, version, PMID, … We might need to work with <code>DataFrame</code>s where we have <code>mcols</code> and <code>metadata</code>.</p>
 </div>
 <div id="pfam-domains" class="section level3">
 <h3 class="hasAnchor">
 <a href="#pfam-domains" class="anchor"></a>PFAM domains</h3>
-<p>We can easily add PFAM domain annotations to the node metadata:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<p>We can easily add <a href="http://pfam.xfam.org">PFAM</a> domain annotations to the node metadata:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/annotatePFAM.html">annotatePFAM</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="va">orgdb</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/graphNEL-class.html">nodes</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span>, <span class="st">"PFAM"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## $P00813
-## [1] "PF00962"
-## 
-## $Q8N7W2
-## [1] "PF10523"
-## 
-## $Q6ZMN8
-## [1] "PF00134"
-## 
-## $P20138
-## [1] "PF00047" "PF07686"
-## 
-## $P55039
-## [1] "PF01926" "PF16897" "PF02824"
-## 
-## $Q17R55
-## [1] NA</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/graphNEL-class.html">nodes</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span>, <span class="st">"PFAM"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; $P00813</span>
+<span class="co">#&gt; [1] "PF00962"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q8N7W2</span>
+<span class="co">#&gt; [1] "PF10523"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q6ZMN8</span>
+<span class="co">#&gt; [1] "PF00134"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P20138</span>
+<span class="co">#&gt; [1] "PF00047" "PF07686"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P55039</span>
+<span class="co">#&gt; [1] "PF01926" "PF16897" "PF02824"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Q17R55</span>
+<span class="co">#&gt; [1] NA</span></code></pre></div>
 </div>
 </div>
 <div id="corum-complexes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#corum-complexes" class="anchor"></a>CORUM complexes</h2>
 <p>Obtain the complete set of human protein complexes from <a href="http://mips.helmholtz-muenchen.de/corum/#download">CORUM</a>:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:28:10</code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 2916   20</code></pre>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span></code></pre></div>
-<pre><code>##  [1] "ComplexID"                           "ComplexName"                        
-##  [3] "Organism"                            "Synonyms"                           
-##  [5] "Cell.line"                           "subunits.UniProt.IDs."              
-##  [7] "subunits.Entrez.IDs."                "Protein.complex.purification.method"
-##  [9] "GO.ID"                               "GO.description"                     
-## [11] "FunCat.ID"                           "FunCat.description"                 
-## [13] "subunits.Gene.name."                 "Subunits.comment"                   
-## [15] "PubMed.ID"                           "Complex.comment"                    
-## [17] "Disease.comment"                     "SWISSPROT.organism"                 
-## [19] "subunits.Gene.name.syn."             "subunits.Protein.name."</code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">all</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##   ComplexID                           ComplexName Organism
-## 1         1                    BCL6-HDAC4 complex    Human
-## 2         2                    BCL6-HDAC5 complex    Human
-## 3         3                    BCL6-HDAC7 complex    Human
-## 4         4 Multisubunit ACTR coactivator complex    Human
-## 6        10                   Condensin I complex    Human
-##                Synonyms Cell.line
-## 1                  None      None
-## 2                  None      None
-## 3                  None      None
-## 4                  None      None
-## 6 13S condensin complex      None</code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:13:09</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
+<span class="co">#&gt; [1] 2916   20</span>
+<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "ComplexID"                           "ComplexName"                        </span>
+<span class="co">#&gt;  [3] "Organism"                            "Synonyms"                           </span>
+<span class="co">#&gt;  [5] "Cell.line"                           "subunits.UniProt.IDs."              </span>
+<span class="co">#&gt;  [7] "subunits.Entrez.IDs."                "Protein.complex.purification.method"</span>
+<span class="co">#&gt;  [9] "GO.ID"                               "GO.description"                     </span>
+<span class="co">#&gt; [11] "FunCat.ID"                           "FunCat.description"                 </span>
+<span class="co">#&gt; [13] "subunits.Gene.name."                 "Subunits.comment"                   </span>
+<span class="co">#&gt; [15] "PubMed.ID"                           "Complex.comment"                    </span>
+<span class="co">#&gt; [17] "Disease.comment"                     "SWISSPROT.organism"                 </span>
+<span class="co">#&gt; [19] "subunits.Gene.name.syn."             "subunits.Protein.name."</span>
+<span class="va">all</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;   ComplexID                           ComplexName Organism</span>
+<span class="co">#&gt; 1         1                    BCL6-HDAC4 complex    Human</span>
+<span class="co">#&gt; 2         2                    BCL6-HDAC5 complex    Human</span>
+<span class="co">#&gt; 3         3                    BCL6-HDAC7 complex    Human</span>
+<span class="co">#&gt; 4         4 Multisubunit ACTR coactivator complex    Human</span>
+<span class="co">#&gt; 6        10                   Condensin I complex    Human</span>
+<span class="co">#&gt;                Synonyms Cell.line</span>
+<span class="co">#&gt; 1                  None      None</span>
+<span class="co">#&gt; 2                  None      None</span>
+<span class="co">#&gt; 3                  None      None</span>
+<span class="co">#&gt; 4                  None      None</span>
+<span class="co">#&gt; 6 13S condensin complex      None</span></code></pre></div>
 <p>Core set of complexes:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:25:47</code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 2417   20</code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:11:06</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
+<span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:28:12</code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 44 20</code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:13:10</span>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span>
+<span class="co">#&gt; [1] 44 20</span></code></pre></div>
 <div id="id-mapping-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#id-mapping-1" class="anchor"></a>ID mapping</h3>
 <p>The protein-to-gene mappings from CORUM (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) might not be fully up-to-date.</p>
 <p>We can update those based on Bioc annotation functionality:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
-                          remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:28:19</code></pre>
+                          remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:13:16</span></code></pre></div>
 </div>
 <div id="data-structures-for-corum-complexes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-structures-for-corum-complexes" class="anchor"></a>Data structures for CORUM complexes</h3>
 <p>We can represent the CORUM complexes as a list of character vectors. The names of the list are the complex IDs/names, and each element of the list is a vector of UniProt IDs for each complex.</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corum2list.html">corum2list</a></span><span class="op">(</span><span class="va">core</span>, subunit.id.type <span class="op">=</span> <span class="st">"UNIPROT"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">core.list</span><span class="op">)</span></code></pre></div>
-<pre><code>## $`CORUM1_BCL6-HDAC4_complex`
-## [1] "P41182" "P56524"
-## 
-## $`CORUM2_BCL6-HDAC5_complex`
-## [1] "P41182" "Q9UQL6"
-## 
-## $`CORUM3_BCL6-HDAC7_complex`
-## [1] "P41182" "Q8WUI4"
-## 
-## $CORUM4_Multisubunit_ACTR_coactivator_complex
-## [1] "Q09472" "Q92793" "Q92831" "Q9Y6Q9"
-## 
-## $`CORUM11_BLOC-3_(biogenesis_of_lysosome-related_organelles_complex_3)`
-## [1] "Q92902" "Q9NQG7"
-## 
-## $`CORUM12_BLOC-2_(biogenesis_of_lysosome-related_organelles_complex_2)`
-## [1] "Q86YV9" "Q969F9" "Q9UPZ3"</code></pre>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">core.list</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 2417</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">core.list</span><span class="op">)</span>
+<span class="co">#&gt; $`CORUM1_BCL6-HDAC4_complex`</span>
+<span class="co">#&gt; [1] "P41182" "P56524"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM2_BCL6-HDAC5_complex`</span>
+<span class="co">#&gt; [1] "P41182" "Q9UQL6"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM3_BCL6-HDAC7_complex`</span>
+<span class="co">#&gt; [1] "P41182" "Q8WUI4"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $CORUM4_Multisubunit_ACTR_coactivator_complex</span>
+<span class="co">#&gt; [1] "Q09472" "Q92793" "Q92831" "Q9Y6Q9"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM11_BLOC-3_(biogenesis_of_lysosome-related_organelles_complex_3)`</span>
+<span class="co">#&gt; [1] "Q92902" "Q9NQG7"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM12_BLOC-2_(biogenesis_of_lysosome-related_organelles_complex_2)`</span>
+<span class="co">#&gt; [1] "Q86YV9" "Q969F9" "Q9UPZ3"</span>
+<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">core.list</span><span class="op">)</span>
+<span class="co">#&gt; [1] 2417</span></code></pre></div>
 <p>If we’d like to add metadata in a more structured form to each complex, a suitable option is a <a href="https://bioconductor.org/packages/GSEABase">GeneSetCollection</a>.</p>
 <p>We can also represent the CORUM complexes as a list of graph instances, where all nodes of a complex are connected to all other nodes of that complex with undirected edges.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.glist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corum2graphlist.html">corum2graphlist</a></span><span class="op">(</span><span class="va">core</span>, subunit.id.type <span class="op">=</span> <span class="st">"UNIPROT"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">)</span></code></pre></div>
-<pre><code>## $`CORUM1_BCL6-HDAC4_complex`
-## A graphNEL graph with undirected edges
-## Number of Nodes = 2 
-## Number of Edges = 1 
-## 
-## $`CORUM2_BCL6-HDAC5_complex`
-## A graphNEL graph with undirected edges
-## Number of Nodes = 2 
-## Number of Edges = 1 
-## 
-## $`CORUM3_BCL6-HDAC7_complex`
-## A graphNEL graph with undirected edges
-## Number of Nodes = 2 
-## Number of Edges = 1 
-## 
-## $CORUM4_Multisubunit_ACTR_coactivator_complex
-## A graphNEL graph with undirected edges
-## Number of Nodes = 4 
-## Number of Edges = 6 
-## 
-## $`CORUM11_BLOC-3_(biogenesis_of_lysosome-related_organelles_complex_3)`
-## A graphNEL graph with undirected edges
-## Number of Nodes = 2 
-## Number of Edges = 1 
-## 
-## $`CORUM12_BLOC-2_(biogenesis_of_lysosome-related_organelles_complex_2)`
-## A graphNEL graph with undirected edges
-## Number of Nodes = 3 
-## Number of Edges = 3</code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 2417</code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">core.glist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">graphData</span></code></pre></div>
-<pre><code>## $edgemode
-## [1] "undirected"
-## 
-## $ComplexID
-## [1] 1
-## 
-## $ComplexName
-## [1] "BCL6-HDAC4 complex"
-## 
-## $GO.ID
-## [1] "GO:0006265" "GO:0045892" "GO:0051276" "GO:0030183" "GO:0005634"
-## [6] "GO:0016575"
-## 
-## $PubMed.ID
-## [1] 11929873</code></pre>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## $P41182
-## $P41182$ENTREZID
-## [1] "604"
-## 
-## $P41182$SYMBOL
-## [1] "BCL6"
-## 
-## 
-## $P56524
-## $P56524$ENTREZID
-## [1] "9759"
-## 
-## $P56524$SYMBOL
-## [1] "HDAC4"</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">)</span>
+<span class="co">#&gt; $`CORUM1_BCL6-HDAC4_complex`</span>
+<span class="co">#&gt; A graphNEL graph with undirected edges</span>
+<span class="co">#&gt; Number of Nodes = 2 </span>
+<span class="co">#&gt; Number of Edges = 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM2_BCL6-HDAC5_complex`</span>
+<span class="co">#&gt; A graphNEL graph with undirected edges</span>
+<span class="co">#&gt; Number of Nodes = 2 </span>
+<span class="co">#&gt; Number of Edges = 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM3_BCL6-HDAC7_complex`</span>
+<span class="co">#&gt; A graphNEL graph with undirected edges</span>
+<span class="co">#&gt; Number of Nodes = 2 </span>
+<span class="co">#&gt; Number of Edges = 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $CORUM4_Multisubunit_ACTR_coactivator_complex</span>
+<span class="co">#&gt; A graphNEL graph with undirected edges</span>
+<span class="co">#&gt; Number of Nodes = 4 </span>
+<span class="co">#&gt; Number of Edges = 6 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM11_BLOC-3_(biogenesis_of_lysosome-related_organelles_complex_3)`</span>
+<span class="co">#&gt; A graphNEL graph with undirected edges</span>
+<span class="co">#&gt; Number of Nodes = 2 </span>
+<span class="co">#&gt; Number of Edges = 1 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $`CORUM12_BLOC-2_(biogenesis_of_lysosome-related_organelles_complex_2)`</span>
+<span class="co">#&gt; A graphNEL graph with undirected edges</span>
+<span class="co">#&gt; Number of Nodes = 3 </span>
+<span class="co">#&gt; Number of Edges = 3</span>
+<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">)</span>
+<span class="co">#&gt; [1] 2417</span>
+<span class="va">core.glist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">@</span><span class="va">graphData</span>
+<span class="co">#&gt; $edgemode</span>
+<span class="co">#&gt; [1] "undirected"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $ComplexID</span>
+<span class="co">#&gt; [1] 1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $ComplexName</span>
+<span class="co">#&gt; [1] "BCL6-HDAC4 complex"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $GO.ID</span>
+<span class="co">#&gt; [1] "GO:0006265" "GO:0045892" "GO:0051276" "GO:0030183" "GO:0005634"</span>
+<span class="co">#&gt; [6] "GO:0016575"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $PubMed.ID</span>
+<span class="co">#&gt; [1] 11929873</span>
+<span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">core.glist</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt; $P41182</span>
+<span class="co">#&gt; $P41182$ENTREZID</span>
+<span class="co">#&gt; [1] "604"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P41182$SYMBOL</span>
+<span class="co">#&gt; [1] "BCL6"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P56524</span>
+<span class="co">#&gt; $P56524$ENTREZID</span>
+<span class="co">#&gt; [1] "9759"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $P56524$SYMBOL</span>
+<span class="co">#&gt; [1] "HDAC4"</span></code></pre></div>
 <p>Note that we can easily convert a <a href="https://bioconductor.org/packages/graph">graph</a> object into an <a href="https://cran.r-project.org/package=igraph">igraph</a> object using <code>igraph::graph_from_graphnel</code>.</p>
 </div>
 </div>
@@ -563,167 +562,162 @@
 <h4 class="hasAnchor">
 <a href="#gse122425" class="anchor"></a>GSE122425</h4>
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a>.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:26:05</code></pre>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">se</span></code></pre></div>
-<pre><code>## class: SummarizedExperiment 
-## dim: 57905 6 
-## metadata(0):
-## assays(2): raw rpkm
-## rownames(57905): ENSG00000223972 ENSG00000227232 ... ENSG00000231514
-##   ENSG00000235857
-## rowData names(4): SYMBOL KO GO length
-## colnames(6): GSM3466389 GSM3466390 ... GSM3466393 GSM3466394
-## colData names(41): title geo_accession ... passages.ch1 strain.ch1</code></pre>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"raw"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##                 GSM3466389 GSM3466390 GSM3466391 GSM3466392 GSM3466393
-## ENSG00000223972          1          2          2          0          0
-## ENSG00000227232        732        690        804        705        812
-## ENSG00000243485          0          0          2          0          0
-## ENSG00000237613          0          0          0          0          0
-## ENSG00000268020          0          0          0          0          0
-## ENSG00000240361          0          0          0          0          0
-##                 GSM3466394
-## ENSG00000223972          2
-## ENSG00000227232       1121
-## ENSG00000243485          0
-## ENSG00000237613          0
-## ENSG00000268020          0
-## ENSG00000240361          1</code></pre>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##                 GSM3466389 GSM3466390 GSM3466391 GSM3466392 GSM3466393
-## ENSG00000223972       0.01       0.01       0.01       0.00       0.00
-## ENSG00000227232       5.43       5.07       5.39       4.77       5.21
-## ENSG00000243485       0.00       0.00       0.04       0.00       0.00
-## ENSG00000237613       0.00       0.00       0.00       0.00       0.00
-## ENSG00000268020       0.00       0.00       0.00       0.00       0.00
-## ENSG00000240361       0.00       0.00       0.00       0.00       0.00
-##                 GSM3466394
-## ENSG00000223972       0.01
-## ENSG00000227232       6.80
-## ENSG00000243485       0.00
-## ENSG00000237613       0.00
-## ENSG00000268020       0.00
-## ENSG00000240361       0.02</code></pre>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 6 rows and 41 columns
-##                    title geo_accession                status submission_date
-##              &lt;character&gt;   &lt;character&gt;           &lt;character&gt;     &lt;character&gt;
-## GSM3466389       WT rep1    GSM3466389 Public on Nov 16 2018     Nov 12 2018
-## GSM3466390       WT rep2    GSM3466390 Public on Nov 16 2018     Nov 12 2018
-## GSM3466391       WT rep3    GSM3466391 Public on Nov 16 2018     Nov 12 2018
-## GSM3466392 NSUN2-KO rep1    GSM3466392 Public on Nov 16 2018     Nov 12 2018
-## GSM3466393 NSUN2-KO rep2    GSM3466393 Public on Nov 16 2018     Nov 12 2018
-## GSM3466394 NSUN2-KO rep3    GSM3466394 Public on Nov 16 2018     Nov 12 2018
-##            last_update_date        type channel_count source_name_ch1
-##                 &lt;character&gt; &lt;character&gt;   &lt;character&gt;     &lt;character&gt;
-## GSM3466389      Nov 16 2018         SRA             1          kidney
-## GSM3466390      Nov 16 2018         SRA             1          kidney
-## GSM3466391      Nov 16 2018         SRA             1          kidney
-## GSM3466392      Nov 16 2018         SRA             1          kidney
-## GSM3466393      Nov 16 2018         SRA             1          kidney
-## GSM3466394      Nov 16 2018         SRA             1          kidney
-##            organism_ch1 characteristics_ch1 characteristics_ch1.1
-##             &lt;character&gt;         &lt;character&gt;           &lt;character&gt;
-## GSM3466389 Homo sapiens      strain: HEK293        passages: 8-12
-## GSM3466390 Homo sapiens      strain: HEK293        passages: 8-12
-## GSM3466391 Homo sapiens      strain: HEK293        passages: 8-12
-## GSM3466392 Homo sapiens      strain: HEK293        passages: 8-12
-## GSM3466393 Homo sapiens      strain: HEK293        passages: 8-12
-## GSM3466394 Homo sapiens      strain: HEK293        passages: 8-12
-##            treatment_protocol_ch1    growth_protocol_ch1 molecule_ch1
-##                       &lt;character&gt;            &lt;character&gt;  &lt;character&gt;
-## GSM3466389 The NSUN2-deficient .. Cells were grown in ..    polyA RNA
-## GSM3466390 The NSUN2-deficient .. Cells were grown in ..    polyA RNA
-## GSM3466391 The NSUN2-deficient .. Cells were grown in ..    polyA RNA
-## GSM3466392 The NSUN2-deficient .. Cells were grown in ..    polyA RNA
-## GSM3466393 The NSUN2-deficient .. Cells were grown in ..    polyA RNA
-## GSM3466394 The NSUN2-deficient .. Cells were grown in ..    polyA RNA
-##              extract_protocol_ch1 extract_protocol_ch1.1   taxid_ch1
-##                       &lt;character&gt;            &lt;character&gt; &lt;character&gt;
-## GSM3466389 Total RNA of cells w.. Next generation sequ..        9606
-## GSM3466390 Total RNA of cells w.. Next generation sequ..        9606
-## GSM3466391 Total RNA of cells w.. Next generation sequ..        9606
-## GSM3466392 Total RNA of cells w.. Next generation sequ..        9606
-## GSM3466393 Total RNA of cells w.. Next generation sequ..        9606
-## GSM3466394 Total RNA of cells w.. Next generation sequ..        9606
-##                   data_processing      data_processing.1      data_processing.2
-##                       &lt;character&gt;            &lt;character&gt;            &lt;character&gt;
-## GSM3466389 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..
-## GSM3466390 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..
-## GSM3466391 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..
-## GSM3466392 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..
-## GSM3466393 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..
-## GSM3466394 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..
-##                 data_processing.3      data_processing.4  data_processing.5
-##                       &lt;character&gt;            &lt;character&gt;        &lt;character&gt;
-## GSM3466389 Reads Per Kilobase o.. Differential express.. Genome_build: HG19
-## GSM3466390 Reads Per Kilobase o.. Differential express.. Genome_build: HG19
-## GSM3466391 Reads Per Kilobase o.. Differential express.. Genome_build: HG19
-## GSM3466392 Reads Per Kilobase o.. Differential express.. Genome_build: HG19
-## GSM3466393 Reads Per Kilobase o.. Differential express.. Genome_build: HG19
-## GSM3466394 Reads Per Kilobase o.. Differential express.. Genome_build: HG19
-##                 data_processing.6 platform_id contact_name   contact_institute
-##                       &lt;character&gt; &lt;character&gt;  &lt;character&gt;         &lt;character&gt;
-## GSM3466389 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University
-## GSM3466390 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University
-## GSM3466391 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University
-## GSM3466392 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University
-## GSM3466393 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University
-## GSM3466394 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University
-##            contact_address contact_city contact_zip.postal_code contact_country
-##                &lt;character&gt;  &lt;character&gt;             &lt;character&gt;     &lt;character&gt;
-## GSM3466389          Wenhui     Yangzhou                  225009           China
-## GSM3466390          Wenhui     Yangzhou                  225009           China
-## GSM3466391          Wenhui     Yangzhou                  225009           China
-## GSM3466392          Wenhui     Yangzhou                  225009           China
-## GSM3466393          Wenhui     Yangzhou                  225009           China
-## GSM3466394          Wenhui     Yangzhou                  225009           China
-##            data_row_count    instrument_model library_selection library_source
-##               &lt;character&gt;         &lt;character&gt;       &lt;character&gt;    &lt;character&gt;
-## GSM3466389              0 Illumina HiSeq 2000              cDNA transcriptomic
-## GSM3466390              0 Illumina HiSeq 2000              cDNA transcriptomic
-## GSM3466391              0 Illumina HiSeq 2000              cDNA transcriptomic
-## GSM3466392              0 Illumina HiSeq 2000              cDNA transcriptomic
-## GSM3466393              0 Illumina HiSeq 2000              cDNA transcriptomic
-## GSM3466394              0 Illumina HiSeq 2000              cDNA transcriptomic
-##            library_strategy               relation             relation.1
-##                 &lt;character&gt;            &lt;character&gt;            &lt;character&gt;
-## GSM3466389          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..
-## GSM3466390          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..
-## GSM3466391          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..
-## GSM3466392          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..
-## GSM3466393          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..
-## GSM3466394          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..
-##            supplementary_file_1 passages.ch1  strain.ch1
-##                     &lt;character&gt;  &lt;character&gt; &lt;character&gt;
-## GSM3466389                 NONE         8-12      HEK293
-## GSM3466390                 NONE         8-12      HEK293
-## GSM3466391                 NONE         8-12      HEK293
-## GSM3466392                 NONE         8-12      HEK293
-## GSM3466393                 NONE         8-12      HEK293
-## GSM3466394                 NONE         8-12      HEK293</code></pre>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 57905 rows and 4 columns
-##                      SYMBOL          KO          GO    length
-##                 &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;
-## ENSG00000223972     DDX11L1      K11273           _      2544
-## ENSG00000227232      WASH7P      K18461           _     15444
-## ENSG00000243485  MIR1302-10           _           _      1556
-## ENSG00000237613     FAM138A           _           _      1528
-## ENSG00000268020      OR4G4P      K04257           _      2464
-## ...                     ...         ...         ...       ...
-## ENSG00000224240     CYCSP49      K08738           _       319
-## ENSG00000227629  SLC25A15P1      K15101           _      4960
-## ENSG00000237917     PARP4P1      K10798           _     39802
-## ENSG00000231514     FAM58CP           _           _       640
-## ENSG00000235857     CTBP2P1      K04496           _       245</code></pre>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:11:23</span>
+<span class="va">se</span>
+<span class="co">#&gt; class: SummarizedExperiment </span>
+<span class="co">#&gt; dim: 57905 6 </span>
+<span class="co">#&gt; metadata(0):</span>
+<span class="co">#&gt; assays(2): raw rpkm</span>
+<span class="co">#&gt; rownames(57905): ENSG00000223972 ENSG00000227232 ... ENSG00000231514</span>
+<span class="co">#&gt;   ENSG00000235857</span>
+<span class="co">#&gt; rowData names(4): SYMBOL KO GO length</span>
+<span class="co">#&gt; colnames(6): GSM3466389 GSM3466390 ... GSM3466393 GSM3466394</span>
+<span class="co">#&gt; colData names(41): title geo_accession ... passages.ch1 strain.ch1</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"raw"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;                 GSM3466389 GSM3466390 GSM3466391 GSM3466392 GSM3466393</span>
+<span class="co">#&gt; ENSG00000223972          1          2          2          0          0</span>
+<span class="co">#&gt; ENSG00000227232        732        690        804        705        812</span>
+<span class="co">#&gt; ENSG00000243485          0          0          2          0          0</span>
+<span class="co">#&gt; ENSG00000237613          0          0          0          0          0</span>
+<span class="co">#&gt; ENSG00000268020          0          0          0          0          0</span>
+<span class="co">#&gt; ENSG00000240361          0          0          0          0          0</span>
+<span class="co">#&gt;                 GSM3466394</span>
+<span class="co">#&gt; ENSG00000223972          2</span>
+<span class="co">#&gt; ENSG00000227232       1121</span>
+<span class="co">#&gt; ENSG00000243485          0</span>
+<span class="co">#&gt; ENSG00000237613          0</span>
+<span class="co">#&gt; ENSG00000268020          0</span>
+<span class="co">#&gt; ENSG00000240361          1</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;                 GSM3466389 GSM3466390 GSM3466391 GSM3466392 GSM3466393</span>
+<span class="co">#&gt; ENSG00000223972       0.01       0.01       0.01       0.00       0.00</span>
+<span class="co">#&gt; ENSG00000227232       5.43       5.07       5.39       4.77       5.21</span>
+<span class="co">#&gt; ENSG00000243485       0.00       0.00       0.04       0.00       0.00</span>
+<span class="co">#&gt; ENSG00000237613       0.00       0.00       0.00       0.00       0.00</span>
+<span class="co">#&gt; ENSG00000268020       0.00       0.00       0.00       0.00       0.00</span>
+<span class="co">#&gt; ENSG00000240361       0.00       0.00       0.00       0.00       0.00</span>
+<span class="co">#&gt;                 GSM3466394</span>
+<span class="co">#&gt; ENSG00000223972       0.01</span>
+<span class="co">#&gt; ENSG00000227232       6.80</span>
+<span class="co">#&gt; ENSG00000243485       0.00</span>
+<span class="co">#&gt; ENSG00000237613       0.00</span>
+<span class="co">#&gt; ENSG00000268020       0.00</span>
+<span class="co">#&gt; ENSG00000240361       0.02</span>
+<span class="fu">colData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 6 rows and 41 columns</span>
+<span class="co">#&gt;                    title geo_accession                status submission_date</span>
+<span class="co">#&gt;              &lt;character&gt;   &lt;character&gt;           &lt;character&gt;     &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389       WT rep1    GSM3466389 Public on Nov 16 2018     Nov 12 2018</span>
+<span class="co">#&gt; GSM3466390       WT rep2    GSM3466390 Public on Nov 16 2018     Nov 12 2018</span>
+<span class="co">#&gt; GSM3466391       WT rep3    GSM3466391 Public on Nov 16 2018     Nov 12 2018</span>
+<span class="co">#&gt; GSM3466392 NSUN2-KO rep1    GSM3466392 Public on Nov 16 2018     Nov 12 2018</span>
+<span class="co">#&gt; GSM3466393 NSUN2-KO rep2    GSM3466393 Public on Nov 16 2018     Nov 12 2018</span>
+<span class="co">#&gt; GSM3466394 NSUN2-KO rep3    GSM3466394 Public on Nov 16 2018     Nov 12 2018</span>
+<span class="co">#&gt;            last_update_date        type channel_count source_name_ch1</span>
+<span class="co">#&gt;                 &lt;character&gt; &lt;character&gt;   &lt;character&gt;     &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389      Nov 16 2018         SRA             1          kidney</span>
+<span class="co">#&gt; GSM3466390      Nov 16 2018         SRA             1          kidney</span>
+<span class="co">#&gt; GSM3466391      Nov 16 2018         SRA             1          kidney</span>
+<span class="co">#&gt; GSM3466392      Nov 16 2018         SRA             1          kidney</span>
+<span class="co">#&gt; GSM3466393      Nov 16 2018         SRA             1          kidney</span>
+<span class="co">#&gt; GSM3466394      Nov 16 2018         SRA             1          kidney</span>
+<span class="co">#&gt;            organism_ch1 characteristics_ch1 characteristics_ch1.1</span>
+<span class="co">#&gt;             &lt;character&gt;         &lt;character&gt;           &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389 Homo sapiens      strain: HEK293        passages: 8-12</span>
+<span class="co">#&gt; GSM3466390 Homo sapiens      strain: HEK293        passages: 8-12</span>
+<span class="co">#&gt; GSM3466391 Homo sapiens      strain: HEK293        passages: 8-12</span>
+<span class="co">#&gt; GSM3466392 Homo sapiens      strain: HEK293        passages: 8-12</span>
+<span class="co">#&gt; GSM3466393 Homo sapiens      strain: HEK293        passages: 8-12</span>
+<span class="co">#&gt; GSM3466394 Homo sapiens      strain: HEK293        passages: 8-12</span>
+<span class="co">#&gt;            treatment_protocol_ch1    growth_protocol_ch1 molecule_ch1</span>
+<span class="co">#&gt;                       &lt;character&gt;            &lt;character&gt;  &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389 The NSUN2-deficient .. Cells were grown in ..    polyA RNA</span>
+<span class="co">#&gt; GSM3466390 The NSUN2-deficient .. Cells were grown in ..    polyA RNA</span>
+<span class="co">#&gt; GSM3466391 The NSUN2-deficient .. Cells were grown in ..    polyA RNA</span>
+<span class="co">#&gt; GSM3466392 The NSUN2-deficient .. Cells were grown in ..    polyA RNA</span>
+<span class="co">#&gt; GSM3466393 The NSUN2-deficient .. Cells were grown in ..    polyA RNA</span>
+<span class="co">#&gt; GSM3466394 The NSUN2-deficient .. Cells were grown in ..    polyA RNA</span>
+<span class="co">#&gt;              extract_protocol_ch1 extract_protocol_ch1.1   taxid_ch1</span>
+<span class="co">#&gt;                       &lt;character&gt;            &lt;character&gt; &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389 Total RNA of cells w.. Next generation sequ..        9606</span>
+<span class="co">#&gt; GSM3466390 Total RNA of cells w.. Next generation sequ..        9606</span>
+<span class="co">#&gt; GSM3466391 Total RNA of cells w.. Next generation sequ..        9606</span>
+<span class="co">#&gt; GSM3466392 Total RNA of cells w.. Next generation sequ..        9606</span>
+<span class="co">#&gt; GSM3466393 Total RNA of cells w.. Next generation sequ..        9606</span>
+<span class="co">#&gt; GSM3466394 Total RNA of cells w.. Next generation sequ..        9606</span>
+<span class="co">#&gt;                   data_processing      data_processing.1      data_processing.2</span>
+<span class="co">#&gt;                       &lt;character&gt;            &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..</span>
+<span class="co">#&gt; GSM3466390 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..</span>
+<span class="co">#&gt; GSM3466391 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..</span>
+<span class="co">#&gt; GSM3466392 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..</span>
+<span class="co">#&gt; GSM3466393 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..</span>
+<span class="co">#&gt; GSM3466394 Bcl2fastq (v2.17.1.1.. 3’ adaptor-trimming .. The high quality tri..</span>
+<span class="co">#&gt;                 data_processing.3      data_processing.4  data_processing.5</span>
+<span class="co">#&gt;                       &lt;character&gt;            &lt;character&gt;        &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389 Reads Per Kilobase o.. Differential express.. Genome_build: HG19</span>
+<span class="co">#&gt; GSM3466390 Reads Per Kilobase o.. Differential express.. Genome_build: HG19</span>
+<span class="co">#&gt; GSM3466391 Reads Per Kilobase o.. Differential express.. Genome_build: HG19</span>
+<span class="co">#&gt; GSM3466392 Reads Per Kilobase o.. Differential express.. Genome_build: HG19</span>
+<span class="co">#&gt; GSM3466393 Reads Per Kilobase o.. Differential express.. Genome_build: HG19</span>
+<span class="co">#&gt; GSM3466394 Reads Per Kilobase o.. Differential express.. Genome_build: HG19</span>
+<span class="co">#&gt;                 data_processing.6 platform_id contact_name   contact_institute</span>
+<span class="co">#&gt;                       &lt;character&gt; &lt;character&gt;  &lt;character&gt;         &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University</span>
+<span class="co">#&gt; GSM3466390 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University</span>
+<span class="co">#&gt; GSM3466391 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University</span>
+<span class="co">#&gt; GSM3466392 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University</span>
+<span class="co">#&gt; GSM3466393 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University</span>
+<span class="co">#&gt; GSM3466394 Supplementary_files_..    GPL11154    Zhen,,Sun Yangzhou University</span>
+<span class="co">#&gt;            contact_address contact_city contact_zip.postal_code contact_country</span>
+<span class="co">#&gt;                &lt;character&gt;  &lt;character&gt;             &lt;character&gt;     &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389          Wenhui     Yangzhou                  225009           China</span>
+<span class="co">#&gt; GSM3466390          Wenhui     Yangzhou                  225009           China</span>
+<span class="co">#&gt; GSM3466391          Wenhui     Yangzhou                  225009           China</span>
+<span class="co">#&gt; GSM3466392          Wenhui     Yangzhou                  225009           China</span>
+<span class="co">#&gt; GSM3466393          Wenhui     Yangzhou                  225009           China</span>
+<span class="co">#&gt; GSM3466394          Wenhui     Yangzhou                  225009           China</span>
+<span class="co">#&gt;            data_row_count    instrument_model library_selection library_source</span>
+<span class="co">#&gt;               &lt;character&gt;         &lt;character&gt;       &lt;character&gt;    &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389              0 Illumina HiSeq 2000              cDNA transcriptomic</span>
+<span class="co">#&gt; GSM3466390              0 Illumina HiSeq 2000              cDNA transcriptomic</span>
+<span class="co">#&gt; GSM3466391              0 Illumina HiSeq 2000              cDNA transcriptomic</span>
+<span class="co">#&gt; GSM3466392              0 Illumina HiSeq 2000              cDNA transcriptomic</span>
+<span class="co">#&gt; GSM3466393              0 Illumina HiSeq 2000              cDNA transcriptomic</span>
+<span class="co">#&gt; GSM3466394              0 Illumina HiSeq 2000              cDNA transcriptomic</span>
+<span class="co">#&gt;            library_strategy               relation             relation.1</span>
+<span class="co">#&gt;                 &lt;character&gt;            &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..</span>
+<span class="co">#&gt; GSM3466390          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..</span>
+<span class="co">#&gt; GSM3466391          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..</span>
+<span class="co">#&gt; GSM3466392          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..</span>
+<span class="co">#&gt; GSM3466393          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..</span>
+<span class="co">#&gt; GSM3466394          RNA-Seq BioSample: https://w.. SRA: https://www.ncb..</span>
+<span class="co">#&gt;            supplementary_file_1 passages.ch1  strain.ch1</span>
+<span class="co">#&gt;                     &lt;character&gt;  &lt;character&gt; &lt;character&gt;</span>
+<span class="co">#&gt; GSM3466389                 NONE         8-12      HEK293</span>
+<span class="co">#&gt; GSM3466390                 NONE         8-12      HEK293</span>
+<span class="co">#&gt; GSM3466391                 NONE         8-12      HEK293</span>
+<span class="co">#&gt; GSM3466392                 NONE         8-12      HEK293</span>
+<span class="co">#&gt; GSM3466393                 NONE         8-12      HEK293</span>
+<span class="co">#&gt; GSM3466394                 NONE         8-12      HEK293</span>
+<span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 57905 rows and 4 columns</span>
+<span class="co">#&gt;                      SYMBOL          KO          GO    length</span>
+<span class="co">#&gt;                 &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;integer&gt;</span>
+<span class="co">#&gt; ENSG00000223972     DDX11L1      K11273           _      2544</span>
+<span class="co">#&gt; ENSG00000227232      WASH7P      K18461           _     15444</span>
+<span class="co">#&gt; ENSG00000243485  MIR1302-10           _           _      1556</span>
+<span class="co">#&gt; ENSG00000237613     FAM138A           _           _      1528</span>
+<span class="co">#&gt; ENSG00000268020      OR4G4P      K04257           _      2464</span>
+<span class="co">#&gt; ...                     ...         ...         ...       ...</span>
+<span class="co">#&gt; ENSG00000224240     CYCSP49      K08738           _       319</span>
+<span class="co">#&gt; ENSG00000227629  SLC25A15P1      K15101           _      4960</span>
+<span class="co">#&gt; ENSG00000237917     PARP4P1      K10798           _     39802</span>
+<span class="co">#&gt; ENSG00000231514     FAM58CP           _           _       640</span>
+<span class="co">#&gt; ENSG00000235857     CTBP2P1      K04496           _       245</span></code></pre></div>
 <p>The dataset includes three wild type samples and three NSUN2 knockout samples.</p>
 </div>
 </div>
@@ -734,181 +728,178 @@
 <h4 class="hasAnchor">
 <a href="#cancer-cell-line-encyclopedia-ccle" class="anchor"></a>Cancer Cell Line Encyclopedia (CCLE)</h4>
 <p>Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the <a href="https://portals.broadinstitute.org/ccle">Cancer Cell Line Encyclopedia</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770">E-MTAB-2770</a>).</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">atlasRes</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/searchAtlasExperiments.html">searchAtlasExperiments</a></span><span class="op">(</span>
               properties <span class="op">=</span> <span class="st">"Cancer Cell Line Encyclopedia"</span>, 
               species <span class="op">=</span> <span class="st">"human"</span> <span class="op">)</span>
-<span class="va">atlasRes</span></code></pre></div>
-<pre><code>## DataFrame with 1 row and 4 columns
-##     Accession      Species                  Type                  Title
-##   &lt;character&gt;  &lt;character&gt;           &lt;character&gt;            &lt;character&gt;
-## 1 E-MTAB-2770 Homo sapiens RNA-seq of coding RNA RNA-seq of 934 human..</code></pre>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccle</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="va">atlasRes</span><span class="op">$</span><span class="va">Accession</span><span class="op">)</span>
+<span class="va">atlasRes</span>
+<span class="co">#&gt; DataFrame with 1 row and 4 columns</span>
+<span class="co">#&gt;     Accession      Species                  Type                  Title</span>
+<span class="co">#&gt;   &lt;character&gt;  &lt;character&gt;           &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; 1 E-MTAB-2770 Homo sapiens RNA-seq of coding RNA RNA-seq of 934 human..</span>
+<span class="va">ccle</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="va">atlasRes</span><span class="op">$</span><span class="va">Accession</span><span class="op">)</span>
 <span class="va">ccle</span> <span class="op">&lt;-</span> <span class="va">ccle</span><span class="op">$</span><span class="va">`E-MTAB-2770`</span><span class="op">$</span><span class="va">rnaseq</span>
-<span class="va">ccle</span></code></pre></div>
-<pre><code>## class: RangedSummarizedExperiment 
-## dim: 65217 934 
-## metadata(4): pipeline filtering mapping quantification
-## assays(1): counts
-## rownames(65217): ENSG00000000003 ENSG00000000005 ... ENSG00000281921
-##   ENSG00000281922
-## rowData names(0):
-## colnames(934): run_22Rv1.2 run_23132_87.2 ... run_ZR_75_1.1
-##   run_ZR_75_30.1
-## colData names(4): AtlasAssayGroup organism cell_line disease</code></pre>
+<span class="va">ccle</span>
+<span class="co">#&gt; class: RangedSummarizedExperiment </span>
+<span class="co">#&gt; dim: 65217 934 </span>
+<span class="co">#&gt; metadata(4): pipeline filtering mapping quantification</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(65217): ENSG00000000003 ENSG00000000005 ... ENSG00000281921</span>
+<span class="co">#&gt;   ENSG00000281922</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(934): run_22Rv1.2 run_23132_87.2 ... run_ZR_75_1.1</span>
+<span class="co">#&gt;   run_ZR_75_30.1</span>
+<span class="co">#&gt; colData names(4): AtlasAssayGroup organism cell_line disease</span></code></pre></div>
 <p>We have raw read counts:</p>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##                 run_22Rv1.2 run_23132_87.2 run_253J_BV.1 run_253J.1
-## ENSG00000000003         532            574          2287       2533
-## ENSG00000000005           0              0             0          2
-## ENSG00000000419        2982           3833          2499       2242
-## ENSG00000000457        1971           2544           545        676
-## ENSG00000000460        2527           1250           841        436
-##                 run_42_MG_BA.1
-## ENSG00000000003           1923
-## ENSG00000000005              0
-## ENSG00000000419           3590
-## ENSG00000000457            461
-## ENSG00000000460            789</code></pre>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 934 rows and 4 columns
-##                AtlasAssayGroup     organism   cell_line                disease
-##                    &lt;character&gt;  &lt;character&gt; &lt;character&gt;            &lt;character&gt;
-## run_22Rv1.2                 g1 Homo sapiens       22Rv1     prostate carcinoma
-## run_23132_87.2              g2 Homo sapiens    23132/87 gastric adenocarcinoma
-## run_253J_BV.1               g3 Homo sapiens     253J-BV      bladder carcinoma
-## run_253J.1                  g4 Homo sapiens        253J      bladder carcinoma
-## run_42_MG_BA.1              g5 Homo sapiens    42-MG-BA           glioblastoma
-## ...                        ...          ...         ...                    ...
-## run_YD_8.1                g929 Homo sapiens        YD-8 tongue squamous cell..
-## run_YH_13.1               g930 Homo sapiens       YH-13           glioblastoma
-## run_YK5                   g931 Homo sapiens        YKG1           glioblastoma
-## run_ZR_75_1.1             g932 Homo sapiens     ZR-75-1 invasive ductal carc..
-## run_ZR_75_30.1            g933 Homo sapiens    ZR-75-30 invasive ductal carc..</code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;                 run_22Rv1.2 run_23132_87.2 run_253J_BV.1 run_253J.1</span>
+<span class="co">#&gt; ENSG00000000003         532            574          2287       2533</span>
+<span class="co">#&gt; ENSG00000000005           0              0             0          2</span>
+<span class="co">#&gt; ENSG00000000419        2982           3833          2499       2242</span>
+<span class="co">#&gt; ENSG00000000457        1971           2544           545        676</span>
+<span class="co">#&gt; ENSG00000000460        2527           1250           841        436</span>
+<span class="co">#&gt;                 run_42_MG_BA.1</span>
+<span class="co">#&gt; ENSG00000000003           1923</span>
+<span class="co">#&gt; ENSG00000000005              0</span>
+<span class="co">#&gt; ENSG00000000419           3590</span>
+<span class="co">#&gt; ENSG00000000457            461</span>
+<span class="co">#&gt; ENSG00000000460            789</span>
+<span class="fu">colData</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 934 rows and 4 columns</span>
+<span class="co">#&gt;                AtlasAssayGroup     organism   cell_line                disease</span>
+<span class="co">#&gt;                    &lt;character&gt;  &lt;character&gt; &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; run_22Rv1.2                 g1 Homo sapiens       22Rv1     prostate carcinoma</span>
+<span class="co">#&gt; run_23132_87.2              g2 Homo sapiens    23132/87 gastric adenocarcinoma</span>
+<span class="co">#&gt; run_253J_BV.1               g3 Homo sapiens     253J-BV      bladder carcinoma</span>
+<span class="co">#&gt; run_253J.1                  g4 Homo sapiens        253J      bladder carcinoma</span>
+<span class="co">#&gt; run_42_MG_BA.1              g5 Homo sapiens    42-MG-BA           glioblastoma</span>
+<span class="co">#&gt; ...                        ...          ...         ...                    ...</span>
+<span class="co">#&gt; run_YD_8.1                g929 Homo sapiens        YD-8 tongue squamous cell..</span>
+<span class="co">#&gt; run_YH_13.1               g930 Homo sapiens       YH-13           glioblastoma</span>
+<span class="co">#&gt; run_YK5                   g931 Homo sapiens        YKG1           glioblastoma</span>
+<span class="co">#&gt; run_ZR_75_1.1             g932 Homo sapiens     ZR-75-1 invasive ductal carc..</span>
+<span class="co">#&gt; run_ZR_75_30.1            g933 Homo sapiens    ZR-75-30 invasive ductal carc..</span></code></pre></div>
 <p>and we have one sample per cell line:</p>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">ccle</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
-<span class="fu">colData</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span></code></pre></div>
-<pre><code>## DataFrame with 1 row and 4 columns
-##               AtlasAssayGroup     organism   cell_line         disease
-##                   &lt;character&gt;  &lt;character&gt; &lt;character&gt;     &lt;character&gt;
-## run_HCT_116.2            g229 Homo sapiens     HCT 116 colon carcinoma</code></pre>
+<span class="fu">colData</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span>
+<span class="co">#&gt; DataFrame with 1 row and 4 columns</span>
+<span class="co">#&gt;               AtlasAssayGroup     organism   cell_line         disease</span>
+<span class="co">#&gt;                   &lt;character&gt;  &lt;character&gt; &lt;character&gt;     &lt;character&gt;</span>
+<span class="co">#&gt; run_HCT_116.2            g229 Homo sapiens     HCT 116 colon carcinoma</span></code></pre></div>
 </div>
 <div id="klijn-et-al--2015" class="section level4">
 <h4 class="hasAnchor">
 <a href="#klijn-et-al--2015" class="anchor"></a>Klijn et al., 2015</h4>
 <p>Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from <a href="https://pubmed.ncbi.nlm.nih.gov/25485619">Klijn et al., 2015</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706">E-MTAB-2706</a>)</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="st">"E-MTAB-2706"</span><span class="op">)</span>
 <span class="va">klijn</span> <span class="op">&lt;-</span> <span class="va">klijn</span><span class="op">$</span><span class="va">`E-MTAB-2706`</span><span class="op">$</span><span class="va">rnaseq</span>
-<span class="va">klijn</span></code></pre></div>
-<pre><code>## class: RangedSummarizedExperiment 
-## dim: 65217 622 
-## metadata(4): pipeline filtering mapping quantification
-## assays(1): counts
-## rownames(65217): ENSG00000000003 ENSG00000000005 ... ENSG00000281921
-##   ENSG00000281922
-## rowData names(0):
-## colnames(622): ERR413347 ERR413348 ... ERR414020 ERR415514
-## colData names(12): AtlasAssayGroup organism ... media freeze_media</code></pre>
+<span class="va">klijn</span>
+<span class="co">#&gt; class: RangedSummarizedExperiment </span>
+<span class="co">#&gt; dim: 65217 622 </span>
+<span class="co">#&gt; metadata(4): pipeline filtering mapping quantification</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(65217): ENSG00000000003 ENSG00000000005 ... ENSG00000281921</span>
+<span class="co">#&gt;   ENSG00000281922</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(622): ERR413347 ERR413348 ... ERR414020 ERR415514</span>
+<span class="co">#&gt; colData names(12): AtlasAssayGroup organism ... media freeze_media</span></code></pre></div>
 <p>We have raw read counts:</p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##                 ERR413347 ERR413348 ERR413349 ERR413350 ERR413351
-## ENSG00000000003       890      1172      6514       559       489
-## ENSG00000000005         0         0         0         0         0
-## ENSG00000000419      2122      2933     10245      2624      1338
-## ENSG00000000457       240       248       903       763       216
-## ENSG00000000460       740       654      3082       640       570</code></pre>
-<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 622 rows and 12 columns
-##           AtlasAssayGroup     organism   cell_line tissue_supergroup
-##               &lt;character&gt;  &lt;character&gt; &lt;character&gt;       &lt;character&gt;
-## ERR413347            g560 Homo sapiens         888      zone of skin
-## ERR413348            g169 Homo sapiens       105KC       sarcomatiod
-## ERR413349            g364 Homo sapiens        143B       sarcomatiod
-## ERR413350            g432 Homo sapiens    23132/87           stomach
-## ERR413351            g187 Homo sapiens        501A      zone of skin
-## ...                   ...          ...         ...               ...
-## ERR414017            g170 Homo sapiens       YMB-1            breast
-## ERR414018            g310 Homo sapiens     YMB-1-E            breast
-## ERR414019            g466 Homo sapiens     ZR-75-1            breast
-## ERR414020             g42 Homo sapiens    ZR-75-30            breast
-## ERR415514            g247 Homo sapiens       CPC-N              lung
-##           metatastic_tissue    organism_part                disease
-##                 &lt;character&gt;      &lt;character&gt;            &lt;character&gt;
-## ERR413347    not applicable     zone of skin               melanoma
-## ERR413348    not applicable cartilage tissue         chondrosarcoma
-## ERR413349    not applicable      bone tissue           osteosarcoma
-## ERR413350    not applicable          stomach gastric adenocarcinoma
-## ERR413351    not applicable     zone of skin               melanoma
-## ...                     ...              ...                    ...
-## ERR414017    not applicable           breast       breast carcinoma
-## ERR414018    not applicable           breast       breast carcinoma
-## ERR414019    not applicable           breast breast ductal adenoc..
-## ERR414020           ascites           breast breast ductal adenoc..
-## ERR415514    not applicable             lung small cell lung carc..
-##                        age           sex     ethnicity                  media
-##                &lt;character&gt;   &lt;character&gt;   &lt;character&gt;            &lt;character&gt;
-## ERR413347 not available    not available not available         not determined
-## ERR413348          66 year          male not available 40%DMEM, 40%MEM, 10%..
-## ERR413349          13 year        female     Caucasian RPMI-1640 10% FBS, 2..
-## ERR413350          72 year          male not available RPMI-1640, 10% FBS, ..
-## ERR413351 not available    not available not available RPMI-1640, 10% FBS, ..
-## ...                    ...           ...           ...                    ...
-## ERR414017          55 year        female not available RPMI-1640, 10% FBS, ..
-## ERR414018          55 year        female not available RPMI-1640, 10% FBS, ..
-## ERR414019          63 year not available     Caucasian RPMI-1640, 10% FBS, ..
-## ERR414020          47 year        female       African RPMI-1640, 10% FBS, ..
-## ERR415514 not available    not available not available McCoys 5A, 10% FBS, ..
-##                     freeze_media
-##                      &lt;character&gt;
-## ERR413347         not determined
-## ERR413348 Complete growth medi..
-## ERR413349 Complete growth medi..
-## ERR413350 Complete growth medi..
-## ERR413351      90% FBS; 10% DMSO
-## ...                          ...
-## ERR414017 Complete growth medi..
-## ERR414018 Complete growth medi..
-## ERR414019 Complete growth medi..
-## ERR414020 Complete growth medi..
-## ERR415514 Complete growth medi..</code></pre>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;                 ERR413347 ERR413348 ERR413349 ERR413350 ERR413351</span>
+<span class="co">#&gt; ENSG00000000003       890      1172      6514       559       489</span>
+<span class="co">#&gt; ENSG00000000005         0         0         0         0         0</span>
+<span class="co">#&gt; ENSG00000000419      2122      2933     10245      2624      1338</span>
+<span class="co">#&gt; ENSG00000000457       240       248       903       763       216</span>
+<span class="co">#&gt; ENSG00000000460       740       654      3082       640       570</span>
+<span class="fu">colData</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 622 rows and 12 columns</span>
+<span class="co">#&gt;           AtlasAssayGroup     organism   cell_line tissue_supergroup</span>
+<span class="co">#&gt;               &lt;character&gt;  &lt;character&gt; &lt;character&gt;       &lt;character&gt;</span>
+<span class="co">#&gt; ERR413347            g560 Homo sapiens         888      zone of skin</span>
+<span class="co">#&gt; ERR413348            g169 Homo sapiens       105KC       sarcomatiod</span>
+<span class="co">#&gt; ERR413349            g364 Homo sapiens        143B       sarcomatiod</span>
+<span class="co">#&gt; ERR413350            g432 Homo sapiens    23132/87           stomach</span>
+<span class="co">#&gt; ERR413351            g187 Homo sapiens        501A      zone of skin</span>
+<span class="co">#&gt; ...                   ...          ...         ...               ...</span>
+<span class="co">#&gt; ERR414017            g170 Homo sapiens       YMB-1            breast</span>
+<span class="co">#&gt; ERR414018            g310 Homo sapiens     YMB-1-E            breast</span>
+<span class="co">#&gt; ERR414019            g466 Homo sapiens     ZR-75-1            breast</span>
+<span class="co">#&gt; ERR414020             g42 Homo sapiens    ZR-75-30            breast</span>
+<span class="co">#&gt; ERR415514            g247 Homo sapiens       CPC-N              lung</span>
+<span class="co">#&gt;           metatastic_tissue    organism_part                disease</span>
+<span class="co">#&gt;                 &lt;character&gt;      &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; ERR413347    not applicable     zone of skin               melanoma</span>
+<span class="co">#&gt; ERR413348    not applicable cartilage tissue         chondrosarcoma</span>
+<span class="co">#&gt; ERR413349    not applicable      bone tissue           osteosarcoma</span>
+<span class="co">#&gt; ERR413350    not applicable          stomach gastric adenocarcinoma</span>
+<span class="co">#&gt; ERR413351    not applicable     zone of skin               melanoma</span>
+<span class="co">#&gt; ...                     ...              ...                    ...</span>
+<span class="co">#&gt; ERR414017    not applicable           breast       breast carcinoma</span>
+<span class="co">#&gt; ERR414018    not applicable           breast       breast carcinoma</span>
+<span class="co">#&gt; ERR414019    not applicable           breast breast ductal adenoc..</span>
+<span class="co">#&gt; ERR414020           ascites           breast breast ductal adenoc..</span>
+<span class="co">#&gt; ERR415514    not applicable             lung small cell lung carc..</span>
+<span class="co">#&gt;                        age           sex     ethnicity                  media</span>
+<span class="co">#&gt;                &lt;character&gt;   &lt;character&gt;   &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; ERR413347 not available    not available not available         not determined</span>
+<span class="co">#&gt; ERR413348          66 year          male not available 40%DMEM, 40%MEM, 10%..</span>
+<span class="co">#&gt; ERR413349          13 year        female     Caucasian RPMI-1640 10% FBS, 2..</span>
+<span class="co">#&gt; ERR413350          72 year          male not available RPMI-1640, 10% FBS, ..</span>
+<span class="co">#&gt; ERR413351 not available    not available not available RPMI-1640, 10% FBS, ..</span>
+<span class="co">#&gt; ...                    ...           ...           ...                    ...</span>
+<span class="co">#&gt; ERR414017          55 year        female not available RPMI-1640, 10% FBS, ..</span>
+<span class="co">#&gt; ERR414018          55 year        female not available RPMI-1640, 10% FBS, ..</span>
+<span class="co">#&gt; ERR414019          63 year not available     Caucasian RPMI-1640, 10% FBS, ..</span>
+<span class="co">#&gt; ERR414020          47 year        female       African RPMI-1640, 10% FBS, ..</span>
+<span class="co">#&gt; ERR415514 not available    not available not available McCoys 5A, 10% FBS, ..</span>
+<span class="co">#&gt;                     freeze_media</span>
+<span class="co">#&gt;                      &lt;character&gt;</span>
+<span class="co">#&gt; ERR413347         not determined</span>
+<span class="co">#&gt; ERR413348 Complete growth medi..</span>
+<span class="co">#&gt; ERR413349 Complete growth medi..</span>
+<span class="co">#&gt; ERR413350 Complete growth medi..</span>
+<span class="co">#&gt; ERR413351      90% FBS; 10% DMSO</span>
+<span class="co">#&gt; ...                          ...</span>
+<span class="co">#&gt; ERR414017 Complete growth medi..</span>
+<span class="co">#&gt; ERR414018 Complete growth medi..</span>
+<span class="co">#&gt; ERR414019 Complete growth medi..</span>
+<span class="co">#&gt; ERR414020 Complete growth medi..</span>
+<span class="co">#&gt; ERR415514 Complete growth medi..</span></code></pre></div>
 <p>and we have one sample per cell line:</p>
-<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">klijn</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
-<span class="fu">colData</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span></code></pre></div>
-<pre><code>## DataFrame with 1 row and 12 columns
-##           AtlasAssayGroup     organism   cell_line tissue_supergroup
-##               &lt;character&gt;  &lt;character&gt; &lt;character&gt;       &lt;character&gt;
-## ERR413569            g283 Homo sapiens     HCT 116       colo-rectal
-##           metatastic_tissue organism_part         disease              age
-##                 &lt;character&gt;   &lt;character&gt;     &lt;character&gt;      &lt;character&gt;
-## ERR413569    not applicable         colon colon carcinoma not available   
-##                   sex     ethnicity                  media
-##           &lt;character&gt;   &lt;character&gt;            &lt;character&gt;
-## ERR413569        male not available McCoys 5A,  10% FBS,..
-##                     freeze_media
-##                      &lt;character&gt;
-## ERR413569 50% FBS, 40% media, ..</code></pre>
+<span class="fu">colData</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span>
+<span class="co">#&gt; DataFrame with 1 row and 12 columns</span>
+<span class="co">#&gt;           AtlasAssayGroup     organism   cell_line tissue_supergroup</span>
+<span class="co">#&gt;               &lt;character&gt;  &lt;character&gt; &lt;character&gt;       &lt;character&gt;</span>
+<span class="co">#&gt; ERR413569            g283 Homo sapiens     HCT 116       colo-rectal</span>
+<span class="co">#&gt;           metatastic_tissue organism_part         disease              age</span>
+<span class="co">#&gt;                 &lt;character&gt;   &lt;character&gt;     &lt;character&gt;      &lt;character&gt;</span>
+<span class="co">#&gt; ERR413569    not applicable         colon colon carcinoma not available   </span>
+<span class="co">#&gt;                   sex     ethnicity                  media</span>
+<span class="co">#&gt;           &lt;character&gt;   &lt;character&gt;            &lt;character&gt;</span>
+<span class="co">#&gt; ERR413569        male not available McCoys 5A,  10% FBS,..</span>
+<span class="co">#&gt;                     freeze_media</span>
+<span class="co">#&gt;                      &lt;character&gt;</span>
+<span class="co">#&gt; ERR413569 50% FBS, 40% media, ..</span></code></pre></div>
 <p>Combine HCT-116 transcriptome from CCLE and Klijn et al. datasets:</p>
-<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">ccle</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="va">ind2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">klijn</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="va">emat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span>,<span class="va">ind1</span><span class="op">]</span>, <span class="fu">assay</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span>,<span class="va">ind2</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">emat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"ccle"</span>, <span class="st">"klijn"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">emat</span><span class="op">)</span></code></pre></div>
-<pre><code>##                 ccle klijn
-## ENSG00000000003 2471  1876
-## ENSG00000000005    0     0
-## ENSG00000000419 4082  3731
-## ENSG00000000457 1160   676
-## ENSG00000000460 1785  1206
-## ENSG00000000938    0     0</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">emat</span><span class="op">)</span>
+<span class="co">#&gt;                 ccle klijn</span>
+<span class="co">#&gt; ENSG00000000003 2471  1876</span>
+<span class="co">#&gt; ENSG00000000005    0     0</span>
+<span class="co">#&gt; ENSG00000000419 4082  3731</span>
+<span class="co">#&gt; ENSG00000000457 1160   676</span>
+<span class="co">#&gt; ENSG00000000460 1785  1206</span>
+<span class="co">#&gt; ENSG00000000938    0     0</span></code></pre></div>
 </div>
 </div>
 </div>
@@ -919,161 +910,151 @@
 <h3 class="hasAnchor">
 <a href="#ccle" class="anchor"></a>CCLE</h3>
 <p>Pull the <a href="https://doi.org/10.1016/j.cell.2019.12.023">CCLE proteome data</a> from ExperimentHub. The dataset profiles 12,755 proteins by mass spectrometry across 375 cancer cell lines.</p>
-<div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ehdb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">eh</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gygi"</span>, <span class="st">"depmap"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="va">ehdb</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ehdb</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></code></pre></div>
-<pre><code>## snapshotDate(): 2021-05-18</code></pre>
-<pre><code>## see ?depmap and browseVignettes('depmap') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
+<span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="va">ehdb</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ehdb</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>
+<span class="co">#&gt; snapshotDate(): 2021-05-18</span>
+<span class="co">#&gt; see ?depmap and browseVignettes('depmap') for documentation</span>
+<span class="co">#&gt; loading from cache</span>
+<span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
 <p>Explore the data:</p>
-<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 4821390      12</code></pre>
-<div class="sourceCode" id="cb99"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
-<pre><code>##  [1] "depmap_id"          "gene_name"          "entrez_id"         
-##  [4] "protein"            "protein_expression" "protein_id"        
-##  [7] "desc"               "group_id"           "uniprot"           
-## [10] "uniprot_acc"        "TenPx"              "cell_line"</code></pre>
-<div class="sourceCode" id="cb101"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
-<pre><code>##    depmap_id gene_name entrez_id                 protein protein_expression
-## 1 ACH-000849   SLC12A2      6558 MDAMB468_BREAST_TenPx01         2.11134846
-## 2 ACH-000441   SLC12A2      6558        SH4_SKIN_TenPx01         0.07046807
-## 3 ACH-000248   SLC12A2      6558    AU565_BREAST_TenPx01        -0.46392793
-## 4 ACH-000684   SLC12A2      6558    KMRC1_KIDNEY_TenPx01        -0.88364548
-## 5 ACH-000856   SLC12A2      6558    CAL51_BREAST_TenPx01         0.78856534
-## 6 ACH-000348   SLC12A2      6558   RPMI7951_SKIN_TenPx01        -0.91235198
-##              protein_id                                          desc group_id
-## 1 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0
-## 2 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0
-## 3 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0
-## 4 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0
-## 5 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0
-## 6 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0
-##       uniprot uniprot_acc   TenPx       cell_line
-## 1 S12A2_HUMAN      P55011 TenPx01 MDAMB468_BREAST
-## 2 S12A2_HUMAN      P55011 TenPx01        SH4_SKIN
-## 3 S12A2_HUMAN      P55011 TenPx01    AU565_BREAST
-## 4 S12A2_HUMAN      P55011 TenPx01    KMRC1_KIDNEY
-## 5 S12A2_HUMAN      P55011 TenPx01    CAL51_BREAST
-## 6 S12A2_HUMAN      P55011 TenPx01   RPMI7951_SKIN</code></pre>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span>
+<span class="co">#&gt; [1] 4821390      12</span>
+<span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "depmap_id"          "gene_name"          "entrez_id"         </span>
+<span class="co">#&gt;  [4] "protein"            "protein_expression" "protein_id"        </span>
+<span class="co">#&gt;  [7] "desc"               "group_id"           "uniprot"           </span>
+<span class="co">#&gt; [10] "uniprot_acc"        "TenPx"              "cell_line"</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span>
+<span class="co">#&gt;    depmap_id gene_name entrez_id                 protein protein_expression</span>
+<span class="co">#&gt; 1 ACH-000849   SLC12A2      6558 MDAMB468_BREAST_TenPx01         2.11134846</span>
+<span class="co">#&gt; 2 ACH-000441   SLC12A2      6558        SH4_SKIN_TenPx01         0.07046807</span>
+<span class="co">#&gt; 3 ACH-000248   SLC12A2      6558    AU565_BREAST_TenPx01        -0.46392793</span>
+<span class="co">#&gt; 4 ACH-000684   SLC12A2      6558    KMRC1_KIDNEY_TenPx01        -0.88364548</span>
+<span class="co">#&gt; 5 ACH-000856   SLC12A2      6558    CAL51_BREAST_TenPx01         0.78856534</span>
+<span class="co">#&gt; 6 ACH-000348   SLC12A2      6558   RPMI7951_SKIN_TenPx01        -0.91235198</span>
+<span class="co">#&gt;              protein_id                                          desc group_id</span>
+<span class="co">#&gt; 1 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0</span>
+<span class="co">#&gt; 2 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0</span>
+<span class="co">#&gt; 3 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0</span>
+<span class="co">#&gt; 4 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0</span>
+<span class="co">#&gt; 5 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0</span>
+<span class="co">#&gt; 6 sp|P55011|S12A2_HUMAN S12A2_HUMAN Solute carrier family 12 member 2        0</span>
+<span class="co">#&gt;       uniprot uniprot_acc   TenPx       cell_line</span>
+<span class="co">#&gt; 1 S12A2_HUMAN      P55011 TenPx01 MDAMB468_BREAST</span>
+<span class="co">#&gt; 2 S12A2_HUMAN      P55011 TenPx01        SH4_SKIN</span>
+<span class="co">#&gt; 3 S12A2_HUMAN      P55011 TenPx01    AU565_BREAST</span>
+<span class="co">#&gt; 4 S12A2_HUMAN      P55011 TenPx01    KMRC1_KIDNEY</span>
+<span class="co">#&gt; 5 S12A2_HUMAN      P55011 TenPx01    CAL51_BREAST</span>
+<span class="co">#&gt; 6 S12A2_HUMAN      P55011 TenPx01   RPMI7951_SKIN</span></code></pre></div>
 <p>Restrict to HCT116:</p>
-<div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ccle.prot.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">ccle.prot</span>, <span class="va">cell_line</span> <span class="op">==</span> <span class="st">"HCT116_LARGE_INTESTINE"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 12755    12</code></pre>
-<div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span></code></pre></div>
-<pre><code>##       depmap_id gene_name entrez_id                        protein
-## 28   ACH-000971   SLC12A2      6558 HCT116_LARGE_INTESTINE_TenPx04
-## 406  ACH-000971    HOXD13      3239 HCT116_LARGE_INTESTINE_TenPx04
-## 784  ACH-000971     KDM1A     23028 HCT116_LARGE_INTESTINE_TenPx04
-## 1162 ACH-000971      SOX1      6656 HCT116_LARGE_INTESTINE_TenPx04
-## 1540 ACH-000971      SOX2      6657 HCT116_LARGE_INTESTINE_TenPx04
-## 1918 ACH-000971      SOX3      6658 HCT116_LARGE_INTESTINE_TenPx04
-##      protein_expression            protein_id
-## 28           -0.2422502 sp|P55011|S12A2_HUMAN
-## 406                  NA sp|P35453|HXD13_HUMAN
-## 784          -0.1941110 sp|O60341|KDM1A_HUMAN
-## 1162                 NA  sp|O00570|SOX1_HUMAN
-## 1540         -1.5306584  sp|P48431|SOX2_HUMAN
-## 1918                 NA  sp|P41225|SOX3_HUMAN
-##                                                    desc group_id     uniprot
-## 28        S12A2_HUMAN Solute carrier family 12 member 2        0 S12A2_HUMAN
-## 406                HXD13_HUMAN Homeobox protein Hox-D13        1 HXD13_HUMAN
-## 784  KDM1A_HUMAN Lysine-specific histone demethylase 1A        2 KDM1A_HUMAN
-## 1162              SOX1_HUMAN Transcription factor SOX-1        4  SOX1_HUMAN
-## 1540              SOX2_HUMAN Transcription factor SOX-2        4  SOX2_HUMAN
-## 1918              SOX3_HUMAN Transcription factor SOX-3        4  SOX3_HUMAN
-##      uniprot_acc   TenPx              cell_line
-## 28        P55011 TenPx04 HCT116_LARGE_INTESTINE
-## 406       P35453 TenPx04 HCT116_LARGE_INTESTINE
-## 784       O60341 TenPx04 HCT116_LARGE_INTESTINE
-## 1162      O00570 TenPx04 HCT116_LARGE_INTESTINE
-## 1540      P48431 TenPx04 HCT116_LARGE_INTESTINE
-## 1918      P41225 TenPx04 HCT116_LARGE_INTESTINE</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span>
+<span class="co">#&gt; [1] 12755    12</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span>
+<span class="co">#&gt;       depmap_id gene_name entrez_id                        protein</span>
+<span class="co">#&gt; 28   ACH-000971   SLC12A2      6558 HCT116_LARGE_INTESTINE_TenPx04</span>
+<span class="co">#&gt; 406  ACH-000971    HOXD13      3239 HCT116_LARGE_INTESTINE_TenPx04</span>
+<span class="co">#&gt; 784  ACH-000971     KDM1A     23028 HCT116_LARGE_INTESTINE_TenPx04</span>
+<span class="co">#&gt; 1162 ACH-000971      SOX1      6656 HCT116_LARGE_INTESTINE_TenPx04</span>
+<span class="co">#&gt; 1540 ACH-000971      SOX2      6657 HCT116_LARGE_INTESTINE_TenPx04</span>
+<span class="co">#&gt; 1918 ACH-000971      SOX3      6658 HCT116_LARGE_INTESTINE_TenPx04</span>
+<span class="co">#&gt;      protein_expression            protein_id</span>
+<span class="co">#&gt; 28           -0.2422502 sp|P55011|S12A2_HUMAN</span>
+<span class="co">#&gt; 406                  NA sp|P35453|HXD13_HUMAN</span>
+<span class="co">#&gt; 784          -0.1941110 sp|O60341|KDM1A_HUMAN</span>
+<span class="co">#&gt; 1162                 NA  sp|O00570|SOX1_HUMAN</span>
+<span class="co">#&gt; 1540         -1.5306584  sp|P48431|SOX2_HUMAN</span>
+<span class="co">#&gt; 1918                 NA  sp|P41225|SOX3_HUMAN</span>
+<span class="co">#&gt;                                                    desc group_id     uniprot</span>
+<span class="co">#&gt; 28        S12A2_HUMAN Solute carrier family 12 member 2        0 S12A2_HUMAN</span>
+<span class="co">#&gt; 406                HXD13_HUMAN Homeobox protein Hox-D13        1 HXD13_HUMAN</span>
+<span class="co">#&gt; 784  KDM1A_HUMAN Lysine-specific histone demethylase 1A        2 KDM1A_HUMAN</span>
+<span class="co">#&gt; 1162              SOX1_HUMAN Transcription factor SOX-1        4  SOX1_HUMAN</span>
+<span class="co">#&gt; 1540              SOX2_HUMAN Transcription factor SOX-2        4  SOX2_HUMAN</span>
+<span class="co">#&gt; 1918              SOX3_HUMAN Transcription factor SOX-3        4  SOX3_HUMAN</span>
+<span class="co">#&gt;      uniprot_acc   TenPx              cell_line</span>
+<span class="co">#&gt; 28        P55011 TenPx04 HCT116_LARGE_INTESTINE</span>
+<span class="co">#&gt; 406       P35453 TenPx04 HCT116_LARGE_INTESTINE</span>
+<span class="co">#&gt; 784       O60341 TenPx04 HCT116_LARGE_INTESTINE</span>
+<span class="co">#&gt; 1162      O00570 TenPx04 HCT116_LARGE_INTESTINE</span>
+<span class="co">#&gt; 1540      P48431 TenPx04 HCT116_LARGE_INTESTINE</span>
+<span class="co">#&gt; 1918      P41225 TenPx04 HCT116_LARGE_INTESTINE</span></code></pre></div>
 <p>Or turn into a <code>SummarizedExperiment</code> for convenience (we can restrict this to selected cell lines, but here we keep all cell lines):</p>
-<div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ccleProteome2SummarizedExperiment.html">ccleProteome2SummarizedExperiment</a></span><span class="op">(</span><span class="va">ccle.prot</span>, cell.line <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-<span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##             22RV1         697       769P       786O      8305C
-## P55011  1.8112046 -0.01482998 -0.5658598 -1.2205591 -0.1713740
-## P35453         NA          NA -2.5433313         NA         NA
-## O60341 -0.3379936  0.37121437 -0.8170886 -0.9183874  0.1141192
-## O00570         NA          NA         NA -0.5043593         NA
-## P48431 -1.2617033          NA         NA -3.4006509         NA</code></pre>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"HCT116"</span><span class="op">]</span></code></pre></div>
-<pre><code>##     P55011     P35453     O60341     O00570     P48431 
-## -0.2422502         NA -0.1941110         NA -1.5306584</code></pre>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 12755 rows and 2 columns
-##             SYMBOL  ENTREZID
-##        &lt;character&gt; &lt;numeric&gt;
-## P55011     SLC12A2      6558
-## P35453      HOXD13      3239
-## O60341       KDM1A     23028
-## O00570        SOX1      6656
-## P48431        SOX2      6657
-## ...            ...       ...
-## Q9Y258       CCL26     10344
-## P20292     ALOX5AP       241
-## Q9H1C7      CYSTM1     84418
-## Q99735       MGST2      4258
-## Q9P003       CNIH4     29097</code></pre>
+<span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;             22RV1         697       769P       786O      8305C</span>
+<span class="co">#&gt; P55011  1.8112046 -0.01482998 -0.5658598 -1.2205591 -0.1713740</span>
+<span class="co">#&gt; P35453         NA          NA -2.5433313         NA         NA</span>
+<span class="co">#&gt; O60341 -0.3379936  0.37121437 -0.8170886 -0.9183874  0.1141192</span>
+<span class="co">#&gt; O00570         NA          NA         NA -0.5043593         NA</span>
+<span class="co">#&gt; P48431 -1.2617033          NA         NA -3.4006509         NA</span>
+<span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"HCT116"</span><span class="op">]</span>
+<span class="co">#&gt;     P55011     P35453     O60341     O00570     P48431 </span>
+<span class="co">#&gt; -0.2422502         NA -0.1941110         NA -1.5306584</span>
+<span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 12755 rows and 2 columns</span>
+<span class="co">#&gt;             SYMBOL  ENTREZID</span>
+<span class="co">#&gt;        &lt;character&gt; &lt;numeric&gt;</span>
+<span class="co">#&gt; P55011     SLC12A2      6558</span>
+<span class="co">#&gt; P35453      HOXD13      3239</span>
+<span class="co">#&gt; O60341       KDM1A     23028</span>
+<span class="co">#&gt; O00570        SOX1      6656</span>
+<span class="co">#&gt; P48431        SOX2      6657</span>
+<span class="co">#&gt; ...            ...       ...</span>
+<span class="co">#&gt; Q9Y258       CCL26     10344</span>
+<span class="co">#&gt; P20292     ALOX5AP       241</span>
+<span class="co">#&gt; Q9H1C7      CYSTM1     84418</span>
+<span class="co">#&gt; Q99735       MGST2      4258</span>
+<span class="co">#&gt; Q9P003       CNIH4     29097</span></code></pre></div>
 </div>
-<div id="relative-protein-expression-data-preprint" class="section level3">
+<div id="relative-protein-expression-data-from-bioplex3-0" class="section level3">
 <h3 class="hasAnchor">
-<a href="#relative-protein-expression-data-preprint" class="anchor"></a>Relative protein expression data (preprint)</h3>
-<p>Huttlin_BioPlex3_Table_S4.xlsx contains the relative protein expression data comparing 293T and HCT116 cells. This is a supplementary table that will be published with the upcoming BioPlex 3 paper.</p>
-<p>That lives on dropbox for the moment, and can be wrapped into an R data package or uploaded to ExperimentHub. Once published there will be other avenues to pull the data (web request, reference DB, …).</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## Using cached version from 2021-06-30 05:27:52</code></pre>
-<div class="sourceCode" id="cb115"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></code></pre></div>
-<pre><code>##               HCT1      HCT2      HCT3      HCT4      HCT5
-## P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410
-## Q8IXZ3-4  1.758790  1.610220  2.004360  1.800270  1.371470
-## P55011   12.570100 11.637500 12.495700 11.374500 12.377400
-## O60341    8.914910  9.677760  8.397850  8.745780  8.746410
-## O14654    0.196305  0.277787  0.425389  0.199624  0.491558</code></pre>
-<div class="sourceCode" id="cb117"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">colData</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 10 rows and 1 column
-##        cell.line
-##      &lt;character&gt;
-## HCT1      HCT116
-## HCT2      HCT116
-## HCT3      HCT116
-## HCT4      HCT116
-## HCT5      HCT116
-## HEK1        293T
-## HEK2        293T
-## HEK3        293T
-## HEK4        293T
-## HEK5        293T</code></pre>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">rowData</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span></code></pre></div>
-<pre><code>## DataFrame with 9604 rows and 5 columns
-##             ENTREZID      SYMBOL nr.peptides log2ratio  adj.pvalue
-##          &lt;character&gt; &lt;character&gt;   &lt;integer&gt; &lt;numeric&gt;   &lt;numeric&gt;
-## P0CG40     100131390         SP9           1 -2.819071 6.66209e-08
-## Q8IXZ3-4      221833         SP8           3 -3.419888 6.94973e-07
-## P55011          6558     SLC12A2           4  0.612380 4.85602e-06
-## O60341         23028       KDM1A           7 -0.319695 5.08667e-04
-## O14654          8471        IRS4           4 -5.951096 1.45902e-06
-## ...              ...         ...         ...       ...         ...
-## Q9H6X4         80194     TMEM134           2 -0.379342 7.67195e-05
-## Q9BS91         55032     SLC35A5           1 -2.237634 8.75523e-05
-## Q9UKJ5         26511       CHIC2           1 -0.614932 1.78756e-03
-## Q9H3S5         93183        PIGM           1 -1.011397 8.91589e-06
-## Q8WYQ3        400916     CHCHD10           1  0.743852 1.17163e-03</code></pre>
-<p>There are 10 channels - 5 replicates for 293T and 5 for HCT116. Based on the way we collect these data, we end up viewing them so that they’re scaled to add up to 100%. Essentially, we think of them as ten variably-sized slices of a pie, with five each allotted to each cell line. Modeling the data this way presents some statistical complications, as I’m sure you can imagine, but it most closely aligns with how our data work.</p>
+<a href="#relative-protein-expression-data-from-bioplex3-0" class="anchor"></a>Relative protein expression data from BioPlex3.0</h3>
+<p>The <a href="https://doi.org/10.1016/j.cell.2021.04.011">BioPlex 3.0 publication</a>, Supplementary Table S4A, provides relative protein expression data comparing 293T and HCT116 cells based on tandem mass tag analysis.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-07-01 01:12:53</span>
+<span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
+<span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
+<span class="co">#&gt; Q8IXZ3-4  1.758790  1.610220  2.004360  1.800270  1.371470</span>
+<span class="co">#&gt; P55011   12.570100 11.637500 12.495700 11.374500 12.377400</span>
+<span class="co">#&gt; O60341    8.914910  9.677760  8.397850  8.745780  8.746410</span>
+<span class="co">#&gt; O14654    0.196305  0.277787  0.425389  0.199624  0.491558</span>
+<span class="fu">colData</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 10 rows and 1 column</span>
+<span class="co">#&gt;        cell.line</span>
+<span class="co">#&gt;      &lt;character&gt;</span>
+<span class="co">#&gt; HCT1      HCT116</span>
+<span class="co">#&gt; HCT2      HCT116</span>
+<span class="co">#&gt; HCT3      HCT116</span>
+<span class="co">#&gt; HCT4      HCT116</span>
+<span class="co">#&gt; HCT5      HCT116</span>
+<span class="co">#&gt; HEK1        293T</span>
+<span class="co">#&gt; HEK2        293T</span>
+<span class="co">#&gt; HEK3        293T</span>
+<span class="co">#&gt; HEK4        293T</span>
+<span class="co">#&gt; HEK5        293T</span>
+<span class="fu">rowData</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span>
+<span class="co">#&gt; DataFrame with 9604 rows and 5 columns</span>
+<span class="co">#&gt;             ENTREZID      SYMBOL nr.peptides log2ratio  adj.pvalue</span>
+<span class="co">#&gt;          &lt;character&gt; &lt;character&gt;   &lt;integer&gt; &lt;numeric&gt;   &lt;numeric&gt;</span>
+<span class="co">#&gt; P0CG40     100131390         SP9           1 -2.819071 6.66209e-08</span>
+<span class="co">#&gt; Q8IXZ3-4      221833         SP8           3 -3.419888 6.94973e-07</span>
+<span class="co">#&gt; P55011          6558     SLC12A2           4  0.612380 4.85602e-06</span>
+<span class="co">#&gt; O60341         23028       KDM1A           7 -0.319695 5.08667e-04</span>
+<span class="co">#&gt; O14654          8471        IRS4           4 -5.951096 1.45902e-06</span>
+<span class="co">#&gt; ...              ...         ...         ...       ...         ...</span>
+<span class="co">#&gt; Q9H6X4         80194     TMEM134           2 -0.379342 7.67195e-05</span>
+<span class="co">#&gt; Q9BS91         55032     SLC35A5           1 -2.237634 8.75523e-05</span>
+<span class="co">#&gt; Q9UKJ5         26511       CHIC2           1 -0.614932 1.78756e-03</span>
+<span class="co">#&gt; Q9H3S5         93183        PIGM           1 -1.011397 8.91589e-06</span>
+<span class="co">#&gt; Q8WYQ3        400916     CHCHD10           1  0.743852 1.17163e-03</span></code></pre></div>
+<p>The data contains 5 replicates each for 293T and for HCT116 cells. As a result of the data collection process, the data represent relative protein abundance scaled to add up to 100% in each row.</p>
 </div>
 </div>
 </div>
@@ -1082,90 +1063,90 @@
 <a href="#caching" class="anchor"></a>Caching</h1>
 <p>Note that calling functions like <code>getCorum</code> or <code>getBioPlex</code> with argument <code>cache = FALSE</code> will automatically overwrite the corresponding object in your cache. It is thus typically not required for a user to interact with the cache.</p>
 <p>For more extended control of the cache, use from within R:</p>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cache.dir</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html">R_user_dir</a></span><span class="op">(</span><span class="st">"BioPlex"</span>, which <span class="op">=</span> <span class="st">"cache"</span><span class="op">)</span> 
 <span class="va">bfc</span> <span class="op">&lt;-</span> <span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">BiocFileCache</a></span><span class="op">(</span><span class="va">cache.dir</span><span class="op">)</span></code></pre></div>
 <p>and then proceed as described in the <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache">BiocFileCache vignette, Section 1.10</a> either via <code>cleanbfc()</code> to clean or <code>removebfc()</code> to remove your cache.</p>
 <p>To do a hard reset (use with caution!):</p>
-<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">removebfc</a></span><span class="op">(</span><span class="va">bfc</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
-<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## R version 4.1.0 (2021-05-18)
-## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Ubuntu 20.04.2 LTS
-## 
-## Matrix products: default
-## BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so
-## 
-## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
-##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
-##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
-## 
-## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
-## other attached packages:
-##  [1] depmap_1.6.0                dplyr_1.0.7                
-##  [3] AnnotationDbi_1.54.1        graph_1.70.0               
-##  [5] ExpressionAtlas_1.20.0      xml2_1.3.2                 
-##  [7] limma_3.48.1                ExperimentHub_2.0.0        
-##  [9] AnnotationHub_3.0.1         BiocFileCache_2.0.0        
-## [11] dbplyr_2.1.1                BioPlex_0.99.1             
-## [13] SummarizedExperiment_1.22.0 Biobase_2.52.0             
-## [15] GenomicRanges_1.44.0        GenomeInfoDb_1.28.0        
-## [17] IRanges_2.26.0              S4Vectors_0.30.0           
-## [19] BiocGenerics_0.38.0         MatrixGenerics_1.4.0       
-## [21] matrixStats_0.59.0         
-## 
-## loaded via a namespace (and not attached):
-##  [1] httr_1.4.2                    sass_0.4.0                   
-##  [3] bit64_4.0.5                   jsonlite_1.7.2               
-##  [5] bslib_0.2.5.1                 shiny_1.6.0                  
-##  [7] assertthat_0.2.1              interactiveDisplayBase_1.30.0
-##  [9] BiocManager_1.30.16           blob_1.2.1                   
-## [11] GenomeInfoDbData_1.2.6        yaml_2.2.1                   
-## [13] BiocVersion_3.13.1            pillar_1.6.1                 
-## [15] RSQLite_2.2.7                 lattice_0.20-44              
-## [17] glue_1.4.2                    digest_0.6.27                
-## [19] promises_1.2.0.1              XVector_0.32.0               
-## [21] htmltools_0.5.1.1             httpuv_1.6.1                 
-## [23] Matrix_1.3-3                  XML_3.99-0.6                 
-## [25] pkgconfig_2.0.3               zlibbioc_1.38.0              
-## [27] xtable_1.8-4                  purrr_0.3.4                  
-## [29] later_1.2.0                   tibble_3.1.2                 
-## [31] KEGGREST_1.32.0               generics_0.1.0               
-## [33] ellipsis_0.3.2                withr_2.4.2                  
-## [35] cachem_1.0.5                  mime_0.11                    
-## [37] magrittr_2.0.1                crayon_1.4.1                 
-## [39] memoise_2.0.0                 evaluate_0.14                
-## [41] fs_1.5.0                      fansi_0.5.0                  
-## [43] textshaping_0.3.5             tools_4.1.0                  
-## [45] lifecycle_1.0.0               stringr_1.4.0                
-## [47] DelayedArray_0.18.0           Biostrings_2.60.1            
-## [49] compiler_4.1.0                pkgdown_1.6.1                
-## [51] jquerylib_0.1.4               systemfonts_1.0.2            
-## [53] rlang_0.4.11                  grid_4.1.0                   
-## [55] RCurl_1.98-1.3                rappdirs_0.3.3               
-## [57] bitops_1.0-7                  rmarkdown_2.9                
-## [59] DBI_1.1.1                     curl_4.3.2                   
-## [61] R6_2.5.0                      knitr_1.33                   
-## [63] fastmap_1.1.0                 bit_4.0.4                    
-## [65] utf8_1.2.1                    filelock_1.0.2               
-## [67] rprojroot_2.0.2               ragg_1.1.3                   
-## [69] desc_1.3.0                    stringi_1.6.2                
-## [71] Rcpp_1.0.6                    png_0.1-7                    
-## [73] vctrs_0.3.8                   tidyselect_1.1.1             
-## [75] xfun_0.24</code></pre>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; R version 4.1.0 (2021-05-18)</span>
+<span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
+<span class="co">#&gt; Running under: Ubuntu 20.04.2 LTS</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Matrix products: default</span>
+<span class="co">#&gt; BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.8.so</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; locale:</span>
+<span class="co">#&gt;  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span>
+<span class="co">#&gt;  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span>
+<span class="co">#&gt;  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             </span>
+<span class="co">#&gt;  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span>
+<span class="co">#&gt;  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span>
+<span class="co">#&gt; [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attached base packages:</span>
+<span class="co">#&gt; [1] parallel  stats4    stats     graphics  grDevices utils     datasets </span>
+<span class="co">#&gt; [8] methods   base     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; other attached packages:</span>
+<span class="co">#&gt;  [1] depmap_1.6.0                dplyr_1.0.7                </span>
+<span class="co">#&gt;  [3] AnnotationDbi_1.54.1        graph_1.70.0               </span>
+<span class="co">#&gt;  [5] ExpressionAtlas_1.20.0      xml2_1.3.2                 </span>
+<span class="co">#&gt;  [7] limma_3.48.1                ExperimentHub_2.0.0        </span>
+<span class="co">#&gt;  [9] AnnotationHub_3.0.1         BiocFileCache_2.0.0        </span>
+<span class="co">#&gt; [11] dbplyr_2.1.1                BioPlex_0.99.1             </span>
+<span class="co">#&gt; [13] SummarizedExperiment_1.22.0 Biobase_2.52.0             </span>
+<span class="co">#&gt; [15] GenomicRanges_1.44.0        GenomeInfoDb_1.28.0        </span>
+<span class="co">#&gt; [17] IRanges_2.26.0              S4Vectors_0.30.0           </span>
+<span class="co">#&gt; [19] BiocGenerics_0.38.0         MatrixGenerics_1.4.0       </span>
+<span class="co">#&gt; [21] matrixStats_0.59.0          BiocStyle_2.20.2           </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; loaded via a namespace (and not attached):</span>
+<span class="co">#&gt;  [1] bitops_1.0-7                  fs_1.5.0                     </span>
+<span class="co">#&gt;  [3] bit64_4.0.5                   filelock_1.0.2               </span>
+<span class="co">#&gt;  [5] httr_1.4.2                    rprojroot_2.0.2              </span>
+<span class="co">#&gt;  [7] tools_4.1.0                   bslib_0.2.5.1                </span>
+<span class="co">#&gt;  [9] utf8_1.2.1                    R6_2.5.0                     </span>
+<span class="co">#&gt; [11] DBI_1.1.1                     withr_2.4.2                  </span>
+<span class="co">#&gt; [13] tidyselect_1.1.1              bit_4.0.4                    </span>
+<span class="co">#&gt; [15] curl_4.3.2                    compiler_4.1.0               </span>
+<span class="co">#&gt; [17] textshaping_0.3.5             desc_1.3.0                   </span>
+<span class="co">#&gt; [19] DelayedArray_0.18.0           bookdown_0.22                </span>
+<span class="co">#&gt; [21] sass_0.4.0                    rappdirs_0.3.3               </span>
+<span class="co">#&gt; [23] pkgdown_1.6.1                 systemfonts_1.0.2            </span>
+<span class="co">#&gt; [25] stringr_1.4.0                 digest_0.6.27                </span>
+<span class="co">#&gt; [27] rmarkdown_2.9                 XVector_0.32.0               </span>
+<span class="co">#&gt; [29] pkgconfig_2.0.3               htmltools_0.5.1.1            </span>
+<span class="co">#&gt; [31] fastmap_1.1.0                 rlang_0.4.11                 </span>
+<span class="co">#&gt; [33] RSQLite_2.2.7                 shiny_1.6.0                  </span>
+<span class="co">#&gt; [35] jquerylib_0.1.4               generics_0.1.0               </span>
+<span class="co">#&gt; [37] jsonlite_1.7.2                RCurl_1.98-1.3               </span>
+<span class="co">#&gt; [39] magrittr_2.0.1                GenomeInfoDbData_1.2.6       </span>
+<span class="co">#&gt; [41] Matrix_1.3-3                  Rcpp_1.0.6                   </span>
+<span class="co">#&gt; [43] fansi_0.5.0                   lifecycle_1.0.0              </span>
+<span class="co">#&gt; [45] stringi_1.6.2                 yaml_2.2.1                   </span>
+<span class="co">#&gt; [47] zlibbioc_1.38.0               grid_4.1.0                   </span>
+<span class="co">#&gt; [49] blob_1.2.1                    promises_1.2.0.1             </span>
+<span class="co">#&gt; [51] crayon_1.4.1                  lattice_0.20-44              </span>
+<span class="co">#&gt; [53] Biostrings_2.60.1             KEGGREST_1.32.0              </span>
+<span class="co">#&gt; [55] knitr_1.33                    pillar_1.6.1                 </span>
+<span class="co">#&gt; [57] XML_3.99-0.6                  glue_1.4.2                   </span>
+<span class="co">#&gt; [59] BiocVersion_3.13.1            evaluate_0.14                </span>
+<span class="co">#&gt; [61] BiocManager_1.30.16           vctrs_0.3.8                  </span>
+<span class="co">#&gt; [63] png_0.1-7                     httpuv_1.6.1                 </span>
+<span class="co">#&gt; [65] purrr_0.3.4                   assertthat_0.2.1             </span>
+<span class="co">#&gt; [67] cachem_1.0.5                  xfun_0.24                    </span>
+<span class="co">#&gt; [69] mime_0.11                     xtable_1.8-4                 </span>
+<span class="co">#&gt; [71] later_1.2.0                   ragg_1.1.3                   </span>
+<span class="co">#&gt; [73] tibble_3.1.2                  memoise_2.0.0                </span>
+<span class="co">#&gt; [75] ellipsis_0.3.2                interactiveDisplayBase_1.30.0</span></code></pre></div>
 </div>
   </div>
 
