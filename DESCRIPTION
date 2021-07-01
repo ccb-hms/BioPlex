@@ -1,5 +1,5 @@
 Package: BioPlex
-Title: R-side access to PPI data from Gygi lab
+Title: R-side access to BioPlex protein-protein interaction data
 Version: 0.99.1
 Authors@R: 
     c(person("Ludwig", "Geistlinger",
@@ -8,7 +8,16 @@ Authors@R:
       person("Robert", "Gentleman",
              role = "aut",
              email = "robert_gentleman@hms.harvard.edu"))
-Description: R-side access to PPI data from Gygi lab.
+Description: The BioPlex package implements access to the BioPlex protein-protein
+             interaction networks and related resources from within R. 
+             Besides protein-protein interaction networks for HEK293 and HCT116 cells,
+             this includes access to CORUM protein complex data, and transcriptome
+             and proteome data for the two cell lines.  
+             Functionality focuses on importing the various data resources and
+             storing them in dedicated Bioconductor data structures, as a 
+             foundation for integrative downstream analysis of the data. 
+URL: https://github.com/ccb-hms/BioPlex
+BugReports: https://github.com/ccb-hms/BioPlex/issues
 Encoding: UTF-8
 License: Artistic-2.0
 VignetteBuilder: knitr
@@ -27,7 +36,19 @@ Imports:
 Suggests: 
     AnnotationDbi,
     AnnotationHub,
+    BiocStyle,
     ExperimentHub,
     ExpressionAtlas,
     knitr,
     rmarkdown
+biocViews:
+    DataImport,
+    DataRepresentation,
+    GeneExpression,
+    GraphAndNetwork,
+    MassSpectrometry,
+    Network,
+    Transcriptomics,
+    Proteomics,
+    Homo_sapiens_Data,
+    ColonCancerData

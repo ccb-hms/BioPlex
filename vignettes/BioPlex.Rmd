@@ -1,14 +1,67 @@
 ---
+title: "Import and representation of BioPlex PPI data and related resources"
+author: "Ludwig Geistlinger and Robert Gentleman"
+affiliation: Center for Computational Biomedicine, Harvard Medical School
+output:
+  BiocStyle::html_document:
+    self_contained: yes 
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('BioPlex')`"
 vignette: >
-  % \VignetteIndexEntry{Data retrieval}
+  % \VignetteIndexEntry{1. Data retrieval}
   % \VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-output:
-  html_document:
-    mathjax: null   
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    crop = NULL ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+)
+```
+
 # Setup
+
+The [BioPlex project](https://bioplex.hms.harvard.edu/) uses 
+affinity-purification mass spectrometry to profile protein-protein interactions (PPIs)
+in human cell lines.
+
+To date, the BioPlex project has created two proteome-scale, cell-line-specific 
+PPI networks. The first, BioPlex 3.0, results from affinity purification of 
+10,128 human proteins —- half the proteome —- in 293T cells and includes 118,162
+interactions among 14,586 proteins. 
+The second results from 5,522 immunoprecipitations in HCT116 cells and includes
+70,966 interactions between 10,531 proteins. 
+
+For more information, please see:
+
+* Huttlin et al. [The BioPlex network: a systematic exploration of the human interactome](https://doi.org/10.1016/j.cell.2015.06.043). *Cell*, 2015.
+* Huttlin et al. [Architecture of the human interactome defines protein communities and disease networks](https://doi.org/10.1038/nature22366), *Nature*, 2017.
+* Huttlin et al. [Dual proteome-scale networks reveal cell-specific remodeling of the human interactome](https://doi.org/10.1016/j.cell.2021.04.011), *Cell*, 2021.
+
+The [BioPlex R package](https://github.com/ccb-hms/BioPlex) 
+implements access to the BioPlex protein-protein interaction networks and 
+related resources from within R. 
+Besides protein-protein interaction networks for 293T and HCT116 cells,
+this includes access to [CORUM](http://mips.helmholtz-muenchen.de/corum)
+protein complex data, and transcriptome and proteome data for the two cell lines. 
+             
+Functionality focuses on importing these data resources and
+storing them in dedicated Bioconductor data structures, as a foundation for 
+integrative downstream analysis of the data. For a set of downstream analyses
+and applications, please see the 
+[BioPlexAnalysis package](https://github.com/ccb-hms/BioPlexAnalysis)
+and 
+[analysis vignettes](https://ccb-hms.github.io/BioPlexAnalysis/).
+ 
+We start by loading the package.
+ 
+
 ```{r, message = FALSE}
 library(BioPlex)
 library(AnnotationHub)
@@ -47,8 +100,8 @@ keytypes(orgdb)
 
 [Available networks](https://bioplex.hms.harvard.edu/interactions.php) include: 
 
-- BioPlex 293T cells (versions 1.0, 2.0, and 3.0)
-- BioPlex HCT116 cells (version 1.0)
+- BioPlex PPI network for human embryonic kidney [293T](https://en.wikipedia.org/wiki/293T) cells (versions 1.0, 2.0, and 3.0)
+- BioPlex PPI network for human colon cancer [HCT116](https://en.wikipedia.org/wiki/HCT116_cells) cells (version 1.0)
 
 Let's get the latest version of the 293T PPI network:
 
@@ -58,6 +111,15 @@ head(bp.293t)
 nrow(bp.293t)
 ```
 
+Each row corresponds to a PPI between a bait protein A and a prey protein B, for which
+NCBI Entrez Gene IDs, Uniprot IDs, and gene symbols are annotated. 
+The last three columns reflect the likelihood that each interaction resulted 
+from either an incorrect protein identification (`pW`), background (`pNI`), or 
+a bona fide interacting partner (`pInt`) as determined using the 
+[CompPASS algorithm](https://github.com/dnusinow/cRomppass).
+
+Analgously, we can obtain the latest version of the HCT116 PPI network:
+
 ```{r bioplexHCT116}
 bp.hct116 <- getBioPlex(cell.line = "HCT116", version = "1.0")
 head(bp.hct116)
@@ -66,7 +128,7 @@ nrow(bp.hct116)
 
 ### ID mapping
 
-The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot.
+The protein-to-gene mappings from BioPlex (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) are based on the mappings available from Uniprot at the time of publication of the BioPlex 3.0 networks.
 
 We can update those based on Bioc annotation functionality:  
 
@@ -96,7 +158,7 @@ We might need to work with `DataFrame`s where we have `mcols` and `metadata`.
 
 ### PFAM domains
 
-We can easily add PFAM domain annotations to the node metadata:
+We can easily add [PFAM](http://pfam.xfam.org) domain annotations to the node metadata:
 
 ```{r pfam}
 bp.gr <- annotatePFAM(bp.gr, orgdb)
@@ -296,13 +358,11 @@ assay(se)[1:5, "HCT116"]
 rowData(se)
 ```
 
-### Relative protein expression data (preprint)
+### Relative protein expression data from BioPlex3.0
 
-Huttlin_BioPlex3_Table_S4.xlsx contains the relative protein expression data comparing 293T and HCT116 cells. This is a supplementary table that will be published with the upcoming BioPlex 3 paper. 
-
-That lives on dropbox for the moment, and can be wrapped into an R data
-package or uploaded to ExperimentHub. Once published there will be other
-avenues to pull the data (web request, reference DB, ...).
+The [BioPlex 3.0 publication](https://doi.org/10.1016/j.cell.2021.04.011), 
+Supplementary Table S4A, provides relative protein expression data comparing
+293T and HCT116 cells based on tandem mass tag analysis.
 
 ```{r bp.prot}
 bp.prot <- getBioplexProteome()
@@ -311,8 +371,9 @@ colData(bp.prot)
 rowData(bp.prot)
 ```
 
-There are 10 channels - 5 replicates for 293T and 5 for HCT116.
-Based on the way we collect these data, we end up viewing them so that they're scaled to add up to 100%.  Essentially, we think of them as ten variably-sized slices of a pie, with five each allotted to each cell line. Modeling the data this way presents some statistical complications, as I'm sure you can imagine, but it most closely aligns with how our data work.
+The data contains 5 replicates each for 293T and for HCT116 cells.
+As a result of the data collection process, the data represent relative protein abundance 
+scaled to add up to 100% in each row.
 
 # Caching
 

@@ -1,12 +1,27 @@
 ---
+title: "Basic checks of BioPlex PPI data"
+output:
+  BiocStyle::html_document:
+    self_contained: yes 
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    code_folding: show
+date: "`r doc_date()`"
+package: "`r pkg_ver('BioPlex')`"
 vignette: >
-  % \VignetteIndexEntry{Data checks}
+  % \VignetteIndexEntry{2. Data checks}
   % \VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-output:
-  html_document:
-    mathjax: null   
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    crop = NULL ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+)
+```
 
 # Setup
 
@@ -103,8 +118,13 @@ bp.sgr
 
 # Check: PFAM domains
 
+Identify 
 
-More to come ...
+```{r}
+
+```
+
+See also the [PFAM domain-domain association analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/PFAM.html) for a more comprehensive analysis of PFAM domain associations in the BioPlex network.
 
 # Check: expressed genes are showing up as prey (293T cells)
 
@@ -211,6 +231,10 @@ cor(prey.freq,
     use = "pairwise.complete.obs")
 ```
 
+See also the [BioNet maximum scoring subnetwork analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/BioNet.html) 
+for a more comprehensive analysis of the 293T transcriptome data from GSE122425
+when mapped onto BioPlex PPI network.
+
 # Check: expressed genes are showing up as prey (HCT116 cells)
 
 Get the latest version of the HCT116 PPI network:
@@ -307,12 +331,12 @@ Turn into a `SummarizedExperiment` for convenience (we can restrict
 this to selected cell lines, but here we keep all cell lines):
 
 ```{r ccle-prot-se}
-se <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
-assay(se)[1:5, "HCT116"]
+ccle.prot <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
+assay(ccle.prot)[1:5, "HCT116"]
 ```
 
 Get the relative protein expression data comparing 293T and HCT116 cells
-from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper): 
+from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper):
 
 ```{r bp.prot}
 bp.prot <- getBioplexProteome()

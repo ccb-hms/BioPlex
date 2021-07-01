@@ -22,7 +22,7 @@
 }
 
 .getResourceFromCache <- function(rname, 
-    update.value=7, update.unit="days", ucdir="BioPlex")
+    update.value=36, update.unit="weeks", ucdir="BioPlex")
 {
     # are we running interactively?
     cache.dir <- tools::R_user_dir(ucdir, which = "cache")
