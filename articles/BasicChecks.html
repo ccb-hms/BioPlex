@@ -139,7 +139,7 @@
 <p>Get core set of complexes:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-07 05:26:08</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-07-07 17:23:40</span></code></pre></div>
 <p>Turn the CORUM complexes into a list of graph instances, where all nodes of a complex are connected to all other nodes of that complex with undirected edges.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.glist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corum2graphlist.html">corum2graphlist</a></span><span class="op">(</span><span class="va">core</span>, subunit.id.type <span class="op">=</span> <span class="st">"UNIPROT"</span><span class="op">)</span></code></pre></div>
@@ -203,7 +203,7 @@
 <p>Get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-07 05:26:15</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-07-07 17:23:46</span></code></pre></div>
 <p>Turn the BioPlex PPI network into one big graph where bait and prey relationship are represented by directed edges from bait to prey.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioplex2graph.html">bioplex2graph</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
@@ -216,19 +216,60 @@
 <span class="co">#&gt; Number of Nodes = 4 </span>
 <span class="co">#&gt; Number of Edges = 5</span></code></pre></div>
 </div>
-<div id="check-pfam-domains" class="section level1">
+<div id="check-identify-interacting-domains-for-a-pfam-domain-of-interest" class="section level1">
 <h1 class="hasAnchor">
-<a href="#check-pfam-domains" class="anchor"></a>Check: PFAM domains</h1>
-<p>Identify</p>
+<a href="#check-identify-interacting-domains-for-a-pfam-domain-of-interest" class="anchor"></a>Check: identify interacting domains for a PFAM domain of interest</h1>
+<p>Add PFAM domain annotations to the node metadata:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu">BioPlex</span><span class="fu">::</span><span class="fu"><a href="../reference/annotatePFAM.html">annotatePFAM</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="va">orgdb</span><span class="op">)</span></code></pre></div>
+<p>Create a map from PFAM to UNIPROT:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">unip2pfam</span> <span class="op">&lt;-</span> <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/graphNEL-class.html">nodes</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span>, <span class="st">"PFAM"</span><span class="op">)</span>
+<span class="va">pfam2unip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/stack.html">stack</a></span><span class="op">(</span><span class="va">unip2pfam</span><span class="op">)</span>
+<span class="va">pfam2unip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">pfam2unip</span><span class="op">$</span><span class="va">ind</span><span class="op">)</span>, <span class="va">pfam2unip</span><span class="op">$</span><span class="va">values</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pfam2unip</span>, <span class="fl">2</span><span class="op">)</span>
+<span class="co">#&gt; $PF00001</span>
+<span class="co">#&gt;  [1] "P28566" "P25106" "P23945" "Q9HBX9" "P16473" "P04201" "Q9HC97" "P30968"</span>
+<span class="co">#&gt;  [9] "Q9Y2T6" "Q14330" "P46089" "Q15391" "Q9BXA5" "Q13304" "P61073" "P21462"</span>
+<span class="co">#&gt; [17] "P25090" "Q99679" "P21730" "P30556" "P43088" "P32246" "P32249" "Q9Y2T5"</span>
+<span class="co">#&gt; [25] "Q7Z602" "P43657" "O00398" "Q9H244" "Q86VZ1" "Q9NPB9" "Q99788" "P51684"</span>
+<span class="co">#&gt; [33] "P35414" "O00590" "Q9H1Y3" "P55085" "O15218" "Q9GZQ4" "P25101" "Q9NS66"</span>
+<span class="co">#&gt; [41] "Q9NQS5" "P21453" "P14416" "P24530" "P32239" "Q16581" "O00421" "Q9UHM6"</span>
+<span class="co">#&gt; [49] "Q8N6U8" "P20309" "O15354" "Q9BXC0" "P47775" "P30550" "P49146" "P47900"</span>
+<span class="co">#&gt; [57] "Q8TDU9" "P25103" "P35372" "P41597" "Q9P296" "P28335" "O95136" "P08173"</span>
+<span class="co">#&gt; [65] "P29371" "P41146" "P43119" "O95977" "Q9HBW0" "Q99677" "Q9BXB1" "Q8WXD0"</span>
+<span class="co">#&gt; [73] "O43193" "P30989" "Q8NGU9" "P47901" "P22888" "Q9GZN0" "P21917" "O60755"</span>
+<span class="co">#&gt; [81] "Q8TDV0" "O43614" "Q9NS67" "P08912" "Q9UPC5" "Q8TDV2" "Q92633" "Q9NQ55"</span>
+<span class="co">#&gt; [89] "Q13585" "Q9UBY5" "Q9H228" "P28222"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $PF00002</span>
+<span class="co">#&gt;  [1] "Q8IZP9" "P41587" "Q8IZF4" "P49190" "P32241" "P47871" "P48960" "Q8IZF5"</span>
+<span class="co">#&gt;  [9] "O14514" "Q03431" "Q9NYQ6" "Q9HCU4" "Q8WXG9" "Q9NYQ7" "O60242" "O60241"</span>
+<span class="co">#&gt; [17] "Q9HAR2" "O94910" "Q8IWK6" "O95490" "Q96PE1" "Q86SQ4"</span></code></pre></div>
+<p>Let’s focus on <a href="http://pfam.xfam.org/family/PF02023">PF02023</a>, corresponding to the zinc finger-associated SCAN domain. For each protein containing the SCAN domain, we now extract PFAM domains connected to the SCAN domain by an edge in the BioPlex network.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">scan.unip</span> <span class="op">&lt;-</span> <span class="va">pfam2unip</span><span class="op">[[</span><span class="st">"PF02023"</span><span class="op">]</span><span class="op">]</span>
+<span class="va">getIAPfams</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/nodeData-methods.html">nodeData</a></span><span class="op">(</span><span class="va">bp.gr</span>, <span class="fu">graph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/graph/man/graphNEL-class.html">edges</a></span><span class="op">(</span><span class="va">bp.gr</span><span class="op">)</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span>, <span class="st">"PFAM"</span><span class="op">)</span>
+<span class="va">unip2iapfams</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">scan.unip</span>, <span class="va">getIAPfams</span><span class="op">)</span>
+<span class="va">unip2iapfams</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">unip2iapfams</span>, <span class="va">unlist</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">unip2iapfams</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">scan.unip</span></code></pre></div>
+<p>Looking at the top 5 PFAM domains most frequently connected to the SCAN domain by an edge in the BioPlex network …</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pfam2iapfams</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">unip2iapfams</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">pfam2iapfams</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt; pfam2iapfams</span>
+<span class="co">#&gt; PF02023 PF00096 PF01352 PF06467 PF00249 </span>
+<span class="co">#&gt;     208     169      99      14       8</span></code></pre></div>
+<p>… we find <a href="http://pfam.xfam.org/family/PF02023">PF02023</a>, the SCAN domain itself, and <a href="http://pfam.xfam.org/family/PF00096">PF00096</a>, a C2H2 type zinc finger domain. This finding is consistent with results reported in the <a href="https://doi.org/10.1016/j.cell.2021.04.011">BioPlex 3.0 publication</a>.</p>
 <p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/PFAM.html">PFAM domain-domain association analysis vignette</a> for a more comprehensive analysis of PFAM domain associations in the BioPlex network.</p>
 </div>
 <div id="check-expressed-genes-are-showing-up-as-prey-293t-cells" class="section level1">
 <h1 class="hasAnchor">
 <a href="#check-expressed-genes-are-showing-up-as-prey-293t-cells" class="anchor"></a>Check: expressed genes are showing up as prey (293T cells)</h1>
 <p>Get RNA-seq data for HEK293 cells from GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-07 05:26:27</span>
+<span class="co">#&gt; Using cached version from 2021-07-07 17:23:59</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -240,22 +281,22 @@
 <span class="co">#&gt; colnames(6): GSM3466389 GSM3466390 ... GSM3466393 GSM3466394</span>
 <span class="co">#&gt; colData names(41): title geo_accession ... passages.ch1 strain.ch1</span></code></pre></div>
 <p>Inspect expression of prey genes:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bait</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolA</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">bait</span><span class="op">)</span>
 <span class="co">#&gt; [1] 8995</span>
 <span class="va">prey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolB</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span>
 <span class="co">#&gt; [1] 10419</span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">prey</span>, <span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">SYMBOL</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>las <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span>, 
         names <span class="op">=</span> <span class="va">se</span><span class="op">$</span><span class="va">title</span>, 
         ylab <span class="op">=</span> <span class="st">"log2 RPKM"</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="BasicChecks_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>How many prey genes are expressed (raw read count &gt; 0) in all 3 WT reps:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># background: how many genes in total are expressed in all three WT reps</span>
 <span class="va">gr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">gr0</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
@@ -273,7 +314,7 @@
 <span class="co">#&gt; FALSE  TRUE </span>
 <span class="co">#&gt;   305  9640</span></code></pre></div>
 <p>Are prey genes overrepresented in the expressed genes?</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">exprTable</span> <span class="op">&lt;-</span>
      <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">9346</span>, <span class="fl">1076</span>, <span class="fl">14717</span>, <span class="fl">32766</span><span class="op">)</span>,
             nrow <span class="op">=</span> <span class="fl">2</span>,
@@ -284,7 +325,7 @@
 <span class="co">#&gt; Expressed            9346           14717</span>
 <span class="co">#&gt; Not.expressed        1076           32766</span></code></pre></div>
 <p>Test using hypergeometric test (i.e. one-sided Fisher’s exact test):</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/fisher.test.html">fisher.test</a></span><span class="op">(</span><span class="va">exprTable</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  Fisher's Exact Test for Count Data</span>
@@ -298,13 +339,13 @@
 <span class="co">#&gt; odds ratio </span>
 <span class="co">#&gt;   19.34726</span></code></pre></div>
 <p>Alternatively: permutation test, i.e. repeatedly sample number of prey genes from the background, and assess how often we have as many or more than 9346 genes expressed:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">permgr0</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">gr0</span>, <span class="va">nr.genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span><span class="op">)</span> 
 <span class="op">{</span>
     <span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-envirAPI.html">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">)</span>, <span class="va">nr.genes</span><span class="op">)</span>
     <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">perms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="fu">permgr0</span><span class="op">(</span><span class="va">gr0</span><span class="op">)</span>, <span class="fl">1000</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">perms</span><span class="op">)</span>
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
@@ -316,7 +357,7 @@
 <h1 class="hasAnchor">
 <a href="#check-is-there-a-relationship-between-prey-frequency-and-prey-expression-level" class="anchor"></a>Check: is there a relationship between prey frequency and prey expression level?</h1>
 <p>Check which genes turn up most frequently as prey:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">prey.freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolB</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">preys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
 <span class="va">prey.freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
@@ -331,7 +372,7 @@
 <p><img src="BasicChecks_files/figure-html/prey-freq-1.png" width="700"></p>
 <p>Prey genes are involved 11 PPIs on average.</p>
 <p>There doesn’t seem to be a strong correlation between expression level and the frequency of gene to turn up as prey:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>, <span class="fu">rowData</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">SYMBOL</span><span class="op">)</span>
 <span class="va">rmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
 <span class="va">log.rmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">rmeans</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span>
@@ -340,8 +381,8 @@
       y <span class="op">=</span> <span class="va">log.rmeans</span>,
       xlab <span class="op">=</span> <span class="st">"prey frequency"</span>,
       ylab <span class="op">=</span> <span class="st">"log2 RPKM"</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<p><img src="BasicChecks_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">prey.freq</span>, 
     <span class="va">log.rmeans</span>,
     use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span><span class="op">)</span>
@@ -352,9 +393,9 @@
 <h1 class="hasAnchor">
 <a href="#check-expressed-genes-are-showing-up-as-prey-hct116-cells" class="anchor"></a>Check: expressed genes are showing up as prey (HCT116 cells)</h1>
 <p>Get the latest version of the HCT116 PPI network:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-07 05:26:31</span>
+<span class="co">#&gt; Using cached version from 2021-07-07 17:24:04</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
 <span class="co">#&gt;   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
@@ -371,7 +412,7 @@
 <span class="co">#&gt; 5 0.9985036</span>
 <span class="co">#&gt; 6 0.9979294</span></code></pre></div>
 <p>Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the <a href="https://portals.broadinstitute.org/ccle">Cancer Cell Line Encyclopedia</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770">E-MTAB-2770</a>)</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">atlasRes</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/searchAtlasExperiments.html">searchAtlasExperiments</a></span><span class="op">(</span>
               properties <span class="op">=</span> <span class="st">"Cancer Cell Line Encyclopedia"</span>, 
               species <span class="op">=</span> <span class="st">"human"</span> <span class="op">)</span>
@@ -400,7 +441,7 @@
 <span class="co">#&gt;   run_ZR_75_30.1</span>
 <span class="co">#&gt; colData names(4): AtlasAssayGroup organism cell_line disease</span></code></pre></div>
 <p>Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from <a href="https://pubmed.ncbi.nlm.nih.gov/25485619">Klijn et al., 2015</a> as available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706">E-MTAB-2706</a>)</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasData.html">getAtlasData</a></span><span class="op">(</span><span class="st">"E-MTAB-2706"</span><span class="op">)</span>
 <span class="co">#&gt; Downloading Expression Atlas experiment summary from:</span>
 <span class="co">#&gt;  ftp://ftp.ebi.ac.uk/pub/databases/microarray/data/atlas/experiments/E-MTAB-2706/E-MTAB-2706-atlasExperimentSummary.Rdata</span>
@@ -417,7 +458,7 @@
 <span class="co">#&gt; colnames(622): ERR413347 ERR413348 ... ERR414020 ERR415514</span>
 <span class="co">#&gt; colData names(12): AtlasAssayGroup organism ... media freeze_media</span></code></pre></div>
 <p>Sanity check that the expressed genes are showing up as prey:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bait</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">$</span><span class="va">GeneA</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">bait</span><span class="op">)</span>
 <span class="co">#&gt; [1] 4866</span>
@@ -425,7 +466,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span>
 <span class="co">#&gt; [1] 7903</span></code></pre></div>
 <p>Map prey to ENSEMBL gene IDs:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">prey</span> <span class="op">&lt;-</span> <span class="fu">AnnotationDbi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">mapIds</a></span><span class="op">(</span><span class="va">orgdb</span>, 
                               keytype <span class="op">=</span> <span class="st">"ENTREZID"</span>, 
                               column <span class="op">=</span> <span class="st">"ENSEMBL"</span>,
@@ -434,7 +475,7 @@
 <span class="va">prey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unname.html">unname</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ind.prey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">prey</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Combine HCT-116 transcriptome from CCLE and Klijn et al. datasets:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ind1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">ccle</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="va">ind2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"HCT 116"</span>, <span class="va">klijn</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
 <span class="va">emat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">ccle</span><span class="op">)</span><span class="op">[</span>,<span class="va">ind1</span><span class="op">]</span>, <span class="fu">assay</span><span class="op">(</span><span class="va">klijn</span><span class="op">)</span><span class="op">[</span>,<span class="va">ind2</span><span class="op">]</span><span class="op">)</span>
@@ -448,11 +489,11 @@
 <span class="co">#&gt; ENSG00000000460 1785  1206</span>
 <span class="co">#&gt; ENSG00000000938    0     0</span></code></pre></div>
 <p>The CCLE and Klijn et al. measurements correlate very well:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">emat</span><span class="op">[</span>,<span class="st">"ccle"</span><span class="op">]</span>, <span class="va">emat</span><span class="op">[</span>,<span class="st">"klijn"</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.9246789</span></code></pre></div>
 <p>How many prey genes are expressed (raw read count &gt; 0) in both CCLE and Klijn et al.?</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># background: how many genes in total are expressed in both measurements</span>
 <span class="va">gr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">emat</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">gr0</span> <span class="op">==</span> <span class="fl">2</span><span class="op">)</span>
@@ -470,27 +511,80 @@
 <span class="co">#&gt; FALSE  TRUE </span>
 <span class="co">#&gt;   178  7685</span></code></pre></div>
 </div>
-<div id="check-proteome-data" class="section level1">
+<div id="check-correlation-of-ccle-transcriptome-and-proteome-data-for-hct116" class="section level1">
 <h1 class="hasAnchor">
-<a href="#check-proteome-data" class="anchor"></a>Check: Proteome data</h1>
-<p>Get the CCLE proteome data from ExperimentHub:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<a href="#check-correlation-of-ccle-transcriptome-and-proteome-data-for-hct116" class="anchor"></a>Check: correlation of CCLE transcriptome and proteome data for HCT116</h1>
+<p>Get the CCLE transcriptome data for HCT116:</p>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"^HCT 116$"</span>, <span class="va">ccle</span><span class="op">$</span><span class="va">cell_line</span><span class="op">)</span>
+<span class="va">ccle.trans</span> <span class="op">&lt;-</span> <span class="va">ccle</span><span class="op">[</span>,<span class="va">ind</span><span class="op">]</span>       
+<span class="va">ccle.trans</span>
+<span class="co">#&gt; class: RangedSummarizedExperiment </span>
+<span class="co">#&gt; dim: 65217 1 </span>
+<span class="co">#&gt; metadata(4): pipeline filtering mapping quantification</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(65217): ENSG00000000003 ENSG00000000005 ... ENSG00000281921</span>
+<span class="co">#&gt;   ENSG00000281922</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(1): run_HCT_116.2</span>
+<span class="co">#&gt; colData names(4): AtlasAssayGroup organism cell_line disease</span></code></pre></div>
+<p>We would typically convert the raw counts to FPKMs or TPMs to account for gene length, but here we just do a simple log-transformation of the counts divided by library size.</p>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">a1</span> <span class="op">&lt;-</span> <span class="fu">assay</span><span class="op">(</span><span class="va">ccle.trans</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
+<span class="fu">assay</span><span class="op">(</span><span class="va">ccle.trans</span>, <span class="st">"logcounts"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">a1</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">a1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1e6</span><span class="op">)</span></code></pre></div>
+<p>Get the CCLE proteome data for HCT116:</p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ehdb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">eh</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gygi"</span>, <span class="st">"depmap"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="va">ehdb</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">ehdb</span><span class="op">)</span><span class="op">]</span><span class="op">]</span>
 <span class="co">#&gt; snapshotDate(): 2021-05-18</span>
 <span class="co">#&gt; see ?depmap and browseVignettes('depmap') for documentation</span>
 <span class="co">#&gt; loading from cache</span>
-<span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
-<p>Turn into a <code>SummarizedExperiment</code> for convenience (we can restrict this to selected cell lines, but here we keep all cell lines):</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ccleProteome2SummarizedExperiment.html">ccleProteome2SummarizedExperiment</a></span><span class="op">(</span><span class="va">ccle.prot</span>, cell.line <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-<span class="fu">assay</span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="st">"HCT116"</span><span class="op">]</span>
-<span class="co">#&gt;     P55011     P35453     O60341     O00570     P48431 </span>
-<span class="co">#&gt; -0.2422502         NA -0.1941110         NA -1.5306584</span></code></pre></div>
-<p>Get the relative protein expression data comparing 293T and HCT116 cells from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper):</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span>
+<span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ccleProteome2SummarizedExperiment.html">ccleProteome2SummarizedExperiment</a></span><span class="op">(</span><span class="va">ccle.prot</span>, cell.line <span class="op">=</span> <span class="st">"HCT116"</span><span class="op">)</span>
+<span class="va">ccle.prot</span>
+<span class="co">#&gt; class: SummarizedExperiment </span>
+<span class="co">#&gt; dim: 12755 1 </span>
+<span class="co">#&gt; metadata(0):</span>
+<span class="co">#&gt; assays(1): expr</span>
+<span class="co">#&gt; rownames(12755): P55011 P35453 ... Q99735 Q9P003</span>
+<span class="co">#&gt; rowData names(2): SYMBOL ENTREZID</span>
+<span class="co">#&gt; colnames(1): HCT116</span>
+<span class="co">#&gt; colData names(0):</span></code></pre></div>
+<p>Map to ENSEMBL for comparison with CCLE transcriptome data for HCT116:</p>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">rnames</span> <span class="op">&lt;-</span> <span class="fu">AnnotationDbi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">mapIds</a></span><span class="op">(</span><span class="va">orgdb</span>,
+                      keytype <span class="op">=</span> <span class="st">"UNIPROT"</span>,
+                      column <span class="op">=</span> <span class="st">"ENSEMBL"</span>,
+                      keys <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Subset to the ENSEMBL IDs that both datasets have in common:</p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">isect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html">intersect</a></span><span class="op">(</span><span class="va">rnames</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">ccle.trans</span><span class="op">)</span><span class="op">)</span>
+<span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/match.html">match</a></span><span class="op">(</span><span class="va">isect</span>, <span class="va">rnames</span><span class="op">)</span></code></pre></div>
+<p>A look at general correlation between HCT116 transcript and protein expression:</p>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">ccle.trans</span>, <span class="st">"logcounts"</span><span class="op">)</span><span class="op">[</span><span class="va">isect</span>,<span class="op">]</span>, 
+         <span class="fu">assay</span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span>,
+         use <span class="op">=</span> <span class="st">"complete.obs"</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Pearson's product-moment correlation</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; data:  assay(ccle.trans, "logcounts")[isect, ] and assay(ccle.prot)[ind, ]</span>
+<span class="co">#&gt; t = 31.872, df = 7848, p-value &lt; 2.2e-16</span>
+<span class="co">#&gt; alternative hypothesis: true correlation is not equal to 0</span>
+<span class="co">#&gt; 95 percent confidence interval:</span>
+<span class="co">#&gt;  0.3187947 0.3579705</span>
+<span class="co">#&gt; sample estimates:</span>
+<span class="co">#&gt;       cor </span>
+<span class="co">#&gt; 0.3385293</span></code></pre></div>
+<p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html">Transcriptome-Proteome analysis vignette</a> for further exploration of the correlation between HCT116 transcript and protein expression.</p>
+</div>
+<div id="check-differential-protein-expression-hek293-vs--hct116" class="section level1">
+<h1 class="hasAnchor">
+<a href="#check-differential-protein-expression-hek293-vs--hct116" class="anchor"></a>Check: differential protein expression (HEK293 vs. HCT116)</h1>
+<p>Get the relative protein expression data comparing 293T and HCT116 cells from Supplementary Table S4A of the BioPlex 3 paper:</p>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-07 05:28:10</span>
+<span class="co">#&gt; Using cached version from 2021-07-07 17:25:29</span>
 <span class="va">bp.prot</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 9604 10 </span>
@@ -516,17 +610,43 @@
 <span class="co">#&gt; Q9H3S5         93183        PIGM           1 -1.011397 8.91589e-06</span>
 <span class="co">#&gt; Q8WYQ3        400916     CHCHD10           1  0.743852 1.17163e-03</span></code></pre></div>
 <p>A couple of quick sanity checks:</p>
-<p><code>log2ratio</code> is just the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<ol style="list-style-type: decimal">
+<li>The relative abundances are scaled to sum up to 100% for each protein:</li>
+</ol>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span><span class="op">)</span> 
+<span class="co">#&gt;    P0CG40  Q8IXZ3-4    P55011    O60341    O14654 </span>
+<span class="co">#&gt;  99.99994  99.99991  99.99996 100.00011 100.00006</span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>The <code>rowData</code> column <code>log2ratio</code> corresponds to the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):</li>
+</ol>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">ratio</span><span class="op">)</span>
 <span class="co">#&gt;     P0CG40   Q8IXZ3-4     P55011     O60341     O14654 </span>
 <span class="co">#&gt; -2.8190710 -3.4198879  0.6123799 -0.3196953 -5.9510960</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>The <code>rowData</code> column <code>adj.pvalue</code> stores Benjamini-Hochberg adjusted <em>p</em>-values from a <em>t</em>-test between the five HEK samples and the five HCT samples:</li>
+</ol>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Welch Two Sample t-test</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; data:  assay(bp.prot)[1, 1:5] and assay(bp.prot)[1, 6:10]</span>
+<span class="co">#&gt; t = -27.898, df = 7.5779, p-value = 6.482e-09</span>
+<span class="co">#&gt; alternative hypothesis: true difference in means is not equal to 0</span>
+<span class="co">#&gt; 95 percent confidence interval:</span>
+<span class="co">#&gt;  -16.29035 -13.78047</span>
+<span class="co">#&gt; sample estimates:</span>
+<span class="co">#&gt; mean of x mean of y </span>
+<span class="co">#&gt;  2.482288 17.517700</span></code></pre></div>
+<p>The <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html">Transcriptome-Proteome analysis vignette</a> also explores the agreement between differential gene expression and differential protein expression when comparing HEK293 against HCT116 cells.</p>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.1.0 (2021-05-18)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
