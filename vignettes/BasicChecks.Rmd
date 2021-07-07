@@ -116,15 +116,52 @@ bp.sgr <- graph::subGraph(n, bp.gr)
 bp.sgr
 ```
 
-# Check: PFAM domains
+# Check: identify interacting domains for a PFAM domain of interest
 
-Identify 
+Add PFAM domain annotations to the node metadata:
 
 ```{r}
-
+bp.gr <- BioPlex::annotatePFAM(bp.gr, orgdb)
 ```
 
-See also the [PFAM domain-domain association analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/PFAM.html) for a more comprehensive analysis of PFAM domain associations in the BioPlex network.
+Create a map from PFAM to UNIPROT:
+
+```{r}
+unip2pfam <- graph::nodeData(bp.gr, graph::nodes(bp.gr), "PFAM")
+pfam2unip <- stack(unip2pfam)
+pfam2unip <- split(as.character(pfam2unip$ind), pfam2unip$values)
+head(pfam2unip, 2)
+```
+
+Let's focus on [PF02023](http://pfam.xfam.org/family/PF02023), corresponding to the
+zinc finger-associated SCAN domain. For each protein containing the SCAN domain,
+we now extract PFAM domains connected to the SCAN domain by an edge in the BioPlex network.
+
+```{r}
+scan.unip <- pfam2unip[["PF02023"]]
+getIAPfams <- function(n) graph::nodeData(bp.gr, graph::edges(bp.gr)[[n]], "PFAM")
+unip2iapfams <- lapply(scan.unip, getIAPfams)
+unip2iapfams <- lapply(unip2iapfams, unlist)
+names(unip2iapfams) <- scan.unip
+```
+
+Looking at the top 5 PFAM domains most frequently connected to the SCAN domain 
+by an edge in the BioPlex network ...
+
+```{r}
+pfam2iapfams <- unlist(unip2iapfams)
+sort(table(pfam2iapfams), decreasing = TRUE)[1:5]
+```
+
+... we find [PF02023](http://pfam.xfam.org/family/PF02023), the SCAN domain itself,
+and [PF00096](http://pfam.xfam.org/family/PF00096), a C2H2 type zinc finger domain.
+This finding is consistent with results reported in the
+[BioPlex 3.0 publication](https://doi.org/10.1016/j.cell.2021.04.011).
+
+
+See also the 
+[PFAM domain-domain association analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/PFAM.html)
+for a more comprehensive analysis of PFAM domain associations in the BioPlex network.
 
 # Check: expressed genes are showing up as prey (293T cells)
 
@@ -317,26 +354,65 @@ table(gr0[ind.prey] == 2)
 table(gr0[ind.prey] > 0)
 ```
 
-# Check: Proteome data
+# Check: correlation of CCLE transcriptome and proteome data for HCT116
 
-Get the CCLE proteome data from ExperimentHub:
+Get the CCLE transcriptome data for HCT116:
+
+```{r}
+ind <- grep("^HCT 116$", ccle$cell_line)
+ccle.trans <- ccle[,ind]       
+ccle.trans
+```
+
+We would typically convert the raw counts to FPKMs or TPMs to account for gene length,
+but here we just do a simple log-transformation of the counts divided by library size.
+
+```{r}
+a1 <- assay(ccle.trans) + 1
+assay(ccle.trans, "logcounts") <- log2(a1 / sum(a1) * 1e6)
+```
+
+Get the CCLE proteome data for HCT116:
 
 ```{r ccle-proteom}
 ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
 ccle.prot <- ehdb[[length(ehdb)]]
 ccle.prot <- as.data.frame(ccle.prot)
+ccle.prot <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = "HCT116")
+ccle.prot
 ```
 
-Turn into a `SummarizedExperiment` for convenience (we can restrict
-this to selected cell lines, but here we keep all cell lines):
+Map to ENSEMBL for comparison with CCLE transcriptome data for HCT116:
 
-```{r ccle-prot-se}
-ccle.prot <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = NULL)
-assay(ccle.prot)[1:5, "HCT116"]
+```{r, message = FALSE}
+rnames <- AnnotationDbi::mapIds(orgdb,
+                      keytype = "UNIPROT",
+                      column = "ENSEMBL",
+                      keys = rownames(ccle.prot))
 ```
+
+Subset to the ENSEMBL IDs that both datasets have in common:
+
+```{r}
+isect <- intersect(rnames, rownames(ccle.trans))
+ind <- match(isect, rnames)
+```
+
+A look at general correlation between HCT116 transcript and protein expression:
+
+```{r}
+cor.test(assay(ccle.trans, "logcounts")[isect,], 
+         assay(ccle.prot)[ind,],
+         use = "complete.obs")
+```
+
+See also the [Transcriptome-Proteome analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html) 
+for further exploration of the correlation between HCT116 transcript and protein expression. 
+
+# Check: differential protein expression (HEK293 vs. HCT116)  
 
 Get the relative protein expression data comparing 293T and HCT116 cells
-from Supplementary Table S4 (will be published with the upcoming BioPlex 3 paper):
+from Supplementary Table S4A of the BioPlex 3 paper:
 
 ```{r bp.prot}
 bp.prot <- getBioplexProteome()
@@ -346,12 +422,29 @@ rowData(bp.prot)
 
 A couple of quick sanity checks:
 
-`log2ratio` is just the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):
+1. The relative abundances are scaled to sum up to 100% for each protein:
+
+```{r}
+rowSums(assay(bp.prot)[1:5,]) 
+```
+
+2. The `rowData` column `log2ratio` corresponds to the mean of the five HEK samples, 
+divided by the mean of the five HCT samples (and then taking log2 of it):
 
 ```{r}
 ratio <- rowMeans(assay(bp.prot)[1:5, 1:5]) / rowMeans(assay(bp.prot)[1:5, 6:10])
 log2(ratio)
 ```
+
+3. The `rowData` column `adj.pvalue` stores Benjamini-Hochberg adjusted *p*-values
+from a *t*-test between the five HEK samples and the five HCT samples:
+
+```{r}
+t.test(assay(bp.prot)[1, 1:5], assay(bp.prot)[1, 6:10])
+```
+
+The [Transcriptome-Proteome analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html) also explores the agreement between differential gene expression and 
+differential protein expression when comparing HEK293 against HCT116 cells.
 
 # SessionInfo
 
