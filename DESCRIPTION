@@ -1,6 +1,6 @@
 Package: BioPlex
 Title: R-side access to BioPlex protein-protein interaction data
-Version: 0.99.1
+Version: 0.99.2
 Authors@R: 
     c(person("Ludwig", "Geistlinger",
              role = c("aut", "cre"),
@@ -49,6 +49,4 @@ biocViews:
     MassSpectrometry,
     Network,
     Transcriptomics,
-    Proteomics,
-    Homo_sapiens_Data,
-    ColonCancerData
+    Proteomics
