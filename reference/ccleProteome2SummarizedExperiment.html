@@ -74,7 +74,7 @@ SummarizedExperiment." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.6</span>
       </span>
     </div>
 
@@ -154,11 +154,7 @@ data for the specified cell line(s).</p>
   <span class='co'># Obtain CCLE proteome data frame</span>
   <span class='va'>ehdb</span> <span class='op'>&lt;-</span> <span class='fu'>AnnotationHub</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html'>query</a></span><span class='op'>(</span><span class='va'>eh</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"gygi"</span>, <span class='st'>"depmap"</span><span class='op'>)</span><span class='op'>)</span>
   <span class='va'>ccle.prot</span> <span class='op'>&lt;-</span> <span class='va'>ehdb</span><span class='op'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>ehdb</span><span class='op'>)</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='message'>'getOption("repos")' replaces Bioconductor standard repositories, see</span>
-#&gt; <span class='message'>'?repositories' for details</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>replacement repositories:</span>
-#&gt; <span class='message'>    CRAN: https://packagemanager.rstudio.com/all/__linux__/focal/latest</span></div><div class='output co'>#&gt; <span class='message'>Bioconductor version 3.13 (BiocManager 1.30.16), R 4.1.0 (2021-05-18)</span></div><div class='output co'>#&gt; <span class='message'>Installing package(s) 'depmap'</span></div><div class='output co'>#&gt; <span class='message'>Old packages: 'isoband', 'vroom', 'Matrix', 'mgcv'</span></div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='output co'>#&gt; <span class='message'>see ?depmap and browseVignettes('depmap') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>  <span class='va'>ccle.prot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>ccle.prot</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='output co'>#&gt; <span class='message'>see ?depmap and browseVignettes('depmap') for documentation</span></div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='input'>  <span class='va'>ccle.prot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>ccle.prot</span><span class='op'>)</span>
 
   <span class='co'># Turn into a SummarizedExperiment</span>
   <span class='va'>se</span> <span class='op'>&lt;-</span> <span class='fu'>ccleProteome2SummarizedExperiment</span><span class='op'>(</span><span class='va'>ccle.prot</span><span class='op'>)</span>
