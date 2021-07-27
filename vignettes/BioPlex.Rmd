@@ -90,8 +90,8 @@ eh <- ExperimentHub::ExperimentHub()
 
 OrgDb package for human:
 ```{r orgdb, message = FALSE}
-ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-orgdb <- ahdb[[length(ahdb)]]
+AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+orgdb <- ah[["AH92581"]]
 orgdb
 keytypes(orgdb)
 ```
@@ -328,8 +328,8 @@ head(emat)
 Pull the [CCLE proteome data](https://doi.org/10.1016/j.cell.2019.12.023) from ExperimentHub. The dataset profiles 12,755 proteins by mass spectrometry across 375 cancer cell lines.
 
 ```{r ccle-proteom}
-ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
-ccle.prot <- ehdb[[length(ehdb)]]
+AnnotationHub::query(eh, c("gygi", "depmap"))
+ccle.prot <- eh[["EH3459"]]
 ccle.prot <- as.data.frame(ccle.prot)
 ```
 

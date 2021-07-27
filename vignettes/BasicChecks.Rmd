@@ -49,8 +49,8 @@ eh <- ExperimentHub::ExperimentHub()
 
 OrgDb package for human:
 ```{r orgdb, message = FALSE}
-ahdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-orgdb <- ahdb[[length(ahdb)]]
+AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+orgdb <- ah[["AH92581"]]
 orgdb
 keytypes(orgdb)
 ```
@@ -375,8 +375,8 @@ assay(ccle.trans, "logcounts") <- log2(a1 / sum(a1) * 1e6)
 Get the CCLE proteome data for HCT116:
 
 ```{r ccle-proteom}
-ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
-ccle.prot <- ehdb[[length(ehdb)]]
+AnnotationHub::query(eh, c("gygi", "depmap"))
+ccle.prot <- eh[["EH3459"]]
 ccle.prot <- as.data.frame(ccle.prot)
 ccle.prot <- ccleProteome2SummarizedExperiment(ccle.prot, cell.line = "HCT116")
 ccle.prot
