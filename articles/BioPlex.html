@@ -67,7 +67,7 @@
       <h1 data-toc-skip>Import and representation of BioPlex PPI data and related resources</h1>
                         <h4 class="author">Ludwig Geistlinger and Robert Gentleman</h4>
             
-            <h4 class="date">27 July 2021</h4>
+            <h4 class="date">28 July 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ccb-hms/BioPlex/blob/master/vignettes/BioPlex.Rmd"><code>vignettes/BioPlex.Rmd</code></a></small>
       <div class="hidden name"><code>BioPlex.Rmd</code></div>
@@ -179,7 +179,7 @@
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:57:08</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:25:15</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1    100 728378   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
@@ -201,7 +201,7 @@
 <p>Analgously, we can obtain the latest version of the HCT116 PPI network:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:57:28</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:25:31</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
 <span class="co">#&gt;   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
@@ -228,7 +228,7 @@
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:57:08</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:25:15</span></code></pre></div>
 </div>
 <div id="data-structures-for-bioplex-ppis" class="section level3">
 <h3 class="hasAnchor">
@@ -422,7 +422,7 @@
 <p>Obtain the complete set of human protein complexes from <a href="http://mips.helmholtz-muenchen.de/corum/#download">CORUM</a>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:58:53</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:26:47</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2916   20</span>
 <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
@@ -452,13 +452,13 @@
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:57:02</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:25:10</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:58:55</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:26:48</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span>
 <span class="co">#&gt; [1] 44 20</span></code></pre></div>
 <div id="id-mapping-1" class="section level3">
@@ -470,7 +470,7 @@
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:59:02</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:26:54</span></code></pre></div>
 </div>
 <div id="data-structures-for-corum-complexes" class="section level3">
 <h3 class="hasAnchor">
@@ -580,7 +580,7 @@
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:57:23</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:25:27</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -1056,7 +1056,7 @@
 <p>The <a href="https://doi.org/10.1016/j.cell.2021.04.011">BioPlex 3.0 publication</a>, Supplementary Table S4A, provides relative protein expression data comparing 293T and HCT116 cells based on tandem mass tag analysis.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-07-27 12:58:36</span>
+<span class="co">#&gt; Using cached version from 2021-07-28 05:26:32</span>
 <span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
 <span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
@@ -1145,7 +1145,7 @@
 <span class="co">#&gt; [15] GenomicRanges_1.44.0        GenomeInfoDb_1.28.1        </span>
 <span class="co">#&gt; [17] IRanges_2.26.0              S4Vectors_0.30.0           </span>
 <span class="co">#&gt; [19] BiocGenerics_0.38.0         MatrixGenerics_1.4.0       </span>
-<span class="co">#&gt; [21] matrixStats_0.59.0          BiocStyle_2.20.2           </span>
+<span class="co">#&gt; [21] matrixStats_0.60.0          BiocStyle_2.20.2           </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] bitops_1.0-7                  fs_1.5.0                     </span>
