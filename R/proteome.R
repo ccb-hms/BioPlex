@@ -38,7 +38,7 @@
 ccleProteome2SummarizedExperiment <- function(df, cell.line = "HCT116")
 {
     ids <- strsplit(df[,"cell_line"], "_")
-    ids <- vapply(ids, function(i) i[1], character(1))
+    ids <- vapply(ids, `[`, character(1), x = 1)
   
     # subset by specific cell lines?
     if(!is.null(cell.line))
@@ -95,9 +95,9 @@ ccleProteome2SummarizedExperiment <- function(df, cell.line = "HCT116")
 #' @export
 getBioplexProteome <- function(cache = TRUE)
 {
-    drop.url <- file.path("https://dl.dropboxusercontent.com/s",
-                        "bqgmouq4jl1p0ks/BioPlex3_HCT_vs_HEK_proteomics.csv")
-  
+    bioplex.url <- file.path("https://bioplex.hms.harvard.edu/data", 
+                             "293T_HCT116_ProteomeComparison.tsv")
+
     # should a cached version be used?
     rname <- "bp.prot"
     if(cache)
@@ -107,7 +107,7 @@ getBioplexProteome <- function(cache = TRUE)
     }   
   
     # read and extract the data
-    dat <- read.csv(drop.url)
+    dat <- read.delim(bioplex.url)
     ind <- grep("scaled$", colnames(dat))
     emat <- dat[,ind]
     
