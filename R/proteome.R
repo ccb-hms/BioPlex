@@ -27,8 +27,8 @@
 #'   eh <- ExperimentHub::ExperimentHub()
 #'
 #'   # Obtain CCLE proteome data frame
-#'   ehdb <- AnnotationHub::query(eh, c("gygi", "depmap"))
-#'   ccle.prot <- ehdb[[length(ehdb)]]
+#'   AnnotationHub::query(eh, c("gygi", "depmap"))
+#'   ccle.prot <- eh[["EH3459"]]
 #'   ccle.prot <- as.data.frame(ccle.prot)
 #'
 #'   # Turn into a SummarizedExperiment

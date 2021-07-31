@@ -268,8 +268,8 @@ atlasRes <- ExpressionAtlas::searchAtlasExperiments(
               properties = "Cancer Cell Line Encyclopedia", 
               species = "human" )
 atlasRes
-ccle <- ExpressionAtlas::getAtlasData(atlasRes$Accession)
-ccle <- ccle$`E-MTAB-2770`$rnaseq
+ccle <- ExpressionAtlas::getAtlasExperiment("E-MTAB-2770")
+ccle <- ccle[[1]]
 ccle
 ```
 
@@ -293,8 +293,8 @@ as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa)
 (Accession: [E-MTAB-2706](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706))
 
 ```{r klijn, message = FALSE}
-klijn <- ExpressionAtlas::getAtlasData("E-MTAB-2706")
-klijn <- klijn$`E-MTAB-2706`$rnaseq
+klijn <- ExpressionAtlas::getAtlasExperiment("E-MTAB-2706")
+klijn <- klijn[[1]]
 klijn
 ```
 
