@@ -38,7 +38,7 @@
         dt <- difftime(Sys.time(), qgsc$create_time, units=update.unit)   
         if(is.na(update.value) || dt < update.value)
         {
-            message(paste("Using cached version from", qgsc$create_time))
+            message("Using cached version from ", qgsc$create_time)
             res <- readRDS(BiocFileCache::bfcrpath(bfc, rname))
         }
     }

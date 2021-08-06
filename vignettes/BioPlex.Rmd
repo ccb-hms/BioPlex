@@ -58,9 +58,19 @@ and applications, please see the
 [BioPlexAnalysis package](https://github.com/ccb-hms/BioPlexAnalysis)
 and 
 [analysis vignettes](https://ccb-hms.github.io/BioPlexAnalysis/).
- 
-We start by loading the package.
- 
+
+# Installation
+
+To install the package, start R and enter: 
+
+```{r, eval = FALSE}
+if(!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("BioPlex")
+``` 
+
+After the installation, we proceed by loading the package and additional packages
+used in the vignette.
 
 ```{r, message = FALSE}
 library(BioPlex)

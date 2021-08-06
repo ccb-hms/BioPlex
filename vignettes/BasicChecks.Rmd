@@ -89,7 +89,7 @@ We can then also inspect the graph with plotting utilities from the
 package:
 
 ```{r corum-subunit3, message = FALSE, eval = FALSE}
-plot(cdk2.glist[[1]], main = cdk2.glist[[1]]@graphData$ComplexName)
+plot(cdk2.glist[[1]], main = names(cdk2.glist)[1])
 ```
 
 # Check: extract BioPlex PPIs for a CORUM complex

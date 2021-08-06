@@ -54,7 +54,7 @@ getGSE122425 <- function(cache = TRUE)
     ind <- rep("HEK293", 6)
     ind[4:6] <- paste0(ind[4:6], "NK")
     ind <- paste(ind, "SEQ", sep = ".")
-    ind <- paste0(ind, rep(1:3, 2))    
+    ind <- paste0(ind, rep(seq_len(3), 2)) 
 
     raw <- as.matrix(cont[,ind])    
     ind <- paste(ind, "RPKM", sep = "_")
