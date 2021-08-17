@@ -3,14 +3,13 @@ on:
   pull_request:
   push:
   workflow_dispatch:
-  schedule:
-    - cron: '0 5 * * *' 
 jobs:
   job1:
     runs-on: ubuntu-18.04
     container: rocker/verse:4.1.0
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
 
