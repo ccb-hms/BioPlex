@@ -57,20 +57,20 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     rname <- paste("bioplex", clver, sep = ".")
     
     # should a cache version be used?
-    if(cache)
+    if(cache) ppi.file <- .getResourceFromCache2(rname)
+    if(!cache || is.null(ppi.file))        
     {
-      bioplex <- .getResourceFromCache(rname)
-      if(!is.null(bioplex)) return(bioplex)        
+        # get the data
+        file.ext <- switch(clver,
+                           `293T.1.0` = "interactionList_v2",
+                           `293T.2.0` = "interactionList_v4a",
+                           `293T.3.0` = "293T_Network_10K_Dec_2019",
+                           `HCT116.1.0` = "HCT116_Network_5.5K_Dec_2019")
+        file.ext <- paste(file.ext, "tsv", sep = ".")
+        ppi.file <- paste0(bioplex.url, file.ext)
+        ppi.file <- .cacheResource2(rname, ppi.file)
     }
     
-    # get the data
-    file.ext <- switch(clver,
-                       `293T.1.0` = "interactionList_v2",
-                       `293T.2.0` = "interactionList_v4a",
-                       `293T.3.0` = "293T_Network_10K_Dec_2019",
-                       `HCT116.1.0` = "HCT116_Network_5.5K_Dec_2019")
-    file.ext <- paste(file.ext, "tsv", sep = ".")
-    ppi.file <- paste0(bioplex.url, file.ext)
     bioplex <- read.delim(ppi.file,
                           colClasses = c(GeneA = "character",
                                          GeneB = "character"))
@@ -79,7 +79,6 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     if(remap.uniprot.ids) bioplex <- .remapUniprotIdsBP(bioplex)
     
     # clean up & cache
-    .cacheResource(bioplex, rname)
     return(bioplex)
 }
 
@@ -112,6 +111,7 @@ bioplex2graph <- function(bioplex.df)
     gr <- .annotateBioplexGraph(gr, bioplex.df)
     return(gr)
 }
+
 
 
 #' @title Annotate PFAM domains to BioPlex PPI graph

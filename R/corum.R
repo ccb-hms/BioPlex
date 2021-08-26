@@ -47,23 +47,23 @@ getCorum <- function(set = c("all", "core", "splice"),
     set <- match.arg(set)
     rname <- paste("corum", 
                    set,
-                   ifelse(is.null(organism), "all", organism),
-                   ifelse(remap.uniprot.ids, "remapped", "original"),
+                   #ifelse(is.null(organism), "all", organism),
+                   #ifelse(remap.uniprot.ids, "remapped", "original"),
                    sep = "-")
 
     # should a cache version be used?
-    if(cache)
+    if(cache) set.file <- .getResourceFromCache2(rname)
+    if(!cache || is.null(set.file))        
     {
-        corum <- .getResourceFromCache(rname)
-        if(!is.null(corum)) return(corum)        
+        # download, unzip, and read in
+        set.file <- paste0(set, "Complexes.txt.zip")
+        set.url <- file.path(corum.url, set.file)
+        set.file <- .cacheResource2(rname, set.url)#, download = FALSE)
     }
 
-    # download, unzip, and read in
-    set <- paste0(set, "Complexes.txt.zip")
-    download.file(file.path(corum.url, set), destfile = set)
-    unzip(set)
-    set <- sub(".zip$", "", set)
-    corum <- read.delim(set)
+    set.file <- unzip(set.file, exdir = dirname(set.file))
+    corum <- read.delim(set.file)
+    file.remove(set.file)
     
     # organism
     if(!is.null(organism))
@@ -75,9 +75,6 @@ getCorum <- function(set = c("all", "core", "splice"),
     # remap gene ids
     if(remap.uniprot.ids) corum <- .remapUniprotIds(corum)
     
-    # clean up & cache
-    .cacheResource(corum, rname)
-    file.remove(c(set, paste0(set, ".zip")))
     return(corum) 
 }
 
