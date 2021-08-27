@@ -41,9 +41,7 @@ getGSE122425 <- function(cache = TRUE)
     if(!cache || is.null(se.file))
     {
         se.file <- .cacheResource2(rname, url, download = FALSE, ext = ".rds")
-        se.file <- suppressMessages(.getResourceFromCache2(rname,
-                                                           update = FALSE,
-                                                           FUN = .gse2se))
+        se.file <- suppressMessages(.getResourceFromCache2(rname, FUN = .gse2se))
     }
     se <- readRDS(se.file)
     return(se)
