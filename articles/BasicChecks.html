@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.13</span>
       </span>
     </div>
 
@@ -66,7 +66,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Basic checks of BioPlex PPI data</h1>
             
-            <h4 class="date">26 August 2021</h4>
+            <h4 class="date">27 August 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ccb-hms/BioPlex/blob/master/vignettes/BasicChecks.Rmd"><code>vignettes/BasicChecks.Rmd</code></a></small>
       <div class="hidden name"><code>BasicChecks.Rmd</code></div>
@@ -155,7 +155,7 @@
 <p>Get core set of complexes:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-26 13:12:12</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-08-27 17:08:05</span></code></pre></div>
 <p>Turn the CORUM complexes into a list of graph instances, where all nodes of a complex are connected to all other nodes of that complex with undirected edges.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core.glist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/corum2graphlist.html">corum2graphlist</a></span><span class="op">(</span><span class="va">core</span>, subunit.id.type <span class="op">=</span> <span class="st">"UNIPROT"</span><span class="op">)</span></code></pre></div>
@@ -219,7 +219,7 @@
 <p>Get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-26 13:12:30</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-08-27 17:08:12</span></code></pre></div>
 <p>Turn the BioPlex PPI network into one big graph where bait and prey relationship are represented by directed edges from bait to prey.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bioplex2graph.html">bioplex2graph</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></code></pre></div>
@@ -285,7 +285,7 @@
 <p>Get RNA-seq data for HEK293 cells from GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a></p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-26 13:12:45</span>
+<span class="co">#&gt; Using cached version from 2021-08-27 17:08:23</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -411,7 +411,7 @@
 <p>Get the latest version of the HCT116 PPI network:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-26 13:12:48</span>
+<span class="co">#&gt; Using cached version from 2021-08-27 17:08:31</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
 <span class="co">#&gt;   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
@@ -623,7 +623,7 @@
 <p>Get the relative protein expression data comparing 293T and HCT116 cells from Supplementary Table S4A of the BioPlex 3 paper:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-26 13:13:49</span>
+<span class="co">#&gt; Using cached version from 2021-08-27 17:09:29</span>
 <span class="va">bp.prot</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 9604 10 </span>
@@ -712,7 +712,7 @@
 <span class="co">#&gt;  [5] xml2_1.3.2                  limma_3.48.3               </span>
 <span class="co">#&gt;  [7] AnnotationHub_3.0.1         BiocFileCache_2.0.0        </span>
 <span class="co">#&gt;  [9] dbplyr_2.1.1                AnnotationDbi_1.54.1       </span>
-<span class="co">#&gt; [11] BioPlex_0.99.12             SummarizedExperiment_1.22.0</span>
+<span class="co">#&gt; [11] BioPlex_0.99.13             SummarizedExperiment_1.22.0</span>
 <span class="co">#&gt; [13] Biobase_2.52.0              GenomicRanges_1.44.0       </span>
 <span class="co">#&gt; [15] GenomeInfoDb_1.28.1         IRanges_2.26.0             </span>
 <span class="co">#&gt; [17] S4Vectors_0.30.0            BiocGenerics_0.38.0        </span>
