@@ -29,25 +29,36 @@
 getGSE122425 <- function(cache = TRUE)
 {
     rname <- "GSE122425"
-    # should a cached version be used
-    if(cache)
-    {
-        se <- .getResourceFromCache(rname)
-        if(!is.null(se)) return(se)
-    }
+    stub <- gsub("\\d{1,3}$", "nnn", rname, perl = TRUE)
+    url <- sprintf("https://ftp.ncbi.nlm.nih.gov/geo/series/%s/%s/suppl/", stub, rname)
+    count.file <- paste0(rname, "_all.counts.293_vs_293NK.edgeR_all.xls.gz")
+    url <- paste0(url, count.file)   
 
+    # should a cached version be used
+    if(cache) se.file <- .getResourceFromCache2(rname,
+                                                update = FALSE,
+                                                FUN = .gse2se)
+    if(!cache || is.null(se.file))
+    {
+        se.file <- .cacheResource2(rname, url, download = FALSE, ext = ".rds")
+        se.file <- suppressMessages(.getResourceFromCache2(rname,
+                                                           update = FALSE,
+                                                           FUN = .gse2se))
+    }
+    se <- readRDS(se.file)
+    return(se)
+}
+
+.gse2se <- function(from, to)
+{
     # pull from GEO
-    eset <- GEOquery::getGEO(rname)[[1]]
+    eset <- GEOquery::getGEO("GSE122425")[[1]]
     se <- as(eset, "SummarizedExperiment")
     
     # expression data not well formated, ...
     # we need to pull the supplementary files to get the counts
     # NOTE: .xls extension is errorneous, it's actually a .tsv file
-    GEOquery::getGEOSuppFiles(rname)
-    count.file <- "all.counts.293_vs_293NK.edgeR_all.xls.gz"
-    count.file.prefix <- file.path(rname, rname)
-    count.file <- paste(count.file.prefix, count.file, sep = "_")
-    cont <- read.delim(count.file)  
+    cont <- read.delim(from)  
 
     # we have raw counts and rpkms here in one matrix, ...
     # let's pull them out separately and make each one an assay
@@ -72,11 +83,7 @@ getGSE122425 <- function(cache = TRUE)
     rowData(se) <- cont[,anno.cols] 
     colnames(rowData(se))[1] <- "SYMBOL"
 
-    # cache and clean up
-    .cacheResource(se, rname)
-    rm.files <- list.files(rname, full.names = TRUE, all.files = TRUE)
-    file.remove(rm.files[-c(1,2)])
-    file.remove(rname)
-
-    return(se)
+    saveRDS(se, file = to)
+    return(TRUE)
 }
+

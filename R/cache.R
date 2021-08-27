@@ -1,8 +1,7 @@
 ############################################################
 # 
 # author: Ludwig Geistlinger
-# date: 2021-01-05 18:08:41
-# 
+
 # descr: misc utils
 # 
 ############################################################
@@ -22,7 +21,10 @@
     return(rpath)
 }
 
-.getResourceFromCache2 <- function(rname, ucdir = "BioPlex", ...)
+.getResourceFromCache2 <- function(rname, 
+                                   update = TRUE,
+                                   ucdir = "BioPlex",
+                                   ...)
 {
     cache.dir <- tools::R_user_dir(ucdir, which = "cache")
     bfc <- BiocFileCache::BiocFileCache(cache.dir)
@@ -36,8 +38,9 @@
         rid <- qgsc$rid
         
         # is the cached version outdated?
-        nu <- BiocFileCache::bfcneedsupdate(bfc, rid)
-        if(!isFALSE(nu)) BiocFileCache::bfcdownload(bfc, rid, ...)
+        nu <- FALSE
+        if(update) nu <- BiocFileCache::bfcneedsupdate(bfc, rid)
+        if(!isFALSE(nu)) BiocFileCache::bfcdownload(bfc, rid, ask = FALSE, ...)
         message("Using cached version from ", qgsc$create_time)
         res <- BiocFileCache::bfcrpath(bfc, rname)
     }

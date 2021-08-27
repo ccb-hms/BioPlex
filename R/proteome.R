@@ -100,14 +100,21 @@ getBioplexProteome <- function(cache = TRUE)
 
     # should a cached version be used?
     rname <- "bp.prot"
-    if(cache)
-    {   
-        se <- .getResourceFromCache(rname)
-        if(!is.null(se)) return(se)
-    }   
-  
+    if(cache) se.file <- .getResourceFromCache2(rname, FUN = .bp2se)
+    if(!cache || is.null(se.file))
+    {
+        se.file <- .cacheResource2(rname, bioplex.url,
+                                   download = FALSE, ext = ".rds")
+        se.file <- suppressMessages(.getResourceFromCache2(rname, FUN = .bp2se))
+    }
+    se <- readRDS(se.file)
+    return(se)
+}
+
+.bp2se <- function(from, to)
+{
     # read and extract the data
-    dat <- read.delim(bioplex.url)
+    dat <- read.delim(from)
     ind <- grep("scaled$", colnames(dat))
     emat <- dat[,ind]
     
@@ -125,6 +132,6 @@ getBioplexProteome <- function(cache = TRUE)
     colnames(rowData(se)) <- c("ENTREZID", "SYMBOL", 
                                "nr.peptides", "log2ratio", "adj.pvalue")
     rowData(se)$ENTREZID <- as.character(rowData(se)$ENTREZID)
-    .cacheResource(se, rname)
-    return(se)
+    saveRDS(se, file = to)
+    return(TRUE)
 }
