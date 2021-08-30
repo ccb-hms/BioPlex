@@ -76,7 +76,6 @@ used in the vignette.
 library(BioPlex)
 library(AnnotationHub)
 library(ExperimentHub)
-library(ExpressionAtlas)
 library(graph)
 ```
 
@@ -268,68 +267,40 @@ The dataset includes three wild type samples and three NSUN2 knockout samples.
 
 #### Cancer Cell Line Encyclopedia (CCLE)
 
-Get RNA-seq data for 934 cancer cell lines (incl. HCT116) from the 
+RNA-seq data for 934 cancer cell lines (incl. HCT116) from the 
 [Cancer Cell Line Encyclopedia](https://portals.broadinstitute.org/ccle) 
-as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
+is available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
 (Accession: [E-MTAB-2770](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770)).
 
-```{r CCLE, message = FALSE}
-atlasRes <- ExpressionAtlas::searchAtlasExperiments(
-              properties = "Cancer Cell Line Encyclopedia", 
-              species = "human" )
-atlasRes
-ccle <- ExpressionAtlas::getAtlasExperiment("E-MTAB-2770")
-ccle <- ccle[[1]]
-ccle
+The data can be obtained as a `SummarizedExperiment` using the 
+[ExpressionAtlas](https://bioconductor.org/packages/ExpressionAtlas) package.
+
+```{r, eval = FALSE}
+ccle.trans <- ExpressionAtlas::getAtlasExperiment("E-MTAB-2770")
 ```
 
-We have raw read counts: 
-```{r ccle-assay}
-assay(ccle)[1:5,1:5]
-colData(ccle)
-```
+See also the [Transcriptome-Proteome analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html) 
+for further exploration of the correlation between CCLE HCT116 transcript and
+protein expression. 
 
-and we have one sample per cell line:
-
-```{r ccle-hct116}
-ind <- grep("HCT 116", ccle$cell_line)
-colData(ccle)[ind,]
-```
 
 #### Klijn et al., 2015
 
-Get RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from [Klijn et al., 2015](https://pubmed.ncbi.nlm.nih.gov/25485619) 
-as available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
+RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from 
+[Klijn et al., 2015](https://pubmed.ncbi.nlm.nih.gov/25485619) 
+is available from the [ArrayExpress-ExpressionAtlas](https://www.ebi.ac.uk/gxa) 
 (Accession: [E-MTAB-2706](https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706))
 
-```{r klijn, message = FALSE}
+The data can be obtained as a `SummarizedExperiment` using the 
+[ExpressionAtlas](https://bioconductor.org/packages/ExpressionAtlas) package.
+
+```{r, eval = FALSE}
 klijn <- ExpressionAtlas::getAtlasExperiment("E-MTAB-2706")
-klijn <- klijn[[1]]
-klijn
 ```
 
-We have raw read counts: 
-```{r klijn-assay}
-assay(klijn)[1:5,1:5]
-colData(klijn)
-```
-
-and we have one sample per cell line:
-
-```{r klijn-hct116}
-ind <- grep("HCT 116", klijn$cell_line)
-colData(klijn)[ind,]
-```
-
-Combine HCT-116 transcriptome from CCLE and Klijn et al. datasets:
-
-```{r comb-hct116}
-ind1 <- grep("HCT 116", ccle$cell_line)
-ind2 <- grep("HCT 116", klijn$cell_line)
-emat <- cbind(assay(ccle)[,ind1], assay(klijn)[,ind2])
-colnames(emat) <- c("ccle", "klijn")
-head(emat)
-```
+See also the [Transcriptome-Proteome analysis vignette](https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html) 
+for further exploration of differential transcript and
+protein expression between 293T and HCT116 cells. 
 
 ## Proteome data
 

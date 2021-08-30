@@ -6,8 +6,7 @@ Authors@R:
              role = c("aut", "cre"),
              email = "ludwig_geistlinger@hms.harvard.edu"),
       person("Robert", "Gentleman",
-             role = "aut",
-             email = "robert_gentleman@hms.harvard.edu"))
+             role = "aut"))
 Description: The BioPlex package implements access to the BioPlex protein-protein
              interaction networks and related resources from within R. 
              Besides protein-protein interaction networks for HEK293 and HCT116 cells,
@@ -38,7 +37,6 @@ Suggests:
     AnnotationHub,
     BiocStyle,
     ExperimentHub,
-    ExpressionAtlas,
     depmap,
     knitr,
     rmarkdown
