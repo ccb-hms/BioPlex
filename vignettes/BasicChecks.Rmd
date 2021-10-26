@@ -275,6 +275,96 @@ See also the [BioNet maximum scoring subnetwork analysis vignette](https://ccb-h
 for a more comprehensive analysis of the 293T transcriptome data from GSE122425
 when mapped onto BioPlex PPI network.
 
+# Check: agreement between CNV tracks
+
+Genomic data from whole-genome sequencing for six different lineages
+of the human embryonic kidney HEK293 cell line can be obtained from
+[hek293genome.org](http://hek293genome.org).
+
+This includes copy number variation (CNV) data for the 293T cell line.
+Available CNV tracks include (i) CNV regions inferred from sequencing 
+read-depth analysis, and (ii) CNV regions inferred from Illumina SNP arrays.
+
+Here, we check agreement between inferred copy numbers from both assay types.
+
+We start by obtaining genomic coordinates and copy number scores from the sequencing
+track ...
+ 
+```{r cnv-seq}
+cnv.hmm <- getHEK293GenomeTrack(track = "cnv.hmm", cell.line = "293T")
+cnv.hmm
+```
+
+... and from the SNP track.
+
+```{r cnv-snp}
+cnv.snp <- getHEK293GenomeTrack(track = "cnv.snp", cell.line = "293T")
+cnv.snp
+```
+
+We reduce the check for agreement between both CNV tracks by transferring copy
+numbers to overlapping genes, and subsequently, assess the agreement between the
+resulting gene copy numbers for both tracks.  
+
+As the genomic coordinates from both CNV tracks is based on the hg18 human genome 
+assembly, we obtain gene coordinates for hg18 from AnnotationHub:
+
+```{r hg18-genes}
+AnnotationHub::query(ah, c("TxDb", "Homo sapiens"))
+txdb <- ah[["AH52257"]]
+gs <- GenomicFeatures::genes(txdb)
+gs
+```
+
+We then transfer SNP-inferred copy numbers to genes by overlap ...
+
+```{r}
+olaps <- GenomicRanges::findOverlaps(gs, cnv.snp)
+joined <- gs[S4Vectors::queryHits(olaps)]
+joined$score <- cnv.snp$score[S4Vectors::subjectHits(olaps)]
+joined
+```
+
+... and, analogously, transfer sequencing-inferred copy numbers to genes by overlap.
+
+```{r}
+olaps <- GenomicRanges::findOverlaps(gs, cnv.hmm)
+joined2 <- gs[S4Vectors::queryHits(olaps)]
+joined2$score <- cnv.hmm$score[S4Vectors::subjectHits(olaps)]
+joined2
+```
+
+We then restrict both tracks to common genes.
+
+```{r}
+isect <- intersect(names(joined), names(joined2))
+joined <- joined[isect]
+joined2 <- joined2[isect]
+```
+
+Now, can assess agreement by testing the correlation between SNP-inferred gene
+copy numbers and the corresponding sequencing-inferred gene copy numbers. 
+
+```{r}
+cor(joined$score, joined2$score)
+cor.test(joined$score, joined2$score)
+```
+
+We also inspect the correlation via a boxplot.
+
+```{r, fig.width = 8, fig.height = 8}
+spl <- split(joined2$score, joined$score)
+boxplot(spl, xlab = "SNP-inferred copy number", ylab = "sequencing-inferred copy number")
+rho <- cor(joined$score, joined2$score)
+rho <- paste("cor", round(rho, digits=3), sep=" = ")
+
+p <- cor.test(joined$score, joined2$score)
+p <- p$p.value
+p <- "   p < 2.2e-16"
+
+legend("topright", legend=c(rho, p))
+```
+
 # Check: differential protein expression (HEK293 vs. HCT116)  
 
 Get the relative protein expression data comparing 293T and HCT116 cells

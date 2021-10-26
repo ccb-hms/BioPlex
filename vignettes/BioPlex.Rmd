@@ -243,9 +243,31 @@ Note that we can easily convert a
 [igraph](https://cran.r-project.org/package=igraph) object using
 `igraph::graph_from_graphnel`.
 
+## CNV data
+
+### HEK293T cells
+
+Genomic data from whole-genome sequencing for six different lineages
+of the human embryonic kidney HEK293 cell line can be obtained from
+[hek293genome.org](http://hek293genome.org).
+
+This includes copy number variation (CNV) data for the 293T cell line.
+Available CNV tracks include (i) CNV regions inferred from sequencing 
+read-depth analysis, and (ii) CNV regions inferred from Illumina SNP arrays.
+
+Here, we obtain CNV segments obtained from applying a hidden Markov model (HMM)
+to sequencing-inferred copy numbers in 2kbp windows. More details on how copy
+numbers were calculated can be obtained from the 
+[primary publication](https://doi.org/10.1038/ncomms5767). 
+
+```{r cnv}
+cnv.hmm <- getHEK293GenomeTrack(track = "cnv.hmm", cell.line = "293T")
+cnv.hmm
+```
+
 ## Transcriptome data
 
-### HEK293 cells
+### HEK293T cells
 
 #### GSE122425
 

@@ -1,6 +1,6 @@
 Package: BioPlex
 Title: R-side access to BioPlex protein-protein interaction data
-Version: 0.99.14
+Version: 0.99.15
 Authors@R: 
     c(person("Ludwig", "Geistlinger",
              role = c("aut", "cre"),
@@ -28,6 +28,8 @@ Depends:
     SummarizedExperiment
 Imports: 
     BiocFileCache,
+    GenomicRanges,
+    GenomeInfoDb,
     GEOquery,
     graph,
     methods,
@@ -37,6 +39,8 @@ Suggests:
     AnnotationHub,
     BiocStyle,
     ExperimentHub,
+    GenomicFeatures,
+    S4Vectors,
     depmap,
     knitr,
     rmarkdown
