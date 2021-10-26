@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.15</span>
       </span>
     </div>
 
@@ -67,7 +67,7 @@
       <h1 data-toc-skip>Import and representation of BioPlex PPI data and related resources</h1>
                         <h4 class="author">Ludwig Geistlinger and Robert Gentleman</h4>
             
-            <h4 class="date">31 August 2021</h4>
+            <h4 class="date">26 October 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ccb-hms/BioPlex/blob/master/vignettes/BioPlex.Rmd"><code>vignettes/BioPlex.Rmd</code></a></small>
       <div class="hidden name"><code>BioPlex.Rmd</code></div>
@@ -187,7 +187,7 @@
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-31 19:08:23</span>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:23</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1    100 728378   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
@@ -235,7 +235,7 @@
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-31 19:08:23</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:23</span></code></pre></div>
 </div>
 <div id="data-structures-for-bioplex-ppis" class="section level3">
 <h3 class="hasAnchor">
@@ -458,7 +458,7 @@
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-31 19:08:18</span>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:15</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
@@ -475,7 +475,7 @@
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-31 19:08:18</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:15</span></code></pre></div>
 </div>
 <div id="data-structures-for-corum-complexes" class="section level3">
 <h3 class="hasAnchor">
@@ -573,19 +573,50 @@
 <p>Note that we can easily convert a <a href="https://bioconductor.org/packages/graph">graph</a> object into an <a href="https://cran.r-project.org/package=igraph">igraph</a> object using <code>igraph::graph_from_graphnel</code>.</p>
 </div>
 </div>
+<div id="cnv-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cnv-data" class="anchor"></a>CNV data</h2>
+<div id="hek293t-cells" class="section level3">
+<h3 class="hasAnchor">
+<a href="#hek293t-cells" class="anchor"></a>HEK293T cells</h3>
+<p>Genomic data from whole-genome sequencing for six different lineages of the human embryonic kidney HEK293 cell line can be obtained from <a href="http://hek293genome.org">hek293genome.org</a>.</p>
+<p>This includes copy number variation (CNV) data for the 293T cell line. Available CNV tracks include (i) CNV regions inferred from sequencing read-depth analysis, and (ii) CNV regions inferred from Illumina SNP arrays.</p>
+<p>Here, we obtain CNV segments obtained from applying a hidden Markov model (HMM) to sequencing-inferred copy numbers in 2kbp windows. More details on how copy numbers were calculated can be obtained from the <a href="https://doi.org/10.1038/ncomms5767">primary publication</a>.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:45</span>
+<span class="va">cnv.hmm</span>
+<span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
+<span class="co">#&gt;           seqnames              ranges strand |     score</span>
+<span class="co">#&gt;              &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span>
+<span class="co">#&gt;       [1]     chr1       823231-829231      * |      3.26</span>
+<span class="co">#&gt;       [2]     chr1       835231-913231      * |      3.08</span>
+<span class="co">#&gt;       [3]     chr1      923231-1063231      * |      3.20</span>
+<span class="co">#&gt;       [4]     chr1     1079231-1213231      * |      3.21</span>
+<span class="co">#&gt;       [5]     chr1     1223231-1399231      * |      3.27</span>
+<span class="co">#&gt;       ...      ...                 ...    ... .       ...</span>
+<span class="co">#&gt;   [12378]     chrX 154750237-154762237      * |      3.96</span>
+<span class="co">#&gt;   [12379]     chrX 154778237-154780237      * |      4.02</span>
+<span class="co">#&gt;   [12380]     chrX 154802237-154822237      * |      3.79</span>
+<span class="co">#&gt;   [12381]     chrX 154842237-154846237      * |      3.85</span>
+<span class="co">#&gt;   [12382]     chrM             0-12000      * |      8.82</span>
+<span class="co">#&gt;   -------</span>
+<span class="co">#&gt;   seqinfo: 24 sequences from hg18 genome; no seqlengths</span></code></pre></div>
+</div>
+</div>
 <div id="transcriptome-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#transcriptome-data" class="anchor"></a>Transcriptome data</h2>
-<div id="hek293-cells" class="section level3">
+<div id="hek293t-cells-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#hek293-cells" class="anchor"></a>HEK293 cells</h3>
+<a href="#hek293t-cells-1" class="anchor"></a>HEK293T cells</h3>
 <div id="gse122425" class="section level4">
 <h4 class="hasAnchor">
 <a href="#gse122425" class="anchor"></a>GSE122425</h4>
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a>.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-31 19:08:34</span>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:36</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -750,8 +781,8 @@
 <a href="#cancer-cell-line-encyclopedia-ccle" class="anchor"></a>Cancer Cell Line Encyclopedia (CCLE)</h4>
 <p>RNA-seq data for 934 cancer cell lines (incl. HCT116) from the <a href="https://portals.broadinstitute.org/ccle">Cancer Cell Line Encyclopedia</a> is available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2770">E-MTAB-2770</a>).</p>
 <p>The data can be obtained as a <code>SummarizedExperiment</code> using the <a href="https://bioconductor.org/packages/ExpressionAtlas">ExpressionAtlas</a> package.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ccle.trans</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasExperiment.html">getAtlasExperiment</a></span><span class="op">(</span><span class="st">"E-MTAB-2770"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ccle.trans</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu">getAtlasExperiment</span><span class="op">(</span><span class="st">"E-MTAB-2770"</span><span class="op">)</span></code></pre></div>
 <p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html">Transcriptome-Proteome analysis vignette</a> for further exploration of the correlation between CCLE HCT116 transcript and protein expression.</p>
 </div>
 <div id="klijn-et-al--2015" class="section level4">
@@ -759,8 +790,8 @@
 <a href="#klijn-et-al--2015" class="anchor"></a>Klijn et al., 2015</h4>
 <p>RNA-seq data of 675 commonly used human cancer cell lines (incl. HCT116) from <a href="https://pubmed.ncbi.nlm.nih.gov/25485619">Klijn et al., 2015</a> is available from the <a href="https://www.ebi.ac.uk/gxa">ArrayExpress-ExpressionAtlas</a> (Accession: <a href="https://www.ebi.ac.uk/gxa/experiments/E-MTAB-2706">E-MTAB-2706</a>)</p>
 <p>The data can be obtained as a <code>SummarizedExperiment</code> using the <a href="https://bioconductor.org/packages/ExpressionAtlas">ExpressionAtlas</a> package.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExpressionAtlas/man/getAtlasExperiment.html">getAtlasExperiment</a></span><span class="op">(</span><span class="st">"E-MTAB-2706"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">klijn</span> <span class="op">&lt;-</span> <span class="fu">ExpressionAtlas</span><span class="fu">::</span><span class="fu">getAtlasExperiment</span><span class="op">(</span><span class="st">"E-MTAB-2706"</span><span class="op">)</span></code></pre></div>
 <p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/TranscriptomeProteome.html">Transcriptome-Proteome analysis vignette</a> for further exploration of differential transcript and protein expression between 293T and HCT116 cells.</p>
 </div>
 </div>
@@ -772,7 +803,7 @@
 <h3 class="hasAnchor">
 <a href="#ccle" class="anchor"></a>CCLE</h3>
 <p>Pull the <a href="https://doi.org/10.1016/j.cell.2019.12.023">CCLE proteome data</a> from ExperimentHub. The dataset profiles 12,755 proteins by mass spectrometry across 375 cancer cell lines.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">eh</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"gygi"</span>, <span class="st">"depmap"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; ExperimentHub with 1 record</span>
 <span class="co">#&gt; # snapshotDate(): 2021-05-18</span>
@@ -803,7 +834,7 @@
 <span class="co">#&gt; loading from cache</span>
 <span class="va">ccle.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span></code></pre></div>
 <p>Explore the data:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span>
 <span class="co">#&gt; [1] 4821390      12</span>
 <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-toTable.html">colnames</a></span><span class="op">(</span><span class="va">ccle.prot</span><span class="op">)</span>
@@ -834,7 +865,7 @@
 <span class="co">#&gt; 5 S12A2_HUMAN      P55011 TenPx01    CAL51_BREAST</span>
 <span class="co">#&gt; 6 S12A2_HUMAN      P55011 TenPx01   RPMI7951_SKIN</span></code></pre></div>
 <p>Restrict to HCT116:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ccle.prot.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">ccle.prot</span>, <span class="va">cell_line</span> <span class="op">==</span> <span class="st">"HCT116_LARGE_INTESTINE"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">ccle.prot.hct116</span><span class="op">)</span>
 <span class="co">#&gt; [1] 12755    12</span>
@@ -868,7 +899,7 @@
 <span class="co">#&gt; 1540      P48431 TenPx04 HCT116_LARGE_INTESTINE</span>
 <span class="co">#&gt; 1918      P41225 TenPx04 HCT116_LARGE_INTESTINE</span></code></pre></div>
 <p>Or turn into a <code>SummarizedExperiment</code> for convenience (we can restrict this to selected cell lines, but here we keep all cell lines):</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ccleProteome2SummarizedExperiment.html">ccleProteome2SummarizedExperiment</a></span><span class="op">(</span><span class="va">ccle.prot</span>, cell.line <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 <span class="fu">assay</span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;             22RV1         697       769P       786O      8305C</span>
@@ -900,9 +931,9 @@
 <h3 class="hasAnchor">
 <a href="#relative-protein-expression-data-from-bioplex3-0" class="anchor"></a>Relative protein expression data from BioPlex3.0</h3>
 <p>The <a href="https://doi.org/10.1016/j.cell.2021.04.011">BioPlex 3.0 publication</a>, Supplementary Table S4A, provides relative protein expression data comparing 293T and HCT116 cells based on tandem mass tag analysis.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-08-31 19:08:42</span>
+<span class="co">#&gt; Using cached version from 2021-10-26 22:15:57</span>
 <span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
 <span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
@@ -948,18 +979,18 @@
 <a href="#caching" class="anchor"></a>Caching</h1>
 <p>Note that calling functions like <code>getCorum</code> or <code>getBioPlex</code> with argument <code>cache = FALSE</code> will automatically overwrite the corresponding object in your cache. It is thus typically not required for a user to interact with the cache.</p>
 <p>For more extended control of the cache, use from within R:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cache.dir</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html">R_user_dir</a></span><span class="op">(</span><span class="st">"BioPlex"</span>, which <span class="op">=</span> <span class="st">"cache"</span><span class="op">)</span> 
 <span class="va">bfc</span> <span class="op">&lt;-</span> <span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">BiocFileCache</a></span><span class="op">(</span><span class="va">cache.dir</span><span class="op">)</span></code></pre></div>
 <p>and then proceed as described in the <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache">BiocFileCache vignette, Section 1.10</a> either via <code>cleanbfc()</code> to clean or <code>removebfc()</code> to remove your cache.</p>
 <p>To do a hard reset (use with caution!):</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">removebfc</a></span><span class="op">(</span><span class="va">bfc</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.1.0 (2021-05-18)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
@@ -983,13 +1014,13 @@
 <span class="co">#&gt; other attached packages:</span>
 <span class="co">#&gt;  [1] depmap_1.6.0                dplyr_1.0.7                </span>
 <span class="co">#&gt;  [3] AnnotationDbi_1.54.1        graph_1.70.0               </span>
-<span class="co">#&gt;  [5] ExperimentHub_2.0.0         AnnotationHub_3.0.1        </span>
+<span class="co">#&gt;  [5] ExperimentHub_2.0.0         AnnotationHub_3.0.2        </span>
 <span class="co">#&gt;  [7] BiocFileCache_2.0.0         dbplyr_2.1.1               </span>
-<span class="co">#&gt;  [9] BioPlex_0.99.14             SummarizedExperiment_1.22.0</span>
+<span class="co">#&gt;  [9] BioPlex_0.99.15             SummarizedExperiment_1.22.0</span>
 <span class="co">#&gt; [11] Biobase_2.52.0              GenomicRanges_1.44.0       </span>
-<span class="co">#&gt; [13] GenomeInfoDb_1.28.2         IRanges_2.26.0             </span>
-<span class="co">#&gt; [15] S4Vectors_0.30.0            BiocGenerics_0.38.0        </span>
-<span class="co">#&gt; [17] MatrixGenerics_1.4.2        matrixStats_0.60.0         </span>
+<span class="co">#&gt; [13] GenomeInfoDb_1.28.4         IRanges_2.26.0             </span>
+<span class="co">#&gt; [15] S4Vectors_0.30.2            BiocGenerics_0.38.0        </span>
+<span class="co">#&gt; [17] MatrixGenerics_1.4.3        matrixStats_0.61.0-9001    </span>
 <span class="co">#&gt; [19] BiocStyle_2.20.2           </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>

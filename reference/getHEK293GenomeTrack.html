@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Annotate PFAM domains to BioPlex PPI graph — annotatePFAM • BioPlex</title>
+<title>Obtain HEK293 genome data — getHEK293GenomeTrack • BioPlex</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,11 @@
 
 
 
-<meta property="og:title" content="Annotate PFAM domains to BioPlex PPI graph — annotatePFAM" />
-<meta property="og:description" content="This function adds PFAM domain annotations to the node metadata
-of the BioPlex PPI graph." />
+<meta property="og:title" content="Obtain HEK293 genome data — getHEK293GenomeTrack" />
+<meta property="og:description" content="Functionality for retrieving genomic data for different
+lineages of the human embryonic kidney HEK293 cell line.
+Returned genomic coordinates are based on the hg18 human genome assembly.
+See references." />
 
 
 
@@ -106,74 +108,60 @@ of the BioPlex PPI graph." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Annotate PFAM domains to BioPlex PPI graph</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ccb-hms/BioPlex/blob/master/R/bioplex.R'><code>R/bioplex.R</code></a></small>
-    <div class="hidden name"><code>annotatePFAM.Rd</code></div>
+    <h1>Obtain HEK293 genome data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ccb-hms/BioPlex/blob/master/R/cnv.R'><code>R/cnv.R</code></a></small>
+    <div class="hidden name"><code>getHEK293GenomeTrack.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function adds PFAM domain annotations to the node metadata
-of the BioPlex PPI graph.</p>
+    <p>Functionality for retrieving genomic data for different
+lineages of the human embryonic kidney HEK293 cell line.
+Returned genomic coordinates are based on the <em>hg18</em> human genome assembly.
+See references.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>annotatePFAM</span><span class='op'>(</span><span class='va'>bp.gr</span>, <span class='va'>orgdb</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getHEK293GenomeTrack</span><span class='op'>(</span>
+  track <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cnv.hmm"</span>, <span class='st'>"cnv.snp"</span><span class='op'>)</span>,
+  cell.line <span class='op'>=</span> <span class='st'>"293T"</span>,
+  cache <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bp.gr</th>
-      <td><p>an object of class <code>graph</code> storing the
-BioPlex PPIs. Typically obtained via <code><a href='bioplex2graph.html'>bioplex2graph</a></code>.</p></td>
+      <th>track</th>
+      <td><p>character. Genome track to retrieve. Valid options include:</p><ul>
+<li><p><code>"cnvhmm"</code>: regions of copy number variation (CNV) as inferred by
+a hidden Markov model (HMM) algorithm,</p></li>
+<li><p><code>"cnvsnp"</code>: CNV regions as inferred from Illumina SNP arrays</p></li>
+</ul><p>Defaults to <code>"cnvhmm"</code>.</p></td>
     </tr>
     <tr>
-      <th>orgdb</th>
-      <td><p>an <code>orgdb</code> object storing annotation data for human.</p></td>
+      <th>cell.line</th>
+      <td><p>character. Valid options include:</p><ul>
+<li><p><code>"293T"</code>: highly-transfective derivative of human embryonic kidney
+293 cell line,</p></li>
+</ul><p>Defaults to <code>"293T"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>cache</th>
+      <td><p>logical. Should a locally cached version used if available?
+Defaults to <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>graphNEL</code> containing PFAM domain annotations
-in the <code>nodeData</code>.</p>
+    <p>A <code>GRanges</code> object storing genomic coordinates and genomic scores
+of regions of interest.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>BioPlex: <a href='https://bioplex.hms.harvard.edu/interactions.php'>https://bioplex.hms.harvard.edu/interactions.php</a></p>
-<p>PFAM: <a href='http://pfam.xfam.org'>http://pfam.xfam.org</a></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code>nodeData</code></p></div>
+    <p><a href='http://hek293genome.org'>http://hek293genome.org</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># (1) Obtain the latest version of the 293T PPI network</span>
-<span class='va'>bp.293t</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getBioPlex.html'>getBioPlex</a></span><span class='op'>(</span>cell.line <span class='op'>=</span> <span class='st'>"293T"</span>, version <span class='op'>=</span> <span class='st'>"3.0"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using cached version from 2021-10-26 22:10:31</span></div><div class='input'>
-<span class='co'># (2) Turn the data into a graph </span>
-<span class='va'>bp.gr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='bioplex2graph.html'>bioplex2graph</a></span><span class='op'>(</span><span class='va'>bp.293t</span><span class='op'>)</span>
-
-<span class='co'># (3) Obtain orgdb package from AnnotationHub</span>
-<span class='va'>ah</span> <span class='op'>&lt;-</span> <span class='fu'>AnnotationHub</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html'>AnnotationHub</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>snapshotDate(): 2021-05-18</span></div><div class='input'><span class='fu'>AnnotationHub</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html'>query</a></span><span class='op'>(</span><span class='va'>ah</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"orgDb"</span>, <span class='st'>"Homo sapiens"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; AnnotationHub with 1 record
-#&gt; # snapshotDate(): 2021-05-18
-#&gt; # names(): AH92581
-#&gt; # $dataprovider: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/
-#&gt; # $species: Homo sapiens
-#&gt; # $rdataclass: OrgDb
-#&gt; # $rdatadateadded: 2021-05-14
-#&gt; # $title: org.Hs.eg.db.sqlite
-#&gt; # $description: NCBI gene ID based annotations about Homo sapiens
-#&gt; # $taxonomyid: 9606
-#&gt; # $genome: NCBI genomes
-#&gt; # $sourcetype: NCBI/ensembl
-#&gt; # $sourceurl: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/, ftp://ftp.ensembl.org/p...
-#&gt; # $sourcesize: NA
-#&gt; # $tags: c("NCBI", "Gene", "Annotation") 
-#&gt; # retrieve record with 'object[["AH92581"]]' </div><div class='input'><span class='va'>orgdb</span> <span class='op'>&lt;-</span> <span class='va'>ah</span><span class='op'>[[</span><span class='st'>"AH92581"</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='message'>loading from cache</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: AnnotationDbi</span></div><div class='input'>
-<span class='co'># (4) Annotate PFAM domains</span>
-<span class='va'>bp.gr</span> <span class='op'>&lt;-</span> <span class='fu'>annotatePFAM</span><span class='op'>(</span><span class='va'>bp.gr</span>, <span class='va'>orgdb</span><span class='op'>)</span>
-
+    <pre class="examples"><div class='input'>   <span class='va'>cnv.hmm</span> <span class='op'>&lt;-</span> <span class='fu'>getHEK293GenomeTrack</span><span class='op'>(</span>track <span class='op'>=</span> <span class='st'>"cnv.hmm"</span>, cell.line <span class='op'>=</span> <span class='st'>"293T"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using cached version from 2021-10-26 22:10:54</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
