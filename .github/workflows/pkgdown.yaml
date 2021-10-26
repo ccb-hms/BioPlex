@@ -49,6 +49,7 @@ jobs:
       - name: Install dependencies
         run: |
           options(repos = BiocManager::repositories())
+          remotes::install_github("HenrikBengtsson/matrixStats")
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
