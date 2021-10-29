@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Identify CORUM complexes that have a subunit of interest — hasSubunit • BioPlex</title>
+<title>Obtain HEK293 genome data — getHEK293GenomeTrack • BioPlex</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,11 @@
 
 
 
-<meta property="og:title" content="Identify CORUM complexes that have a subunit of interest — hasSubunit" />
-<meta property="og:description" content="Screens a list of graph instances storing
-CORUM protein complex data for a subunit of choice." />
+<meta property="og:title" content="Obtain HEK293 genome data — getHEK293GenomeTrack" />
+<meta property="og:description" content="Functionality for retrieving genomic data for different
+lineages of the human embryonic kidney HEK293 cell line.
+Returned genomic coordinates are based on the hg18 human genome assembly.
+See references." />
 
 
 
@@ -106,50 +108,60 @@ CORUM protein complex data for a subunit of choice." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Identify CORUM complexes that have a subunit of interest</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ccb-hms/BioPlex/blob/master/R/corum.R'><code>R/corum.R</code></a></small>
-    <div class="hidden name"><code>hasSubunit.Rd</code></div>
+    <h1>Obtain HEK293 genome data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ccb-hms/BioPlex/blob/master/R/cnv.R'><code>R/cnv.R</code></a></small>
+    <div class="hidden name"><code>getHEK293GenomeTrack.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Screens a <code>list</code> of <code>graph</code> instances storing
-CORUM protein complex data for a subunit of choice.</p>
+    <p>Functionality for retrieving genomic data for different
+lineages of the human embryonic kidney HEK293 cell line.
+Returned genomic coordinates are based on the <em>hg18</em> human genome assembly.
+See references.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hasSubunit</span><span class='op'>(</span><span class='va'>glist</span>, <span class='va'>subunit</span>, id.type <span class='op'>=</span> <span class='st'>"SYMBOL"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getHEK293GenomeTrack</span><span class='op'>(</span>
+  track <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cnv.hmm"</span>, <span class='st'>"cnv.snp"</span><span class='op'>)</span>,
+  cell.line <span class='op'>=</span> <span class='st'>"293T"</span>,
+  cache <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>glist</th>
-      <td><p>A <code>list</code> of <code>graph</code>s storing CORUM complexes.
-Typically obtained via <code><a href='corum2graphlist.html'>corum2graphlist</a></code>.</p></td>
+      <th>track</th>
+      <td><p>character. Genome track to retrieve. Valid options include:</p><ul>
+<li><p><code>"cnvhmm"</code>: regions of copy number variation (CNV) as inferred by
+a hidden Markov model (HMM) algorithm,</p></li>
+<li><p><code>"cnvsnp"</code>: CNV regions as inferred from Illumina SNP arrays</p></li>
+</ul><p>Defaults to <code>"cnvhmm"</code>.</p></td>
     </tr>
     <tr>
-      <th>subunit</th>
-      <td><p>character. A gene ID corresponding to the subunit of interest.</p></td>
+      <th>cell.line</th>
+      <td><p>character. Valid options include:</p><ul>
+<li><p><code>"293T"</code>: highly-transfective derivative of human embryonic kidney
+293 cell line,</p></li>
+</ul><p>Defaults to <code>"293T"</code>.</p></td>
     </tr>
     <tr>
-      <th>id.type</th>
-      <td><p>character. Gene ID type of the given subunit. Defaults to <code>"SYMBOL"</code>.</p></td>
+      <th>cache</th>
+      <td><p>logical. Should a locally cached version used if available?
+Defaults to <code>TRUE</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A logical vector indicating which graphs have a node with the given
-subunit.</p>
+    <p>A <code>GRanges</code> object storing genomic coordinates and genomic scores
+of regions of interest.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p><a href='http://hek293genome.org'>http://hek293genome.org</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># (1) Obtain the core set of CORUM complexes ...</span>
-<span class='va'>core</span> <span class='op'>&lt;-</span> <span class='fu'><a href='getCorum.html'>getCorum</a></span><span class='op'>(</span>set <span class='op'>=</span> <span class='st'>"core"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Using cached version from 2021-10-29 16:26:33</span></div><div class='input'>
-<span class='co'># (2) ... turn into a list of graphs ...</span>
-<span class='va'>core.glist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='corum2graphlist.html'>corum2graphlist</a></span><span class='op'>(</span><span class='va'>core</span><span class='op'>)</span>
-
-<span class='co'># (3) .. check for a particular subunit of interest</span>
-<span class='va'>has.cdk2</span> <span class='op'>&lt;-</span> <span class='fu'>hasSubunit</span><span class='op'>(</span><span class='va'>core.glist</span>, subunit <span class='op'>=</span> <span class='st'>"CDK2"</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'>   <span class='va'>cnv.hmm</span> <span class='op'>&lt;-</span> <span class='fu'>getHEK293GenomeTrack</span><span class='op'>(</span>track <span class='op'>=</span> <span class='st'>"cnv.hmm"</span>, cell.line <span class='op'>=</span> <span class='st'>"293T"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Using cached version from 2021-10-29 16:26:58</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
