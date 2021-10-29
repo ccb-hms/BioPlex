@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -119,24 +119,8 @@
 <code class="sourceCode R"><span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu">ExperimentHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>OrgDb package for human:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"orgDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; AnnotationHub with 1 record</span>
-<span class="co">#&gt; # snapshotDate(): 2021-05-18</span>
-<span class="co">#&gt; # names(): AH92581</span>
-<span class="co">#&gt; # $dataprovider: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/</span>
-<span class="co">#&gt; # $species: Homo sapiens</span>
-<span class="co">#&gt; # $rdataclass: OrgDb</span>
-<span class="co">#&gt; # $rdatadateadded: 2021-05-14</span>
-<span class="co">#&gt; # $title: org.Hs.eg.db.sqlite</span>
-<span class="co">#&gt; # $description: NCBI gene ID based annotations about Homo sapiens</span>
-<span class="co">#&gt; # $taxonomyid: 9606</span>
-<span class="co">#&gt; # $genome: NCBI genomes</span>
-<span class="co">#&gt; # $sourcetype: NCBI/ensembl</span>
-<span class="co">#&gt; # $sourceurl: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/, ftp://ftp.ensembl.org/p...</span>
-<span class="co">#&gt; # $sourcesize: NA</span>
-<span class="co">#&gt; # $tags: c("NCBI", "Gene", "Annotation") </span>
-<span class="co">#&gt; # retrieve record with 'object[["AH92581"]]'</span>
-<span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="va">ah</span><span class="op">[[</span><span class="st">"AH92581"</span><span class="op">]</span><span class="op">]</span>
+<code class="sourceCode R"><span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"orgDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="va">orgdb</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">orgdb</span>
 <span class="co">#&gt; OrgDb object:</span>
 <span class="co">#&gt; | DBSCHEMAVERSION: 2.1</span>
@@ -187,7 +171,7 @@
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:12</span>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:39:58</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1    100 728378   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
@@ -235,7 +219,7 @@
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:12</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:39:58</span></code></pre></div>
 </div>
 <div id="data-structures-for-bioplex-ppis" class="section level3">
 <h3 class="hasAnchor">
@@ -458,7 +442,7 @@
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:05</span>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:39:52</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
@@ -475,7 +459,7 @@
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:05</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:39:52</span></code></pre></div>
 </div>
 <div id="data-structures-for-corum-complexes" class="section level3">
 <h3 class="hasAnchor">
@@ -584,7 +568,7 @@
 <p>Here, we obtain CNV segments obtained from applying a hidden Markov model (HMM) to sequencing-inferred copy numbers in 2kbp windows. More details on how copy numbers were calculated can be obtained from the <a href="https://doi.org/10.1038/ncomms5767">primary publication</a>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:34</span>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:40:18</span>
 <span class="va">cnv.hmm</span>
 <span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
 <span class="co">#&gt;           seqnames              ranges strand |     score</span>
@@ -616,7 +600,7 @@
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425">GSE122425</a>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:23</span>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:40:09</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -933,7 +917,7 @@
 <p>The <a href="https://doi.org/10.1016/j.cell.2021.04.011">BioPlex 3.0 publication</a>, Supplementary Table S4A, provides relative protein expression data comparing 293T and HCT116 cells based on tandem mass tag analysis.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2021-10-29 16:31:45</span>
+<span class="co">#&gt; Using cached version from 2021-10-29 16:40:27</span>
 <span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
 <span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
@@ -1016,7 +1000,7 @@
 <span class="co">#&gt;  [3] AnnotationDbi_1.54.1        graph_1.70.0               </span>
 <span class="co">#&gt;  [5] ExperimentHub_2.0.0         AnnotationHub_3.0.2        </span>
 <span class="co">#&gt;  [7] BiocFileCache_2.0.0         dbplyr_2.1.1               </span>
-<span class="co">#&gt;  [9] BioPlex_1.1.0               SummarizedExperiment_1.22.0</span>
+<span class="co">#&gt;  [9] BioPlex_1.1.2               SummarizedExperiment_1.22.0</span>
 <span class="co">#&gt; [11] Biobase_2.52.0              GenomicRanges_1.44.0       </span>
 <span class="co">#&gt; [13] GenomeInfoDb_1.28.4         IRanges_2.26.0             </span>
 <span class="co">#&gt; [15] S4Vectors_0.30.2            BiocGenerics_0.38.0        </span>
