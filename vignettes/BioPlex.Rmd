@@ -99,8 +99,8 @@ eh <- ExperimentHub::ExperimentHub()
 
 OrgDb package for human:
 ```{r orgdb, message = FALSE}
-AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-orgdb <- ah[["AH92581"]]
+orgdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+orgdb <- orgdb[[1]]
 orgdb
 keytypes(orgdb)
 ```
