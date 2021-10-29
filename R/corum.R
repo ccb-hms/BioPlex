@@ -179,8 +179,8 @@ hasSubunit <- function(glist, subunit, id.type = "SYMBOL")
     # obtain latest ensembl mappings from AnnotationHub
     suppressMessages({
         ah <- AnnotationHub::AnnotationHub()
-        # AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-        orgdb <- ah[["AH92581"]]
+        ah <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+        orgdb <- ah[[1]]
     })
     
     # map Uniprot IDs to Entrez IDs and to symbols

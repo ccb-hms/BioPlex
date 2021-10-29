@@ -136,8 +136,8 @@ bioplex2graph <- function(bioplex.df)
 #' 
 #' # (3) Obtain orgdb package from AnnotationHub
 #' ah <- AnnotationHub::AnnotationHub()
-#' AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-#' orgdb <- ah[["AH92581"]]
+#' ah <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+#' orgdb <- ah[[1]]
 #' 
 #' # (4) Annotate PFAM domains
 #' bp.gr <- annotatePFAM(bp.gr, orgdb)
@@ -281,8 +281,8 @@ mapSummarizedExperimentOntoGraph <- function(gr, se,
     
     suppressMessages({
       ah <- AnnotationHub::AnnotationHub()
-      # AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-      orgdb <- ah[["AH92581"]]
+      ah <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+      orgdb <- ah[[1]]
     })
     
     suppressMessages({
