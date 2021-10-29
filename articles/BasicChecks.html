@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -91,24 +91,8 @@
 <code class="sourceCode R"><span class="va">eh</span> <span class="op">&lt;-</span> <span class="fu">ExperimentHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ExperimentHub/man/ExperimentHub-class.html">ExperimentHub</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>OrgDb package for human:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"orgDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; AnnotationHub with 1 record</span>
-<span class="co">#&gt; # snapshotDate(): 2021-05-18</span>
-<span class="co">#&gt; # names(): AH92581</span>
-<span class="co">#&gt; # $dataprovider: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/</span>
-<span class="co">#&gt; # $species: Homo sapiens</span>
-<span class="co">#&gt; # $rdataclass: OrgDb</span>
-<span class="co">#&gt; # $rdatadateadded: 2021-05-14</span>
-<span class="co">#&gt; # $title: org.Hs.eg.db.sqlite</span>
-<span class="co">#&gt; # $description: NCBI gene ID based annotations about Homo sapiens</span>
-<span class="co">#&gt; # $taxonomyid: 9606</span>
-<span class="co">#&gt; # $genome: NCBI genomes</span>
-<span class="co">#&gt; # $sourcetype: NCBI/ensembl</span>
-<span class="co">#&gt; # $sourceurl: ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/, ftp://ftp.ensembl.org/p...</span>
-<span class="co">#&gt; # $sourcesize: NA</span>
-<span class="co">#&gt; # $tags: c("NCBI", "Gene", "Annotation") </span>
-<span class="co">#&gt; # retrieve record with 'object[["AH92581"]]'</span>
-<span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="va">ah</span><span class="op">[[</span><span class="st">"AH92581"</span><span class="op">]</span><span class="op">]</span>
+<code class="sourceCode R"><span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"orgDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">orgdb</span> <span class="op">&lt;-</span> <span class="va">orgdb</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">orgdb</span>
 <span class="co">#&gt; OrgDb object:</span>
 <span class="co">#&gt; | DBSCHEMAVERSION: 2.1</span>
@@ -401,188 +385,11 @@
 <span class="co">#&gt; [1] 0.2035977</span></code></pre></div>
 <p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/BioNet.html">BioNet maximum scoring subnetwork analysis vignette</a> for a more comprehensive analysis of the 293T transcriptome data from GSE122425 when mapped onto BioPlex PPI network.</p>
 </div>
-<div id="check-agreement-between-cnv-tracks" class="section level1">
-<h1 class="hasAnchor">
-<a href="#check-agreement-between-cnv-tracks" class="anchor"></a>Check: agreement between CNV tracks</h1>
-<p>Genomic data from whole-genome sequencing for six different lineages of the human embryonic kidney HEK293 cell line can be obtained from <a href="http://hek293genome.org">hek293genome.org</a>.</p>
-<p>This includes copy number variation (CNV) data for the 293T cell line. Available CNV tracks include (i) CNV regions inferred from sequencing read-depth analysis, and (ii) CNV regions inferred from Illumina SNP arrays.</p>
-<p>Here, we check agreement between inferred copy numbers from both assay types.</p>
-<p>We start by obtaining genomic coordinates and copy number scores from the sequencing track …</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="va">cnv.hmm</span>
-<span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
-<span class="co">#&gt;           seqnames              ranges strand |     score</span>
-<span class="co">#&gt;              &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span>
-<span class="co">#&gt;       [1]     chr1       823231-829231      * |      3.26</span>
-<span class="co">#&gt;       [2]     chr1       835231-913231      * |      3.08</span>
-<span class="co">#&gt;       [3]     chr1      923231-1063231      * |      3.20</span>
-<span class="co">#&gt;       [4]     chr1     1079231-1213231      * |      3.21</span>
-<span class="co">#&gt;       [5]     chr1     1223231-1399231      * |      3.27</span>
-<span class="co">#&gt;       ...      ...                 ...    ... .       ...</span>
-<span class="co">#&gt;   [12378]     chrX 154750237-154762237      * |      3.96</span>
-<span class="co">#&gt;   [12379]     chrX 154778237-154780237      * |      4.02</span>
-<span class="co">#&gt;   [12380]     chrX 154802237-154822237      * |      3.79</span>
-<span class="co">#&gt;   [12381]     chrX 154842237-154846237      * |      3.85</span>
-<span class="co">#&gt;   [12382]     chrM             0-12000      * |      8.82</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 24 sequences from hg18 genome; no seqlengths</span></code></pre></div>
-<p>… and from the SNP track.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">cnv.snp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.snp"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="va">cnv.snp</span>
-<span class="co">#&gt; GRanges object with 204 ranges and 1 metadata column:</span>
-<span class="co">#&gt;         seqnames              ranges strand |     score</span>
-<span class="co">#&gt;            &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;integer&gt;</span>
-<span class="co">#&gt;     [1]     chr1      742429-5117504      * |         3</span>
-<span class="co">#&gt;     [2]     chr1    5126548-27691288      * |         4</span>
-<span class="co">#&gt;     [3]     chr1   27696717-33934376      * |         6</span>
-<span class="co">#&gt;     [4]     chr1   33946560-48944728      * |         4</span>
-<span class="co">#&gt;     [5]     chr1   48956914-50523337      * |         2</span>
-<span class="co">#&gt;     ...      ...                 ...    ... .       ...</span>
-<span class="co">#&gt;   [200]     chrX 106780442-127925246      * |         5</span>
-<span class="co">#&gt;   [201]     chrX 127931857-131443550      * |         6</span>
-<span class="co">#&gt;   [202]     chrX 131541633-136116260      * |         5</span>
-<span class="co">#&gt;   [203]     chrX 136125141-147982191      * |         4</span>
-<span class="co">#&gt;   [204]     chrX 147983995-154582606      * |         5</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 23 sequences from hg18 genome; no seqlengths</span></code></pre></div>
-<p>We reduce the check for agreement between both CNV tracks by transferring copy numbers to overlapping genes, and subsequently, assess the agreement between the resulting gene copy numbers for both tracks.</p>
-<p>As the genomic coordinates from both CNV tracks is based on the hg18 human genome assembly, we obtain gene coordinates for hg18 from AnnotationHub:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TxDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; AnnotationHub with 35 records</span>
-<span class="co">#&gt; # snapshotDate(): 2021-05-18</span>
-<span class="co">#&gt; # $dataprovider: GENCODE, UCSC, NCBI, tRNAdb, snoRNAdb, RMBase v2.0</span>
-<span class="co">#&gt; # $species: Homo sapiens</span>
-<span class="co">#&gt; # $rdataclass: TxDb, SQLiteFile, ChainFile, FaFile</span>
-<span class="co">#&gt; # additional mcols(): taxonomyid, genome, description,</span>
-<span class="co">#&gt; #   coordinate_1_based, maintainer, rdatadateadded, preparerclass, tags,</span>
-<span class="co">#&gt; #   rdatapath, sourceurl, sourcetype </span>
-<span class="co">#&gt; # retrieve records with, e.g., 'object[["AH52256"]]' </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;             title                                             </span>
-<span class="co">#&gt;   AH52256 | TxDb.Hsapiens.BioMart.igis.sqlite                 </span>
-<span class="co">#&gt;   AH52257 | TxDb.Hsapiens.UCSC.hg18.knownGene.sqlite          </span>
-<span class="co">#&gt;   AH52258 | TxDb.Hsapiens.UCSC.hg19.knownGene.sqlite          </span>
-<span class="co">#&gt;   AH52259 | TxDb.Hsapiens.UCSC.hg19.lincRNAsTranscripts.sqlite</span>
-<span class="co">#&gt;   AH52260 | TxDb.Hsapiens.UCSC.hg38.knownGene.sqlite          </span>
-<span class="co">#&gt;   ...       ...                                               </span>
-<span class="co">#&gt;   AH78915 | Chain file for Homo sapiens rRNA hg19 to hg38     </span>
-<span class="co">#&gt;   AH78916 | Chain file for Homo sapiens rRNA hg38 to hg19     </span>
-<span class="co">#&gt;   AH83362 | Sequences of snoRNA targets of Homo sapiens hg38  </span>
-<span class="co">#&gt;   AH92591 | TxDb.Hsapiens.UCSC.hg38.knownGene.sqlite          </span>
-<span class="co">#&gt;   AH92592 | TxDb.Hsapiens.UCSC.hg38.refGene.sqlite</span>
-<span class="va">txdb</span> <span class="op">&lt;-</span> <span class="va">ah</span><span class="op">[[</span><span class="st">"AH52257"</span><span class="op">]</span><span class="op">]</span>
-<span class="co">#&gt; loading from cache</span>
-<span class="co">#&gt; Loading required package: GenomicFeatures</span>
-<span class="va">gs</span> <span class="op">&lt;-</span> <span class="fu">GenomicFeatures</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicFeatures/man/transcripts.html">genes</a></span><span class="op">(</span><span class="va">txdb</span><span class="op">)</span>
-<span class="co">#&gt;   379 genes were dropped because they have exons located on both strands</span>
-<span class="co">#&gt;   of the same reference sequence or on more than one reference sequence,</span>
-<span class="co">#&gt;   so cannot be represented by a single genomic range.</span>
-<span class="co">#&gt;   Use 'single.strand.genes.only=FALSE' to get all the genes in a</span>
-<span class="co">#&gt;   GRangesList object, or use suppressMessages() to suppress this message.</span>
-<span class="va">gs</span>
-<span class="co">#&gt; GRanges object with 19742 ranges and 1 metadata column:</span>
-<span class="co">#&gt;         seqnames              ranges strand |     gene_id</span>
-<span class="co">#&gt;            &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span>
-<span class="co">#&gt;       1    chr19   63549984-63565932      - |           1</span>
-<span class="co">#&gt;      10     chr8   18293035-18303003      + |          10</span>
-<span class="co">#&gt;     100    chr20   42681577-42713790      - |         100</span>
-<span class="co">#&gt;    1000    chr18   23784933-24011189      - |        1000</span>
-<span class="co">#&gt;   10000     chr1 241718158-242073207      - |       10000</span>
-<span class="co">#&gt;     ...      ...                 ...    ... .         ...</span>
-<span class="co">#&gt;    9991     chr9 114020538-114135733      - |        9991</span>
-<span class="co">#&gt;    9992    chr21   34658193-34665310      + |        9992</span>
-<span class="co">#&gt;    9993    chr22   17403795-17489967      - |        9993</span>
-<span class="co">#&gt;    9994     chr6   90596334-90640876      + |        9994</span>
-<span class="co">#&gt;    9997    chr22   49308863-49310900      - |        9997</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 49 sequences (1 circular) from hg18 genome</span></code></pre></div>
-<p>We then transfer SNP-inferred copy numbers to genes by overlap …</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">olaps</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/findOverlaps-methods.html">findOverlaps</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">cnv.snp</span><span class="op">)</span>
-<span class="va">joined</span> <span class="op">&lt;-</span> <span class="va">gs</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html">queryHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
-<span class="va">joined</span><span class="op">$</span><span class="va">score</span> <span class="op">&lt;-</span> <span class="va">cnv.snp</span><span class="op">$</span><span class="va">score</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html">subjectHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
-<span class="va">joined</span>
-<span class="co">#&gt; GRanges object with 19555 ranges and 2 metadata columns:</span>
-<span class="co">#&gt;         seqnames              ranges strand |     gene_id     score</span>
-<span class="co">#&gt;            &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;integer&gt;</span>
-<span class="co">#&gt;       1    chr19   63549984-63565932      - |           1         4</span>
-<span class="co">#&gt;      10     chr8   18293035-18303003      + |          10         2</span>
-<span class="co">#&gt;     100    chr20   42681577-42713790      - |         100         4</span>
-<span class="co">#&gt;    1000    chr18   23784933-24011189      - |        1000         3</span>
-<span class="co">#&gt;   10000     chr1 241718158-242073207      - |       10000         6</span>
-<span class="co">#&gt;     ...      ...                 ...    ... .         ...       ...</span>
-<span class="co">#&gt;    9991     chr9 114020538-114135733      - |        9991         3</span>
-<span class="co">#&gt;    9992    chr21   34658193-34665310      + |        9992         4</span>
-<span class="co">#&gt;    9993    chr22   17403795-17489967      - |        9993         5</span>
-<span class="co">#&gt;    9994     chr6   90596334-90640876      + |        9994         3</span>
-<span class="co">#&gt;    9997    chr22   49308863-49310900      - |        9997         4</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 49 sequences (1 circular) from hg18 genome</span></code></pre></div>
-<p>… and, analogously, transfer sequencing-inferred copy numbers to genes by overlap.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">olaps</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/findOverlaps-methods.html">findOverlaps</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">cnv.hmm</span><span class="op">)</span>
-<span class="va">joined2</span> <span class="op">&lt;-</span> <span class="va">gs</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html">queryHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
-<span class="va">joined2</span><span class="op">$</span><span class="va">score</span> <span class="op">&lt;-</span> <span class="va">cnv.hmm</span><span class="op">$</span><span class="va">score</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html">subjectHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
-<span class="va">joined2</span>
-<span class="co">#&gt; GRanges object with 22366 ranges and 2 metadata columns:</span>
-<span class="co">#&gt;         seqnames              ranges strand |     gene_id     score</span>
-<span class="co">#&gt;            &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;</span>
-<span class="co">#&gt;       1    chr19   63549984-63565932      - |           1      3.18</span>
-<span class="co">#&gt;      10     chr8   18293035-18303003      + |          10      1.96</span>
-<span class="co">#&gt;     100    chr20   42681577-42713790      - |         100      2.98</span>
-<span class="co">#&gt;    1000    chr18   23784933-24011189      - |        1000      2.94</span>
-<span class="co">#&gt;   10000     chr1 241718158-242073207      - |       10000      5.92</span>
-<span class="co">#&gt;     ...      ...                 ...    ... .         ...       ...</span>
-<span class="co">#&gt;    9990    chr15   32309489-32417557      - |        9990      2.26</span>
-<span class="co">#&gt;    9991     chr9 114020538-114135733      - |        9991      3.45</span>
-<span class="co">#&gt;    9993    chr22   17403795-17489967      - |        9993      4.48</span>
-<span class="co">#&gt;    9994     chr6   90596334-90640876      + |        9994      3.14</span>
-<span class="co">#&gt;    9997    chr22   49308863-49310900      - |        9997      3.35</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 49 sequences (1 circular) from hg18 genome</span></code></pre></div>
-<p>We then restrict both tracks to common genes.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">isect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">joined</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">joined2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">joined</span> <span class="op">&lt;-</span> <span class="va">joined</span><span class="op">[</span><span class="va">isect</span><span class="op">]</span>
-<span class="va">joined2</span> <span class="op">&lt;-</span> <span class="va">joined2</span><span class="op">[</span><span class="va">isect</span><span class="op">]</span></code></pre></div>
-<p>Now, can assess agreement by testing the correlation between SNP-inferred gene copy numbers and the corresponding sequencing-inferred gene copy numbers.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.7953383</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Pearson's product-moment correlation</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; data:  joined$score and joined2$score</span>
-<span class="co">#&gt; t = 176.07, df = 18008, p-value &lt; 2.2e-16</span>
-<span class="co">#&gt; alternative hypothesis: true correlation is not equal to 0</span>
-<span class="co">#&gt; 95 percent confidence interval:</span>
-<span class="co">#&gt;  0.7899089 0.8006431</span>
-<span class="co">#&gt; sample estimates:</span>
-<span class="co">#&gt;       cor </span>
-<span class="co">#&gt; 0.7953383</span></code></pre></div>
-<p>We also inspect the correlation via a boxplot.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">spl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="va">joined2</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/boxplot.html">boxplot</a></span><span class="op">(</span><span class="va">spl</span>, xlab <span class="op">=</span> <span class="st">"SNP-inferred copy number"</span>, ylab <span class="op">=</span> <span class="st">"sequencing-inferred copy number"</span><span class="op">)</span>
-<span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
-<span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"cor"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">rho</span>, digits<span class="op">=</span><span class="fl">3</span><span class="op">)</span>, sep<span class="op">=</span><span class="st">" = "</span><span class="op">)</span>
-
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="va">p</span><span class="op">$</span><span class="va">p.value</span>
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="st">"   p &lt; 2.2e-16"</span>
-
-<span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">rho</span>, <span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/unnamed-chunk-13-1.png" width="768"></p>
-</div>
 <div id="check-differential-protein-expression-hek293-vs--hct116" class="section level1">
 <h1 class="hasAnchor">
 <a href="#check-differential-protein-expression-hek293-vs--hct116" class="anchor"></a>Check: differential protein expression (HEK293 vs. HCT116)</h1>
 <p>Get the relative protein expression data comparing 293T and HCT116 cells from Supplementary Table S4A of the BioPlex 3 paper:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">bp.prot</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
@@ -612,14 +419,14 @@
 <ol style="list-style-type: decimal">
 <li>The relative abundances are scaled to sum up to 100% for each protein:</li>
 </ol>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span><span class="op">)</span> 
 <span class="co">#&gt;    P0CG40  Q8IXZ3-4    P55011    O60341    O14654 </span>
 <span class="co">#&gt;  99.99994  99.99991  99.99996 100.00011 100.00006</span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>The <code>rowData</code> column <code>log2ratio</code> corresponds to the mean of the five HEK samples, divided by the mean of the five HCT samples (and then taking log2 of it):</li>
 </ol>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ratio</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log2</a></span><span class="op">(</span><span class="va">ratio</span><span class="op">)</span>
 <span class="co">#&gt;     P0CG40   Q8IXZ3-4     P55011     O60341     O14654 </span>
@@ -627,7 +434,7 @@
 <ol start="3" style="list-style-type: decimal">
 <li>The <code>rowData</code> column <code>adj.pvalue</code> stores Benjamini-Hochberg adjusted <em>p</em>-values from a <em>t</em>-test between the five HEK samples and the five HCT samples:</li>
 </ol>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>, <span class="fu">assay</span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  Welch Two Sample t-test</span>
@@ -645,7 +452,7 @@
 <div id="sessioninfo" class="section level1">
 <h1 class="hasAnchor">
 <a href="#sessioninfo" class="anchor"></a>SessionInfo</h1>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.1.0 (2021-05-18)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
@@ -667,66 +474,60 @@
 <span class="co">#&gt; [8] methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt;  [1] GenomicFeatures_1.44.2      graph_1.70.0               </span>
-<span class="co">#&gt;  [3] AnnotationHub_3.0.2         BiocFileCache_2.0.0        </span>
-<span class="co">#&gt;  [5] dbplyr_2.1.1                AnnotationDbi_1.54.1       </span>
-<span class="co">#&gt;  [7] BioPlex_1.1.1               SummarizedExperiment_1.22.0</span>
-<span class="co">#&gt;  [9] Biobase_2.52.0              GenomicRanges_1.44.0       </span>
-<span class="co">#&gt; [11] GenomeInfoDb_1.28.4         IRanges_2.26.0             </span>
-<span class="co">#&gt; [13] S4Vectors_0.30.2            BiocGenerics_0.38.0        </span>
-<span class="co">#&gt; [15] MatrixGenerics_1.4.3        matrixStats_0.61.0-9001    </span>
-<span class="co">#&gt; [17] BiocStyle_2.20.2           </span>
+<span class="co">#&gt;  [1] graph_1.70.0                AnnotationHub_3.0.2        </span>
+<span class="co">#&gt;  [3] BiocFileCache_2.0.0         dbplyr_2.1.1               </span>
+<span class="co">#&gt;  [5] AnnotationDbi_1.54.1        BioPlex_1.0.1              </span>
+<span class="co">#&gt;  [7] SummarizedExperiment_1.22.0 Biobase_2.52.0             </span>
+<span class="co">#&gt;  [9] GenomicRanges_1.44.0        GenomeInfoDb_1.28.4        </span>
+<span class="co">#&gt; [11] IRanges_2.26.0              S4Vectors_0.30.2           </span>
+<span class="co">#&gt; [13] BiocGenerics_0.38.0         MatrixGenerics_1.4.3       </span>
+<span class="co">#&gt; [15] matrixStats_0.61.0-9001     BiocStyle_2.20.2           </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] bitops_1.0-7                  fs_1.5.0                     </span>
-<span class="co">#&gt;  [3] bit64_4.0.5                   progress_1.2.2               </span>
-<span class="co">#&gt;  [5] filelock_1.0.2                httr_1.4.2                   </span>
-<span class="co">#&gt;  [7] rprojroot_2.0.2               tools_4.1.0                  </span>
-<span class="co">#&gt;  [9] bslib_0.2.5.1                 utf8_1.2.2                   </span>
-<span class="co">#&gt; [11] R6_2.5.0                      DBI_1.1.1                    </span>
-<span class="co">#&gt; [13] withr_2.4.2                   prettyunits_1.1.1            </span>
-<span class="co">#&gt; [15] tidyselect_1.1.1              bit_4.0.4                    </span>
-<span class="co">#&gt; [17] curl_4.3.2                    compiler_4.1.0               </span>
-<span class="co">#&gt; [19] cli_3.0.1                     textshaping_0.3.5            </span>
-<span class="co">#&gt; [21] xml2_1.3.2                    desc_1.3.0                   </span>
-<span class="co">#&gt; [23] DelayedArray_0.18.0           rtracklayer_1.52.1           </span>
-<span class="co">#&gt; [25] bookdown_0.22                 sass_0.4.0                   </span>
-<span class="co">#&gt; [27] readr_2.0.0                   rappdirs_0.3.3               </span>
-<span class="co">#&gt; [29] pkgdown_1.6.1                 Rsamtools_2.8.0              </span>
-<span class="co">#&gt; [31] systemfonts_1.0.2             stringr_1.4.0                </span>
-<span class="co">#&gt; [33] digest_0.6.27                 rmarkdown_2.10               </span>
-<span class="co">#&gt; [35] GEOquery_2.60.0               XVector_0.32.0               </span>
-<span class="co">#&gt; [37] pkgconfig_2.0.3               htmltools_0.5.1.1            </span>
-<span class="co">#&gt; [39] highr_0.9                     limma_3.48.3                 </span>
-<span class="co">#&gt; [41] fastmap_1.1.0                 rlang_0.4.11                 </span>
-<span class="co">#&gt; [43] RSQLite_2.2.7                 shiny_1.6.0                  </span>
-<span class="co">#&gt; [45] BiocIO_1.2.0                  jquerylib_0.1.4              </span>
-<span class="co">#&gt; [47] generics_0.1.0                jsonlite_1.7.2               </span>
-<span class="co">#&gt; [49] BiocParallel_1.26.2           vroom_1.5.4                  </span>
-<span class="co">#&gt; [51] dplyr_1.0.7                   RCurl_1.98-1.3               </span>
-<span class="co">#&gt; [53] magrittr_2.0.1                GenomeInfoDbData_1.2.6       </span>
-<span class="co">#&gt; [55] Matrix_1.3-3                  Rcpp_1.0.7                   </span>
-<span class="co">#&gt; [57] fansi_0.5.0                   lifecycle_1.0.0              </span>
-<span class="co">#&gt; [59] stringi_1.7.3                 yaml_2.2.1                   </span>
-<span class="co">#&gt; [61] zlibbioc_1.38.0               grid_4.1.0                   </span>
-<span class="co">#&gt; [63] blob_1.2.2                    promises_1.2.0.1             </span>
-<span class="co">#&gt; [65] ExperimentHub_2.0.0           crayon_1.4.1                 </span>
-<span class="co">#&gt; [67] lattice_0.20-44               Biostrings_2.60.2            </span>
-<span class="co">#&gt; [69] hms_1.1.0                     KEGGREST_1.32.0              </span>
-<span class="co">#&gt; [71] knitr_1.33                    pillar_1.6.2                 </span>
-<span class="co">#&gt; [73] rjson_0.2.20                  biomaRt_2.48.3               </span>
-<span class="co">#&gt; [75] XML_3.99-0.6                  glue_1.4.2                   </span>
-<span class="co">#&gt; [77] BiocVersion_3.13.1            evaluate_0.14                </span>
-<span class="co">#&gt; [79] BiocManager_1.30.16           png_0.1-7                    </span>
-<span class="co">#&gt; [81] vctrs_0.3.8                   tzdb_0.1.2                   </span>
-<span class="co">#&gt; [83] httpuv_1.6.1                  purrr_0.3.4                  </span>
-<span class="co">#&gt; [85] tidyr_1.1.3                   assertthat_0.2.1             </span>
-<span class="co">#&gt; [87] cachem_1.0.5                  xfun_0.25                    </span>
-<span class="co">#&gt; [89] mime_0.11                     xtable_1.8-4                 </span>
-<span class="co">#&gt; [91] restfulr_0.0.13               later_1.2.0                  </span>
-<span class="co">#&gt; [93] ragg_1.1.3                    tibble_3.1.3                 </span>
-<span class="co">#&gt; [95] GenomicAlignments_1.28.0      memoise_2.0.0                </span>
-<span class="co">#&gt; [97] ellipsis_0.3.2                interactiveDisplayBase_1.30.0</span></code></pre></div>
+<span class="co">#&gt;  [3] bit64_4.0.5                   filelock_1.0.2               </span>
+<span class="co">#&gt;  [5] httr_1.4.2                    rprojroot_2.0.2              </span>
+<span class="co">#&gt;  [7] tools_4.1.0                   bslib_0.2.5.1                </span>
+<span class="co">#&gt;  [9] utf8_1.2.2                    R6_2.5.0                     </span>
+<span class="co">#&gt; [11] DBI_1.1.1                     withr_2.4.2                  </span>
+<span class="co">#&gt; [13] tidyselect_1.1.1              bit_4.0.4                    </span>
+<span class="co">#&gt; [15] curl_4.3.2                    compiler_4.1.0               </span>
+<span class="co">#&gt; [17] cli_3.0.1                     textshaping_0.3.5            </span>
+<span class="co">#&gt; [19] xml2_1.3.2                    desc_1.3.0                   </span>
+<span class="co">#&gt; [21] DelayedArray_0.18.0           bookdown_0.22                </span>
+<span class="co">#&gt; [23] sass_0.4.0                    readr_2.0.0                  </span>
+<span class="co">#&gt; [25] rappdirs_0.3.3                pkgdown_1.6.1                </span>
+<span class="co">#&gt; [27] systemfonts_1.0.2             stringr_1.4.0                </span>
+<span class="co">#&gt; [29] digest_0.6.27                 rmarkdown_2.10               </span>
+<span class="co">#&gt; [31] GEOquery_2.60.0               XVector_0.32.0               </span>
+<span class="co">#&gt; [33] pkgconfig_2.0.3               htmltools_0.5.1.1            </span>
+<span class="co">#&gt; [35] highr_0.9                     limma_3.48.3                 </span>
+<span class="co">#&gt; [37] fastmap_1.1.0                 rlang_0.4.11                 </span>
+<span class="co">#&gt; [39] RSQLite_2.2.7                 shiny_1.6.0                  </span>
+<span class="co">#&gt; [41] jquerylib_0.1.4               generics_0.1.0               </span>
+<span class="co">#&gt; [43] jsonlite_1.7.2                vroom_1.5.4                  </span>
+<span class="co">#&gt; [45] dplyr_1.0.7                   RCurl_1.98-1.3               </span>
+<span class="co">#&gt; [47] magrittr_2.0.1                GenomeInfoDbData_1.2.6       </span>
+<span class="co">#&gt; [49] Matrix_1.3-3                  Rcpp_1.0.7                   </span>
+<span class="co">#&gt; [51] fansi_0.5.0                   lifecycle_1.0.0              </span>
+<span class="co">#&gt; [53] stringi_1.7.3                 yaml_2.2.1                   </span>
+<span class="co">#&gt; [55] zlibbioc_1.38.0               grid_4.1.0                   </span>
+<span class="co">#&gt; [57] blob_1.2.2                    promises_1.2.0.1             </span>
+<span class="co">#&gt; [59] ExperimentHub_2.0.0           crayon_1.4.1                 </span>
+<span class="co">#&gt; [61] lattice_0.20-44               Biostrings_2.60.2            </span>
+<span class="co">#&gt; [63] hms_1.1.0                     KEGGREST_1.32.0              </span>
+<span class="co">#&gt; [65] knitr_1.33                    pillar_1.6.2                 </span>
+<span class="co">#&gt; [67] glue_1.4.2                    BiocVersion_3.13.1           </span>
+<span class="co">#&gt; [69] evaluate_0.14                 BiocManager_1.30.16          </span>
+<span class="co">#&gt; [71] png_0.1-7                     vctrs_0.3.8                  </span>
+<span class="co">#&gt; [73] tzdb_0.1.2                    httpuv_1.6.1                 </span>
+<span class="co">#&gt; [75] purrr_0.3.4                   tidyr_1.1.3                  </span>
+<span class="co">#&gt; [77] assertthat_0.2.1              cachem_1.0.5                 </span>
+<span class="co">#&gt; [79] xfun_0.25                     mime_0.11                    </span>
+<span class="co">#&gt; [81] xtable_1.8-4                  later_1.2.0                  </span>
+<span class="co">#&gt; [83] ragg_1.1.3                    tibble_3.1.3                 </span>
+<span class="co">#&gt; [85] memoise_2.0.0                 ellipsis_0.3.2               </span>
+<span class="co">#&gt; [87] interactiveDisplayBase_1.30.0</span></code></pre></div>
 </div>
   </div>
 
