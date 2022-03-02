@@ -71,9 +71,13 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
         ppi.file <- .cacheResource2(rname, ppi.file)
     }
     
-    bioplex <- read.delim(ppi.file,
-                          colClasses = c(GeneA = "character",
-                                         GeneB = "character"))
+    bioplex <- read.delim(ppi.file)
+    colnames(bioplex) <- c("GeneA", "GeneB",
+                           "UniprotA", "UniprotB",
+                           "SymbolA", "SymbolB",
+                           "pW", "pNI", "pInt")
+    bioplex$GeneA <- as.character(bioplex$GeneA)
+    bioplex$GeneB <- as.character(bioplex$GeneA)
     
     # remap gene ids
     if(remap.uniprot.ids) bioplex <- .remapUniprotIdsBP(bioplex)
@@ -136,8 +140,8 @@ bioplex2graph <- function(bioplex.df)
 #' 
 #' # (3) Obtain orgdb package from AnnotationHub
 #' ah <- AnnotationHub::AnnotationHub()
-#' ah <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-#' orgdb <- ah[[1]]
+#' orgdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+#' orgdb <- orgdb[[1]]
 #' 
 #' # (4) Annotate PFAM domains
 #' bp.gr <- annotatePFAM(bp.gr, orgdb)
@@ -281,8 +285,8 @@ mapSummarizedExperimentOntoGraph <- function(gr, se,
     
     suppressMessages({
       ah <- AnnotationHub::AnnotationHub()
-      ah <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
-      orgdb <- ah[[1]]
+      orgdb <- AnnotationHub::query(ah, c("orgDb", "Homo sapiens"))
+      orgdb <- orgdb[[1]]
     })
     
     suppressMessages({
