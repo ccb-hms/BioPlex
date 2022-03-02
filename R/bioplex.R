@@ -71,9 +71,13 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
         ppi.file <- .cacheResource2(rname, ppi.file)
     }
     
-    bioplex <- read.delim(ppi.file,
-                          colClasses = c(GeneA = "character",
-                                         GeneB = "character"))
+    bioplex <- read.delim(ppi.file)
+    colnames(bioplex) <- c("GeneA", "GeneB",
+                           "UniprotA", "UniprotB",
+                           "SymbolA", "SymbolB",
+                           "pW", "pNI", "pInt")
+    bioplex$GeneA <- as.character(bioplex$GeneA)
+    bioplex$GeneB <- as.character(bioplex$GeneA)
     
     # remap gene ids
     if(remap.uniprot.ids) bioplex <- .remapUniprotIdsBP(bioplex)
