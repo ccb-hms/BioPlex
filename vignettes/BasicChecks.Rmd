@@ -21,10 +21,6 @@ knitr::opts_chunk$set(
     comment = "#>",
     crop = NULL ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
 )
-
-cache.dir <- tools::R_user_dir("BioPlex", which = "cache")
-bfc <- BiocFileCache::BiocFileCache(cache.dir)
-for(b in BiocFileCache::bfcinfo(bfc)$rid) BiocFileCache::bfcremove(bfc, b)
 ```
 
 # Setup
