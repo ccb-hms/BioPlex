@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
       </span>
     </div>
 
@@ -203,6 +203,7 @@ networks</a> include:</p>
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:19</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1    100    100   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
@@ -230,6 +231,7 @@ interacting partner (<code>pInt</code>) as determined using the <a href="https:/
 network:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:56</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
 <span class="co">#&gt;   GeneA GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1 88455 88455   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
@@ -258,7 +260,7 @@ the time of publication of the BioPlex 3.0 networks.</p>
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-06-02 23:00:05</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:19</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="data-structures-for-bioplex-ppis">Data structures for BioPlex PPIs<a class="anchor" aria-label="anchor" href="#data-structures-for-bioplex-ppis"></a>
@@ -458,6 +460,7 @@ annotations to the node metadata:</p>
 <p>Obtain the complete set of human protein complexes from <a href="http://mips.helmholtz-muenchen.de/corum/#download" class="external-link">CORUM</a>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:42:13</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2916   20</span>
 <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
@@ -487,11 +490,13 @@ annotations to the node metadata:</p>
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:13</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:42:14</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span>
 <span class="co">#&gt; [1] 44 20</span></code></pre></div>
 <div class="section level4">
@@ -504,7 +509,7 @@ UNIPROT-to-ENTREZID) might not be fully up-to-date.</p>
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-06-02 23:15:43</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:13</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="data-structures-for-corum-complexes">Data structures for CORUM complexes<a class="anchor" aria-label="anchor" href="#data-structures-for-corum-complexes"></a>
@@ -626,6 +631,7 @@ model (HMM) to sequencing-inferred copy numbers in 2kbp windows. More
 details on how copy numbers were calculated can be obtained from the <a href="https://doi.org/10.1038/ncomms5767" class="external-link">primary publication</a>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:38</span>
 <span class="va">cnv.hmm</span>
 <span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
 <span class="co">#&gt;           seqnames              ranges strand |     score</span>
@@ -657,6 +663,7 @@ details on how copy numbers were calculated can be obtained from the <a href="ht
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425" class="external-link">GSE122425</a>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:30</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -994,6 +1001,7 @@ expression data comparing 293T and HCT116 cells based on tandem mass tag
 analysis.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2022-06-02 23:41:48</span>
 <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
 <span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
@@ -1084,7 +1092,7 @@ or <code><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html
 <span class="co">#&gt;  [3] AnnotationDbi_1.58.0        graph_1.74.0               </span>
 <span class="co">#&gt;  [5] ExperimentHub_2.4.0         AnnotationHub_3.4.0        </span>
 <span class="co">#&gt;  [7] BiocFileCache_2.4.0         dbplyr_2.1.1               </span>
-<span class="co">#&gt;  [9] BioPlex_1.2.2               SummarizedExperiment_1.26.1</span>
+<span class="co">#&gt;  [9] BioPlex_1.3.1               SummarizedExperiment_1.26.1</span>
 <span class="co">#&gt; [11] Biobase_2.56.0              GenomicRanges_1.48.0       </span>
 <span class="co">#&gt; [13] GenomeInfoDb_1.32.2         IRanges_2.30.0             </span>
 <span class="co">#&gt; [15] S4Vectors_0.34.0            BiocGenerics_0.42.0        </span>
@@ -1092,50 +1100,44 @@ or <code><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html
 <span class="co">#&gt; [19] BiocStyle_2.24.0           </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] bitops_1.0-7                  fs_1.5.2                     </span>
-<span class="co">#&gt;  [3] bit64_4.0.5                   filelock_1.0.2               </span>
-<span class="co">#&gt;  [5] httr_1.4.3                    rprojroot_2.0.3              </span>
-<span class="co">#&gt;  [7] tools_4.2.0                   bslib_0.3.1                  </span>
-<span class="co">#&gt;  [9] utf8_1.2.2                    R6_2.5.1                     </span>
-<span class="co">#&gt; [11] DBI_1.1.2                     withr_2.5.0                  </span>
-<span class="co">#&gt; [13] tidyselect_1.1.2              bit_4.0.4                    </span>
-<span class="co">#&gt; [15] curl_4.3.2                    compiler_4.2.0               </span>
-<span class="co">#&gt; [17] textshaping_0.3.6             cli_3.3.0                    </span>
-<span class="co">#&gt; [19] xml2_1.3.3                    desc_1.4.1                   </span>
-<span class="co">#&gt; [21] DelayedArray_0.22.0           bookdown_0.26                </span>
-<span class="co">#&gt; [23] sass_0.4.1                    readr_2.1.2                  </span>
-<span class="co">#&gt; [25] rappdirs_0.3.3                pkgdown_2.0.3                </span>
-<span class="co">#&gt; [27] systemfonts_1.0.4             stringr_1.4.0                </span>
-<span class="co">#&gt; [29] digest_0.6.29                 R.utils_2.11.0               </span>
-<span class="co">#&gt; [31] rmarkdown_2.14                GEOquery_2.64.2              </span>
-<span class="co">#&gt; [33] XVector_0.36.0                pkgconfig_2.0.3              </span>
-<span class="co">#&gt; [35] htmltools_0.5.2               limma_3.52.1                 </span>
-<span class="co">#&gt; [37] fastmap_1.1.0                 rlang_1.0.2                  </span>
-<span class="co">#&gt; [39] RSQLite_2.2.14                shiny_1.7.1                  </span>
-<span class="co">#&gt; [41] jquerylib_0.1.4               generics_0.1.2               </span>
-<span class="co">#&gt; [43] jsonlite_1.8.0                R.oo_1.24.0                  </span>
-<span class="co">#&gt; [45] RCurl_1.98-1.6                magrittr_2.0.3               </span>
-<span class="co">#&gt; [47] GenomeInfoDbData_1.2.8        Matrix_1.4-1                 </span>
-<span class="co">#&gt; [49] Rcpp_1.0.8.3                  fansi_1.0.3                  </span>
-<span class="co">#&gt; [51] R.methodsS3_1.8.1             lifecycle_1.0.1              </span>
-<span class="co">#&gt; [53] stringi_1.7.6                 yaml_2.3.5                   </span>
-<span class="co">#&gt; [55] zlibbioc_1.42.0               grid_4.2.0                   </span>
-<span class="co">#&gt; [57] blob_1.2.3                    promises_1.2.0.1             </span>
-<span class="co">#&gt; [59] crayon_1.5.1                  lattice_0.20-45              </span>
-<span class="co">#&gt; [61] Biostrings_2.64.0             hms_1.1.1                    </span>
-<span class="co">#&gt; [63] KEGGREST_1.36.0               knitr_1.39                   </span>
-<span class="co">#&gt; [65] pillar_1.7.0                  glue_1.6.2                   </span>
-<span class="co">#&gt; [67] BiocVersion_3.15.2            evaluate_0.15                </span>
-<span class="co">#&gt; [69] data.table_1.14.2             BiocManager_1.30.18          </span>
-<span class="co">#&gt; [71] tzdb_0.3.0                    vctrs_0.4.1                  </span>
-<span class="co">#&gt; [73] png_0.1-7                     httpuv_1.6.5                 </span>
-<span class="co">#&gt; [75] tidyr_1.2.0                   purrr_0.3.4                  </span>
-<span class="co">#&gt; [77] assertthat_0.2.1              cachem_1.0.6                 </span>
-<span class="co">#&gt; [79] xfun_0.31                     mime_0.12                    </span>
-<span class="co">#&gt; [81] xtable_1.8-4                  later_1.3.0                  </span>
-<span class="co">#&gt; [83] ragg_1.2.2                    tibble_3.1.7                 </span>
-<span class="co">#&gt; [85] memoise_2.0.1                 ellipsis_0.3.2               </span>
-<span class="co">#&gt; [87] interactiveDisplayBase_1.34.0</span></code></pre></div>
+<span class="co">#&gt;  [1] httr_1.4.3                    sass_0.4.1                   </span>
+<span class="co">#&gt;  [3] bit64_4.0.5                   jsonlite_1.8.0               </span>
+<span class="co">#&gt;  [5] bslib_0.3.1                   shiny_1.7.1                  </span>
+<span class="co">#&gt;  [7] assertthat_0.2.1              interactiveDisplayBase_1.34.0</span>
+<span class="co">#&gt;  [9] BiocManager_1.30.18           blob_1.2.3                   </span>
+<span class="co">#&gt; [11] GenomeInfoDbData_1.2.8        yaml_2.3.5                   </span>
+<span class="co">#&gt; [13] BiocVersion_3.15.2            pillar_1.7.0                 </span>
+<span class="co">#&gt; [15] RSQLite_2.2.14                lattice_0.20-45              </span>
+<span class="co">#&gt; [17] glue_1.6.2                    digest_0.6.29                </span>
+<span class="co">#&gt; [19] promises_1.2.0.1              XVector_0.36.0               </span>
+<span class="co">#&gt; [21] httpuv_1.6.5                  htmltools_0.5.2              </span>
+<span class="co">#&gt; [23] Matrix_1.4-1                  pkgconfig_2.0.3              </span>
+<span class="co">#&gt; [25] bookdown_0.26                 zlibbioc_1.42.0              </span>
+<span class="co">#&gt; [27] xtable_1.8-4                  purrr_0.3.4                  </span>
+<span class="co">#&gt; [29] later_1.3.0                   tibble_3.1.7                 </span>
+<span class="co">#&gt; [31] KEGGREST_1.36.0               generics_0.1.2               </span>
+<span class="co">#&gt; [33] ellipsis_0.3.2                withr_2.5.0                  </span>
+<span class="co">#&gt; [35] cachem_1.0.6                  cli_3.3.0                    </span>
+<span class="co">#&gt; [37] mime_0.12                     magrittr_2.0.3               </span>
+<span class="co">#&gt; [39] crayon_1.5.1                  memoise_2.0.1                </span>
+<span class="co">#&gt; [41] evaluate_0.15                 fs_1.5.2                     </span>
+<span class="co">#&gt; [43] fansi_1.0.3                   textshaping_0.3.6            </span>
+<span class="co">#&gt; [45] tools_4.2.0                   lifecycle_1.0.1              </span>
+<span class="co">#&gt; [47] stringr_1.4.0                 DelayedArray_0.22.0          </span>
+<span class="co">#&gt; [49] Biostrings_2.64.0             compiler_4.2.0               </span>
+<span class="co">#&gt; [51] pkgdown_2.0.3                 jquerylib_0.1.4              </span>
+<span class="co">#&gt; [53] systemfonts_1.0.4             rlang_1.0.2                  </span>
+<span class="co">#&gt; [55] grid_4.2.0                    RCurl_1.98-1.6               </span>
+<span class="co">#&gt; [57] rappdirs_0.3.3                bitops_1.0-7                 </span>
+<span class="co">#&gt; [59] rmarkdown_2.14                DBI_1.1.2                    </span>
+<span class="co">#&gt; [61] curl_4.3.2                    R6_2.5.1                     </span>
+<span class="co">#&gt; [63] knitr_1.39                    fastmap_1.1.0                </span>
+<span class="co">#&gt; [65] bit_4.0.4                     utf8_1.2.2                   </span>
+<span class="co">#&gt; [67] filelock_1.0.2                rprojroot_2.0.3              </span>
+<span class="co">#&gt; [69] ragg_1.2.2                    desc_1.4.1                   </span>
+<span class="co">#&gt; [71] stringi_1.7.6                 Rcpp_1.0.8.3                 </span>
+<span class="co">#&gt; [73] png_0.1-7                     vctrs_0.4.1                  </span>
+<span class="co">#&gt; [75] tidyselect_1.1.2              xfun_0.31</span></code></pre></div>
 </div>
   </div>
 
