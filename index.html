@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.2</span>
       </span>
     </div>
 
@@ -53,7 +55,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ccb-hms/BioPlex">
+  <a href="https://github.com/ccb-hms/BioPlex" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
@@ -70,75 +72,86 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="bioplex" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#bioplex" class="anchor"></a>BioPlex</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="bioplex">BioPlex<a class="anchor" aria-label="anchor" href="#bioplex"></a>
+</h1></div>
 <p>R-side access to PPI data from Gygi lab</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>Make sure to have the latest release version of <a href="https://cran.r-project.org/">R</a> and <a href="https://bioconductor.org/install/">Bioconductor</a> installed.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Make sure to have the latest release version of <a href="https://cran.r-project.org/" class="external-link">R</a> and <a href="https://bioconductor.org/install/" class="external-link">Bioconductor</a> installed.</p>
 <p>Then proceed from within R via:</p>
-<pre><code><a href="https://rdrr.io/pkg/BiocManager/man/install.html">BiocManager::install("ccb-hms/BioPlex") </a></code></pre>
+<pre><code><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"ccb-hms/BioPlex"</span><span class="op">)</span></code></pre>
 <p>NOTE: you will need the <code>remotes</code> package to install from github.</p>
 <p>To build the package vignettes upon installation use:</p>
-<pre><code><a href="https://rdrr.io/pkg/BiocManager/man/install.html">BiocManager::install("ccb-hms/BioPlex",
-                     build_vignettes = TRUE,
-                     dependencies = TRUE)</a></code></pre>
+<pre><code><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"ccb-hms/BioPlex"</span>,
+                     build_vignettes <span class="op">=</span> <span class="cn">TRUE</span>,
+                     dependencies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre>
 <p>Once you have the package installed, you can inspect the vignettes from within R via:</p>
-<pre><code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes("BioPlex")</a></code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/browseVignettes.html" class="external-link">browseVignettes</a></span><span class="op">(</span><span class="st">"BioPlex"</span><span class="op">)</span></code></pre>
 </div>
-<div id="cleaning-your-cache" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cleaning-your-cache" class="anchor"></a>Cleaning your cache</h2>
+<div class="section level2">
+<h2 id="cleaning-your-cache">Cleaning your cache<a class="anchor" aria-label="anchor" href="#cleaning-your-cache"></a>
+</h2>
 <p>Note that calling functions like <code>getCorum</code> or <code>getBioPlex</code> with argument <code>cache = FALSE</code> will automatically overwrite the corresponding object in your cache. It is thus typically not required for a user to interact with the cache.</p>
 <p>For more extended control of the cache, use from within R:</p>
-<pre><code>cache.dir &lt;- tools::R_user_dir("BioPlex", which = "cache") 
-bfc &lt;- BiocFileCache::BiocFileCache(cache.dir)</code></pre>
-<p>and then proceed as described in the <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache">BiocFileCache vignette, Section 1.10</a></p>
+<pre><code><span class="va">cache.dir</span> <span class="op">&lt;-</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">R_user_dir</a></span><span class="op">(</span><span class="st">"BioPlex"</span>, which <span class="op">=</span> <span class="st">"cache"</span><span class="op">)</span> 
+<span class="va">bfc</span> <span class="op">&lt;-</span> <span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html" class="external-link">BiocFileCache</a></span><span class="op">(</span><span class="va">cache.dir</span><span class="op">)</span></code></pre>
+<p>and then proceed as described in the <a href="https://www.bioconductor.org/packages/release/bioc/vignettes/BiocFileCache/inst/doc/BiocFileCache.html#cleaning-or-removing-cache" class="external-link">BiocFileCache vignette, Section 1.10</a></p>
 <p>either via <code>cleanbfc()</code> to clean or <code>removebfc()</code> to remove your cache.</p>
 <p>To do a hard reset (use with caution!):</p>
-<pre><code><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html">BiocFileCache::removebfc(bfc)</a></code></pre>
+<pre><code><span class="fu">BiocFileCache</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html" class="external-link">removebfc</a></span><span class="op">(</span><span class="va">bfc</span><span class="op">)</span></code></pre>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/BioPlex">https://​www.bioconductor.org/​packages/​BioPlex</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/ccb-hms/BioPlex/">https://​github.com/​ccb-hms/​BioPlex/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/ccb-hms/BioPlex/issues">https://​github.com/​ccb-hms/​BioPlex/​issues</a>
-</li>
+<li><a href="https://www.bioconductor.org/packages/BioPlex" class="external-link">View on Bioconductor</a></li>
+<li><a href="https://github.com/ccb-hms/BioPlex/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ccb-hms/BioPlex/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/Artistic-2.0">Artistic-2.0</a></li>
+<li><a href="https://www.r-project.org/Licenses/Artistic-2.0" class="external-link">Artistic-2.0</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing BioPlex</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Ludwig Geistlinger <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Robert Gentleman <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
+
+
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Ludwig Geistlinger, Robert Gentleman.</p>
+  <p></p>
+<p>Developed by Ludwig Geistlinger, Robert Gentleman.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
@@ -146,6 +159,8 @@ bfc &lt;- BiocFileCache::BiocFileCache(cache.dir)</code></pre>
 
   
 
+
+  
 
   </body>
 </html>
