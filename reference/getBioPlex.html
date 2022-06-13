@@ -21,7 +21,7 @@ See references."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
       </span>
     </div>
 
@@ -74,23 +74,32 @@ interaction data. Available networks include:</p><ul><li><p>BioPlex 293T cells (
 <dd><p>character. Valid options include:</p><ul><li><p><code>"293T"</code>: derivative of human embryonic kidney 293 cell line,</p></li>
 <li><p><code>"HCT116"</code>: human colon cancer cell line 116.</p></li>
 </ul><p>Defaults to <code>"293T"</code>.</p></dd>
+
+
 <dt>version</dt>
 <dd><p>character. Valid options include <code>"1.0"</code>, <code>"2.0"</code>,
 and <code>"3.0"</code> for 293T cells. For HCT116 cells, only <code>"1.0"</code> is
 available.
 Defaults to <code>"3.0"</code>.</p></dd>
+
+
 <dt>remap.uniprot.ids</dt>
 <dd><p>logical. Should the protein-to-gene mappings from BioPlex
 (i.e. UNIPROT-to-SYMBOL and UNIPROT-to-ENTREZID) be updated using Bioc annotation
 functionality?
 Defaults to <code>FALSE</code> which will then keep the mappings provided by BioPlex.</p></dd>
+
+
 <dt>cache</dt>
 <dd><p>logical. Should a locally cached version used if available?
 Defaults to <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>data.frame</code>.</p>
+    
+
+<p>A <code>data.frame</code>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -101,11 +110,11 @@ Defaults to <code>TRUE</code>.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># (1) Obtain the latest version of the 293T PPI network</span></span>
 <span class="r-in"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu">getBioPlex</span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-02 23:41:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-13 20:28:32</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># (2) Obtain the latest version of the HCT116 PPI network</span></span>
 <span class="r-in"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu">getBioPlex</span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-02 23:41:56</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-13 20:29:18</span>
 </code></pre></div>
     </div>
   </div>
@@ -120,7 +129,7 @@ Defaults to <code>TRUE</code>.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

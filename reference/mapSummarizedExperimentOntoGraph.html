@@ -19,7 +19,7 @@ graph object."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
       </span>
     </div>
 
@@ -70,39 +70,50 @@ a <code>SummarizedExperiment</code> onto a
     <h2>Arguments</h2>
     <dl><dt>gr</dt>
 <dd><p>an object of class <code>graph</code>.</p></dd>
+
+
 <dt>se</dt>
 <dd><p>an object of class <code>SummarizedExperiment</code>.</p></dd>
+
+
 <dt>col.names</dt>
 <dd><p>character. Column names of <code>se</code> for which assay
 data should be mapped onto the nodes of <code>gr</code>. Defaults to <code>NULL</code>
 which will then use all column names of <code>se</code>.</p></dd>
+
+
 <dt>rowdata.cols</dt>
 <dd><p>character. Column names of <code>rowData(se)</code> which
 should be mapped onto the nodes of <code>gr</code>. Defaults to <code>NULL</code>
 which will then use all column names of <code>rowData(se)</code>.</p></dd>
+
+
 <dt>prefix</dt>
 <dd><p>character. Informative prefix that should be pasted together
 with the selected <code>col.names</code> and <code>rowdata.cols</code> to allow easy
 identification of columns of interest when mapping from multiple experimental
 datasets.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <code>graph</code>.</p>
+    
+
+<p>An object of class <code>graph</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># (1) Obtain the latest version of the 293T PPI network ...</span></span>
 <span class="r-in"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-02 23:41:19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-13 20:28:32</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># (2) ... and turn into a graph</span></span>
 <span class="r-in"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="bioplex2graph.html">bioplex2graph</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># (3) Obtain the BioPlex3 proteome data ...</span></span>
 <span class="r-in"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-02 23:41:48</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-13 20:29:07</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># (4) ... and map onto the graph</span></span>
 <span class="r-in"><span class="va">bp.gr</span> <span class="op">&lt;-</span> <span class="fu">mapSummarizedExperimentOntoGraph</span><span class="op">(</span><span class="va">bp.gr</span>, <span class="va">se</span><span class="op">)</span></span>
@@ -120,7 +131,7 @@ datasets.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

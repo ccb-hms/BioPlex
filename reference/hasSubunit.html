@@ -18,7 +18,7 @@ CORUM protein complex data for a subunit of choice."><!-- mathjax --><script src
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
       </span>
     </div>
 
@@ -63,14 +63,21 @@ CORUM protein complex data for a subunit of choice.</p>
     <dl><dt>glist</dt>
 <dd><p>A <code>list</code> of <code>graph</code>s storing CORUM complexes.
 Typically obtained via <code><a href="corum2graphlist.html">corum2graphlist</a></code>.</p></dd>
+
+
 <dt>subunit</dt>
 <dd><p>character. A gene ID corresponding to the subunit of interest.</p></dd>
+
+
 <dt>id.type</dt>
 <dd><p>character. Gene ID type of the given subunit. Defaults to <code>"SYMBOL"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A logical vector indicating which graphs have a node with the given
+    
+
+<p>A logical vector indicating which graphs have a node with the given
 subunit.</p>
     </div>
 
@@ -78,7 +85,7 @@ subunit.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># (1) Obtain the core set of CORUM complexes ...</span></span>
 <span class="r-in"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-02 23:41:13</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-13 20:28:26</span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># (2) ... turn into a list of graphs ...</span></span>
 <span class="r-in"><span class="va">core.glist</span> <span class="op">&lt;-</span> <span class="fu"><a href="corum2graphlist.html">corum2graphlist</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span></span>
@@ -99,7 +106,7 @@ subunit.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

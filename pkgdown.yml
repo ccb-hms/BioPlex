@@ -1,10 +1,10 @@
 pandoc: 2.17.1.1
-pkgdown: 2.0.3
+pkgdown: 2.0.4
 pkgdown_sha: ~
 articles:
   BasicChecks: BasicChecks.html
   BioPlex: BioPlex.html
-last_built: 2022-06-02T23:48Z
+last_built: 2022-06-13T20:36Z
 urls:
   reference: https://ccb-hms.github.io/BioPlex/reference
   article: https://ccb-hms.github.io/BioPlex/articles

@@ -20,7 +20,7 @@ See references."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.3</span>
       </span>
     </div>
 
@@ -73,17 +73,24 @@ See references.</p>
 a hidden Markov model (HMM) algorithm,</p></li>
 <li><p><code>"cnvsnp"</code>: CNV regions as inferred from Illumina SNP arrays</p></li>
 </ul><p>Defaults to <code>"cnvhmm"</code>.</p></dd>
+
+
 <dt>cell.line</dt>
 <dd><p>character. Valid options include:</p><ul><li><p><code>"293T"</code>: highly-transfective derivative of human embryonic kidney
 293 cell line,</p></li>
 </ul><p>Defaults to <code>"293T"</code>.</p></dd>
+
+
 <dt>cache</dt>
 <dd><p>logical. Should a locally cached version used if available?
 Defaults to <code>TRUE</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>GRanges</code> object storing genomic coordinates and genomic scores
+    
+
+<p>A <code>GRanges</code> object storing genomic coordinates and genomic scores
 of regions of interest.</p>
     </div>
     <div id="references">
@@ -94,7 +101,7 @@ of regions of interest.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in">   <span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu">getHEK293GenomeTrack</span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-02 23:41:38</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached version from 2022-06-13 20:28:55</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>
@@ -110,7 +117,7 @@ of regions of interest.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
