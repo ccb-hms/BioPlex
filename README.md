@@ -3,6 +3,19 @@ R-side access to PPI data from Gygi lab
 
 ## Installation
 
+### Installation from Bioconductor
+
+Users interested in using the stable release version of the `BioPlex` 
+package: please follow the installation instructions
+[here](https://bioconductor.org/packages/BioPlex). 
+This is the recommended way of installing the package.
+
+### Installation from Gitub
+
+It is also possible to install the package directly from GitHub. This is 
+for users/developers interested in using the latest development version of the
+`BioPlex` package. 
+
 Make sure to have the latest release version of 
 [R](https://cran.r-project.org/) and 
 [Bioconductor](https://bioconductor.org/install/) installed.
