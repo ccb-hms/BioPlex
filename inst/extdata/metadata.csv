@@ -1,0 +1,2 @@
+Title,Description,BiocVersion,Genome,SourceType,SourceUrl,SourceVersion,Species,TaxonomyId,Coordinate_1_based,DataProvider,Maintainer,RDataClass,DispatchClass,RDataPath,Tags
+HEK293T_HCT116_exon_counts,Exon count matrix,3.16,hg38,Zip,https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52429,15-May-19,Homo sapiens,9606,NA,University of Southern California,Ludwig Geistlinger <ludwig_geistlinger@hms.harvard.edu>,DEXSeqDataSet,Rds,BioPlex/dexseq.rds,BioPlex
