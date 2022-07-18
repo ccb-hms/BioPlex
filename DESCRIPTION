@@ -38,6 +38,7 @@ Suggests:
     AnnotationDbi,
     AnnotationHub,
     BiocStyle,
+    DEXSeq,
     ExperimentHub,
     GenomicFeatures,
     S4Vectors,

@@ -324,13 +324,44 @@ See also the [Transcriptome-Proteome analysis vignette](https://ccb-hms.github.i
 for further exploration of differential transcript and
 protein expression between 293T and HCT116 cells. 
 
+## Splicing data
+
+For the inference of differential exon usage between cell lines, raw RNA-seq read
+counts on exon level can be obtained from
+[ExperimentHub](https://bioconductor.org/packages/ExperimentHub).   
+
+RNA-seq data for 293T cells was obtained from GEO accession
+[GSE122633](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122633) and
+RNA-seq data for HCT116 cells was obtained from GEO accession
+[GSE52429](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52429). 
+
+The data can be obtained as a `DEXSeqDataSet` which is a
+`SummarizedExperiment`-derivative and can be accessed and manipulated very much
+like a `DESeqDataSet`.
+
+```{r splice, message = FALSE}
+AnnotationHub::query(eh, c("BioPlex"))
+dex <- eh[["EH7563"]]
+dex
+```
+
+We take a closer look at the sample annotation, the counts for each exon for
+both cell lines, and the genomic coordinates and additional annotation for each
+exon.
+
+```{r}
+DEXSeq::sampleAnnotation(dex)
+head(DEXSeq::featureCounts(dex))
+rowRanges(dex)
+```
+
 ## Proteome data
 
 ### CCLE
 
 Pull the [CCLE proteome data](https://doi.org/10.1016/j.cell.2019.12.023) from ExperimentHub. The dataset profiles 12,755 proteins by mass spectrometry across 375 cancer cell lines.
 
-```{r ccle-proteom}
+```{r ccle-proteom, message = FALSE}
 AnnotationHub::query(eh, c("gygi", "depmap"))
 ccle.prot <- eh[["EH3459"]]
 ccle.prot <- as.data.frame(ccle.prot)
