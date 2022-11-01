@@ -1,6 +1,6 @@
 Package: BioPlex
 Title: R-side access to BioPlex protein-protein interaction data
-Version: 1.4.0
+Version: 1.5.0
 Authors@R: 
     c(person("Ludwig", "Geistlinger",
              role = c("aut", "cre"),
