@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.0</span>
       </span>
     </div>
 
@@ -203,7 +203,7 @@ networks</a> include:</p>
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:24:00</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:28:45</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1    100    100   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
@@ -231,7 +231,7 @@ interacting partner (<code>pInt</code>) as determined using the <a href="https:/
 network:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:24:46</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:29:39</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
 <span class="co">#&gt;   GeneA GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1 88455 88455   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
@@ -260,7 +260,7 @@ the time of publication of the BioPlex 3.0 networks.</p>
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:24:00</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:28:45</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="data-structures-for-bioplex-ppis">Data structures for BioPlex PPIs<a class="anchor" aria-label="anchor" href="#data-structures-for-bioplex-ppis"></a>
@@ -460,7 +460,7 @@ annotations to the node metadata:</p>
 <p>Obtain the complete set of human protein complexes from <a href="http://mips.helmholtz-muenchen.de/corum/#download" class="external-link">CORUM</a>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:25:04</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:30:00</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2916   20</span>
 <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
@@ -490,13 +490,13 @@ annotations to the node metadata:</p>
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:23:54</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:28:37</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:25:06</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:30:02</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span>
 <span class="co">#&gt; [1] 44 20</span></code></pre></div>
 <div class="section level4">
@@ -509,7 +509,7 @@ UNIPROT-to-ENTREZID) might not be fully up-to-date.</p>
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:23:54</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:28:37</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="data-structures-for-corum-complexes">Data structures for CORUM complexes<a class="anchor" aria-label="anchor" href="#data-structures-for-corum-complexes"></a>
@@ -631,7 +631,7 @@ model (HMM) to sequencing-inferred copy numbers in 2kbp windows. More
 details on how copy numbers were calculated can be obtained from the <a href="https://doi.org/10.1038/ncomms5767" class="external-link">primary publication</a>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:24:23</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:29:10</span>
 <span class="va">cnv.hmm</span>
 <span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
 <span class="co">#&gt;           seqnames              ranges strand |     score</span>
@@ -663,7 +663,7 @@ details on how copy numbers were calculated can be obtained from the <a href="ht
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425" class="external-link">GSE122425</a>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:24:12</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:28:59</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -1125,7 +1125,7 @@ expression data comparing 293T and HCT116 cells based on tandem mass tag
 analysis.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2022-11-08 21:24:36</span>
+<span class="co">#&gt; Using cached version from 2022-11-08 21:29:25</span>
 <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
 <span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
@@ -1218,7 +1218,7 @@ or <code><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html
 <span class="co">#&gt;  [7] AnnotationDbi_1.60.0        graph_1.76.0               </span>
 <span class="co">#&gt;  [9] ExperimentHub_2.6.0         AnnotationHub_3.6.0        </span>
 <span class="co">#&gt; [11] BiocFileCache_2.6.0         dbplyr_2.2.0               </span>
-<span class="co">#&gt; [13] BioPlex_1.5.0               SummarizedExperiment_1.28.0</span>
+<span class="co">#&gt; [13] BioPlex_1.4.0               SummarizedExperiment_1.28.0</span>
 <span class="co">#&gt; [15] Biobase_2.58.0              GenomicRanges_1.50.1       </span>
 <span class="co">#&gt; [17] GenomeInfoDb_1.34.2         IRanges_2.32.0             </span>
 <span class="co">#&gt; [19] S4Vectors_0.36.0            BiocGenerics_0.44.0        </span>
