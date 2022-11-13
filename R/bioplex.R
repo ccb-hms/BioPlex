@@ -43,6 +43,7 @@
 getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        version = c("3.0", "1.0", "2.0"),
                        remap.uniprot.ids = FALSE,
+                       directed = FALSE,
                        cache = TRUE)
 {
     bioplex.url <- "https://bioplex.hms.harvard.edu/data/BioPlex_"
@@ -54,8 +55,9 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     if(cell.line == "HCT116") version <- "1.0"
     
     clver <- paste(cell.line, version, sep = ".")
-    rname <- paste("bioplex", clver, sep = ".")
-    
+    if(directed) paste0(clver, "d")
+    rname <- paste("bioplex", clver, sep = ".")   
+ 
     # should a cache version be used?
     if(cache) ppi.file <- .getResourceFromCache2(rname)
     if(!cache || is.null(ppi.file))        
@@ -65,7 +67,8 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
                            `293T.1.0` = "interactionList_v2",
                            `293T.2.0` = "interactionList_v4a",
                            `293T.3.0` = "293T_Network_10K_Dec_2019",
-                           `HCT116.1.0` = "HCT116_Network_5.5K_Dec_2019")
+                           `HCT116.1.0` = "HCT116_Network_5.5K_Dec_2019",
+                           `293T.1.0d` = "1.0_293T_" )
         file.ext <- paste(file.ext, "tsv", sep = ".")
         ppi.file <- paste0(bioplex.url, file.ext)
         ppi.file <- .cacheResource2(rname, ppi.file)
@@ -77,7 +80,7 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
                            "SymbolA", "SymbolB",
                            "pW", "pNI", "pInt")
     bioplex$GeneA <- as.character(bioplex$GeneA)
-    bioplex$GeneB <- as.character(bioplex$GeneA)
+    bioplex$GeneB <- as.character(bioplex$GeneB)
     
     # remap gene ids
     if(remap.uniprot.ids) bioplex <- .remapUniprotIdsBP(bioplex)
