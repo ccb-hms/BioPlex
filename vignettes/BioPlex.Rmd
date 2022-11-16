@@ -160,11 +160,6 @@ head(graph::nodeData(bp.gr))
 head(graph::edgeData(bp.gr))
 ```
 
-When starting off with ordinary dfs we'll be losing the ability
-to annotate graph-level annotation such as cell line, version, PMID, ...
-We might need to work with `DataFrame`s where we have `mcols` and `metadata`.
-
-
 ### PFAM domains
 
 We can easily add [PFAM](http://pfam.xfam.org) domain annotations to the node metadata:
@@ -221,10 +216,6 @@ core.list <- corum2list(core, subunit.id.type = "UNIPROT")
 head(core.list)
 length(core.list)
 ```
-
-If we'd like to add metadata in a more structured form to each complex,
-a suitable option is a 
-[GeneSetCollection](https://bioconductor.org/packages/GSEABase).
 
 We can also represent the CORUM complexes as a list of graph instances,
 where all nodes of a complex are connected to all other nodes of that complex

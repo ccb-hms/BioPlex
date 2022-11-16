@@ -43,7 +43,6 @@
 getBioPlex <- function(cell.line = c("293T", "HCT116"),
                        version = c("3.0", "1.0", "2.0"),
                        remap.uniprot.ids = FALSE,
-                       directed = FALSE,
                        cache = TRUE)
 {
     bioplex.url <- "https://bioplex.hms.harvard.edu/data/BioPlex_"
@@ -55,7 +54,6 @@ getBioPlex <- function(cell.line = c("293T", "HCT116"),
     if(cell.line == "HCT116") version <- "1.0"
     
     clver <- paste(cell.line, version, sep = ".")
-    if(directed) paste0(clver, "d")
     rname <- paste("bioplex", clver, sep = ".")   
  
     # should a cache version be used?
