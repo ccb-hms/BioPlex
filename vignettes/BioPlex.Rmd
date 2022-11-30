@@ -44,7 +44,7 @@ For more information, please see:
 * Huttlin et al. [Architecture of the human interactome defines protein communities and disease networks](https://doi.org/10.1038/nature22366), *Nature*, 2017.
 * Huttlin et al. [Dual proteome-scale networks reveal cell-specific remodeling of the human interactome](https://doi.org/10.1016/j.cell.2021.04.011), *Cell*, 2021.
 
-The [BioPlex R package](https://github.com/ccb-hms/BioPlex) 
+The [BioPlex R package](https://bioconductor.org/packages/BioPlex) 
 implements access to the BioPlex protein-protein interaction networks and 
 related resources from within R. 
 Besides protein-protein interaction networks for 293T and HCT116 cells,
@@ -256,6 +256,9 @@ cnv.hmm <- getHEK293GenomeTrack(track = "cnv.hmm", cell.line = "293T")
 cnv.hmm
 ```
 
+See also the [data checks vignette, Section 5](
+https://bioconductor.org/packages/release/data/experiment/vignettes/BioPlex/inst/doc/BasicChecks.html) for an exploration of the agreement between inferred copy numbers from both assay types (SNP arrays vs. sequencing).
+
 ## Transcriptome data
 
 ### HEK293T cells
@@ -275,6 +278,8 @@ rowData(se)
 ```
 
 The dataset includes three wild type samples and three NSUN2 knockout samples.
+
+See also the [data checks vignette, Section 7](https://bioconductor.org/packages/release/data/experiment/vignettes/BioPlex/inst/doc/BasicChecks.html) for an exploration of the relationship between expression level and the frequency of a protein being detected as prey. 
 
 ### HCT116 cells
 
@@ -399,6 +404,8 @@ rowData(bp.prot)
 The data contains 5 replicates each for 293T and for HCT116 cells.
 As a result of the data collection process, the data represent relative protein abundance 
 scaled to add up to 100% in each row.
+
+See also the [data checks vignette, Section 8](https://bioconductor.org/packages/release/data/experiment/vignettes/BioPlex/inst/doc/BasicChecks.html) for a basic exploration of the annotated differential expression measures.
 
 # Caching
 
