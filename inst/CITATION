@@ -1,0 +1,17 @@
+citEntry(entry="article",
+         title = "BioPlexR and BioPlexPy: integrated data products for the analysis of human protein interactions",
+         author = personList( as.person("Ludwig Geistlinger"),
+                              as.person("Roger Vargas"),
+                              as.person("Tyrone Lee"),
+                              as.person("Joshua Pan"),
+                              as.person("Edward Huttlin"),
+                              as.person("Robert Gentleman")),
+         year = 2023,
+         journal = "Bioinformatics",
+         doi = "10.1093/bioinformatics/btad091",
+         textVersion = 
+         paste("Ludwig Geistlinger, Roger Vargas Jr, Tyrone Lee, Joshua Pan,", 
+               "Edward Huttlin, Robert Gentleman (2023)", 
+               "BioPlexR and BioPlexPy: integrated data products for the",
+               "analysis of human protein interactions.",
+               "Bioinformatics, doi: 10.1093/bioinformatics/btad091." ) )
