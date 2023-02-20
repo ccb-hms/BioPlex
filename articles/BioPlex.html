@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.3</span>
       </span>
     </div>
 
@@ -104,7 +104,7 @@ interactome defines protein communities and disease networks</a>,
 networks reveal cell-specific remodeling of the human interactome</a>,
 <em>Cell</em>, 2021.</li>
 </ul>
-<p>The <a href="https://bioconductor.org/packages/BioPlex" class="external-link">BioPlex R
+<p>The <a href="https://github.com/ccb-hms/BioPlex" class="external-link">BioPlex R
 package</a> implements access to the BioPlex protein-protein interaction
 networks and related resources from within R. Besides protein-protein
 interaction networks for 293T and HCT116 cells, this includes access to
@@ -203,7 +203,7 @@ networks</a> include:</p>
 <p>Let’s get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:04</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:56:48</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">)</span>
 <span class="co">#&gt;    GeneA  GeneB UniprotA UniprotB SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1    100 728378   P00813   A5A3E0     ADA   POTEF 6.881844e-10 0.0001176357</span>
@@ -231,7 +231,7 @@ interacting partner (<code>pInt</code>) as determined using the <a href="https:/
 network:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.hct116</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"HCT116"</span>, version <span class="op">=</span> <span class="st">"1.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:37</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:57:41</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">bp.hct116</span><span class="op">)</span>
 <span class="co">#&gt;   GeneA  GeneB UniprotA UniprotB  SymbolA SymbolB           pW          pNI</span>
 <span class="co">#&gt; 1 88455  50649   Q8IZ07 Q9NR80-4 ANKRD13A ARHGEF4 3.959215e-04 3.298003e-05</span>
@@ -260,7 +260,7 @@ the time of publication of the BioPlex 3.0 networks.</p>
 <code class="sourceCode R"><span class="va">bp.293t.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>,
                                version <span class="op">=</span> <span class="st">"3.0"</span>,
                                remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:04</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:56:48</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="data-structures-for-bioplex-ppis">Data structures for BioPlex PPIs<a class="anchor" aria-label="anchor" href="#data-structures-for-bioplex-ppis"></a>
@@ -456,7 +456,7 @@ annotations to the node metadata:</p>
 <p>Obtain the complete set of human protein complexes from <a href="http://mips.helmholtz-muenchen.de/corum/#download" class="external-link">CORUM</a>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">all</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"all"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:49</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:57:58</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2916   20</span>
 <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/row_colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">all</span><span class="op">)</span>
@@ -486,13 +486,13 @@ annotations to the node metadata:</p>
 <p>Core set of complexes:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:50:59</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:56:42</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">core</span><span class="op">)</span>
 <span class="co">#&gt; [1] 2417   20</span></code></pre></div>
 <p>Complexes with splice variants:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"splice"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:51</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:58:00</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">splice</span><span class="op">)</span>
 <span class="co">#&gt; [1] 44 20</span></code></pre></div>
 <div class="section level4">
@@ -505,7 +505,7 @@ UNIPROT-to-ENTREZID) might not be fully up-to-date.</p>
 <code class="sourceCode R"><span class="va">core.remapped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, 
                           organism <span class="op">=</span> <span class="st">"Human"</span>,
                           remap.uniprot.ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:50:59</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:56:42</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="data-structures-for-corum-complexes">Data structures for CORUM complexes<a class="anchor" aria-label="anchor" href="#data-structures-for-corum-complexes"></a>
@@ -625,7 +625,7 @@ model (HMM) to sequencing-inferred copy numbers in 2kbp windows. More
 details on how copy numbers were calculated can be obtained from the <a href="https://doi.org/10.1038/ncomms5767" class="external-link">primary publication</a>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:13</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:57:09</span>
 <span class="va">cnv.hmm</span>
 <span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
 <span class="co">#&gt;           seqnames              ranges strand |     score</span>
@@ -643,10 +643,6 @@ details on how copy numbers were calculated can be obtained from the <a href="ht
 <span class="co">#&gt;   [12382]     chrM             0-12000      * |      8.82</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 24 sequences from hg18 genome; no seqlengths</span></code></pre></div>
-<p>See also the <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/BioPlex/inst/doc/BasicChecks.html" class="external-link">data
-checks vignette, Section 5</a> for an exploration of the agreement
-between inferred copy numbers from both assay types (SNP arrays
-vs. sequencing).</p>
 </div>
 </div>
 <div class="section level3">
@@ -661,7 +657,7 @@ vs. sequencing).</p>
 <p>Obtain transcriptome data for 293T cells from GEO dataset: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425" class="external-link">GSE122425</a>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:22</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:56:59</span>
 <span class="va">se</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 57905 6 </span>
@@ -817,10 +813,6 @@ vs. sequencing).</p>
 <span class="co">#&gt; ENSG00000235857     CTBP2P1      K04496           _       245</span></code></pre></div>
 <p>The dataset includes three wild type samples and three NSUN2 knockout
 samples.</p>
-<p>See also the <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/BioPlex/inst/doc/BasicChecks.html" class="external-link">data
-checks vignette, Section 7</a> for an exploration of the relationship
-between expression level and the frequency of a protein being detected
-as prey.</p>
 </div>
 </div>
 <div class="section level4">
@@ -1127,7 +1119,7 @@ expression data comparing 293T and HCT116 cells based on tandem mass tag
 analysis.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:51:29</span>
+<span class="co">#&gt; Using cached version from 2023-02-20 10:57:31</span>
 <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">bp.prot</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="co">#&gt;               HCT1      HCT2      HCT3      HCT4      HCT5</span>
 <span class="co">#&gt; P0CG40    1.526690  3.479370  2.223500  2.258470  2.923410</span>
@@ -1167,9 +1159,6 @@ analysis.</p>
 <p>The data contains 5 replicates each for 293T and for HCT116 cells. As
 a result of the data collection process, the data represent relative
 protein abundance scaled to add up to 100% in each row.</p>
-<p>See also the <a href="https://bioconductor.org/packages/release/data/experiment/vignettes/BioPlex/inst/doc/BasicChecks.html" class="external-link">data
-checks vignette, Section 8</a> for a basic exploration of the annotated
-differential expression measures.</p>
 </div>
 </div>
 </div>
@@ -1223,7 +1212,7 @@ or <code><a href="https://rdrr.io/pkg/BiocFileCache/man/BiocFileCache-class.html
 <span class="co">#&gt;  [7] AnnotationDbi_1.60.0        graph_1.76.0               </span>
 <span class="co">#&gt;  [9] ExperimentHub_2.6.0         AnnotationHub_3.6.0        </span>
 <span class="co">#&gt; [11] BiocFileCache_2.6.1         dbplyr_2.2.0               </span>
-<span class="co">#&gt; [13] BioPlex_1.5.4               SummarizedExperiment_1.28.0</span>
+<span class="co">#&gt; [13] BioPlex_1.4.3               SummarizedExperiment_1.28.0</span>
 <span class="co">#&gt; [15] Biobase_2.58.0              GenomicRanges_1.50.2       </span>
 <span class="co">#&gt; [17] GenomeInfoDb_1.34.9         IRanges_2.32.0             </span>
 <span class="co">#&gt; [19] S4Vectors_0.36.1            BiocGenerics_0.44.0        </span>
