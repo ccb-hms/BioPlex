@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">BioPlex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.4</span>
       </span>
     </div>
 
@@ -68,7 +68,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Basic checks of BioPlex PPI data</h1>
             
-            <h4 data-toc-skip class="date">20 February 2023</h4>
+            <h4 data-toc-skip class="date">26 February 2023</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ccb-hms/BioPlex/blob/HEAD/vignettes/BasicChecks.Rmd" class="external-link"><code>vignettes/BasicChecks.Rmd</code></a></small>
       <div class="hidden name"><code>BasicChecks.Rmd</code></div>
@@ -140,7 +140,7 @@
 <p>Get core set of complexes:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">core</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCorum.html">getCorum</a></span><span class="op">(</span>set <span class="op">=</span> <span class="st">"core"</span>, organism <span class="op">=</span> <span class="st">"Human"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:56:42</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2023-02-26 15:10:34</span></code></pre></div>
 <p>Turn the CORUM complexes into a list of graph instances, where all
 nodes of a complex are connected to all other nodes of that complex with
 undirected edges.</p>
@@ -208,7 +208,7 @@ package:</p>
 <p>Get the latest version of the 293T PPI network:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.293t</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioPlex.html">getBioPlex</a></span><span class="op">(</span>cell.line <span class="op">=</span> <span class="st">"293T"</span>, version <span class="op">=</span> <span class="st">"3.0"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:56:48</span></code></pre></div>
+<span class="co">#&gt; Using cached version from 2023-02-26 15:10:40</span></code></pre></div>
 <p>Turn the BioPlex PPI network into one big graph where bait and prey
 relationship are represented by directed edges from bait to prey.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -282,141 +282,6 @@ domain-domain association analysis vignette</a> for a more comprehensive
 analysis of PFAM domain associations in the BioPlex network.</p>
 </div>
 <div class="section level2">
-<h2 id="check-expressed-genes-are-showing-up-as-prey-293t-cells">Check: expressed genes are showing up as prey (293T cells)<a class="anchor" aria-label="anchor" href="#check-expressed-genes-are-showing-up-as-prey-293t-cells"></a>
-</h2>
-<p>Get RNA-seq data for HEK293 cells from GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425" class="external-link">GSE122425</a></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:56:59</span>
-<span class="va">se</span>
-<span class="co">#&gt; class: SummarizedExperiment </span>
-<span class="co">#&gt; dim: 57905 6 </span>
-<span class="co">#&gt; metadata(0):</span>
-<span class="co">#&gt; assays(2): raw rpkm</span>
-<span class="co">#&gt; rownames(57905): ENSG00000223972 ENSG00000227232 ... ENSG00000231514</span>
-<span class="co">#&gt;   ENSG00000235857</span>
-<span class="co">#&gt; rowData names(4): SYMBOL KO GO length</span>
-<span class="co">#&gt; colnames(6): GSM3466389 GSM3466390 ... GSM3466393 GSM3466394</span>
-<span class="co">#&gt; colData names(41): title geo_accession ... passages.ch1 strain.ch1</span></code></pre></div>
-<p>Inspect expression of prey genes:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bait</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolA</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">bait</span><span class="op">)</span>
-<span class="co">#&gt; [1] 8995</span>
-<span class="va">prey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolB</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span>
-<span class="co">#&gt; [1] 10419</span></code></pre></div>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">prey</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">SYMBOL</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>las <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span>, 
-        names <span class="op">=</span> <span class="va">se</span><span class="op">$</span><span class="va">title</span>, 
-        ylab <span class="op">=</span> <span class="st">"log2 RPKM"</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<p>How many prey genes are expressed (raw read count &gt; 0) in all 3 WT
-reps:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># background: how many genes in total are expressed in all three WT reps</span>
-<span class="va">gr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">gr0</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; FALSE  TRUE </span>
-<span class="co">#&gt; 33842 24063</span>
-<span class="co"># prey: expressed in all three WT reps</span>
-<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; FALSE  TRUE </span>
-<span class="co">#&gt;   599  9346</span>
-<span class="co"># prey: expressed in at least one WT rep</span>
-<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; FALSE  TRUE </span>
-<span class="co">#&gt;   305  9640</span></code></pre></div>
-<p>Are prey genes overrepresented in the expressed genes?</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">exprTable</span> <span class="op">&lt;-</span>
-     <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">9346</span>, <span class="fl">1076</span>, <span class="fl">14717</span>, <span class="fl">32766</span><span class="op">)</span>,
-            nrow <span class="op">=</span> <span class="fl">2</span>,
-            dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Expressed"</span>, <span class="st">"Not.expressed"</span><span class="op">)</span>,
-                            <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"In.prey.set"</span>, <span class="st">"Not.in.prey.set"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">exprTable</span>
-<span class="co">#&gt;               In.prey.set Not.in.prey.set</span>
-<span class="co">#&gt; Expressed            9346           14717</span>
-<span class="co">#&gt; Not.expressed        1076           32766</span></code></pre></div>
-<p>Test using hypergeometric test (i.e. one-sided Fisher’s exact
-test):</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/fisher.test.html" class="external-link">fisher.test</a></span><span class="op">(</span><span class="va">exprTable</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  Fisher's Exact Test for Count Data</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; data:  exprTable</span>
-<span class="co">#&gt; p-value &lt; 2.2e-16</span>
-<span class="co">#&gt; alternative hypothesis: true odds ratio is greater than 1</span>
-<span class="co">#&gt; 95 percent confidence interval:</span>
-<span class="co">#&gt;  18.29105      Inf</span>
-<span class="co">#&gt; sample estimates:</span>
-<span class="co">#&gt; odds ratio </span>
-<span class="co">#&gt;   19.34726</span></code></pre></div>
-<p>Alternatively: permutation test, i.e. repeatedly sample number of
-prey genes from the background, and assess how often we have as many or
-more than 9346 genes expressed:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">permgr0</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">gr0</span>, <span class="va">nr.genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span><span class="op">)</span> 
-<span class="op">{</span>
-    <span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-envirAPI.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">)</span>, <span class="va">nr.genes</span><span class="op">)</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
-<span class="op">}</span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">perms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fu">permgr0</span><span class="op">(</span><span class="va">gr0</span><span class="op">)</span>, <span class="fl">1000</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">perms</span><span class="op">)</span>
-<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;    1000    1000    1000    1000    1000    1000</span>
-<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">perms</span> <span class="op">&gt;=</span> <span class="fl">9346</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1001</span>
-<span class="co">#&gt; [1] 0.000999001</span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="check-is-there-a-relationship-between-prey-frequency-and-prey-expression-level">Check: is there a relationship between prey frequency and prey
-expression level?<a class="anchor" aria-label="anchor" href="#check-is-there-a-relationship-between-prey-frequency-and-prey-expression-level"></a>
-</h2>
-<p>Check which genes turn up most frequently as prey:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">prey.freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolB</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">preys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
-<span class="va">prey.freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">preys</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
-<span class="co">#&gt; HSPA5 HSPA8 TUBB8   UBB  YBX1 YWHAH </span>
-<span class="co">#&gt;   199   192   176   173   139   132</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
-<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;    1.00    2.00    6.00   11.34   16.00  199.00</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">prey.freq</span>, breaks <span class="op">=</span> <span class="fl">50</span>, main <span class="op">=</span> <span class="st">""</span>, xlab <span class="op">=</span> <span class="st">"Number of PPIs"</span>, ylab <span class="op">=</span> <span class="st">"Number of genes"</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/prey-freq-1.png" width="700"></p>
-<p>Prey genes are involved 11 PPIs on average.</p>
-<p>There doesn’t seem to be a strong correlation between expression
-level and the frequency of gene to turn up as prey:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">SYMBOL</span><span class="op">)</span>
-<span class="va">rmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
-<span class="va">log.rmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2</a></span><span class="op">(</span><span class="va">rmeans</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span> x <span class="op">=</span> <span class="va">prey.freq</span>,
-      y <span class="op">=</span> <span class="va">log.rmeans</span>,
-      xlab <span class="op">=</span> <span class="st">"prey frequency"</span>,
-      ylab <span class="op">=</span> <span class="st">"log2 RPKM"</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">prey.freq</span>, 
-    <span class="va">log.rmeans</span>,
-    use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.2035977</span></code></pre></div>
-<p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/BioNet.html">BioNet
-maximum scoring subnetwork analysis vignette</a> for a more
-comprehensive analysis of the 293T transcriptome data from GSE122425
-when mapped onto BioPlex PPI network.</p>
-</div>
-<div class="section level2">
 <h2 id="check-agreement-between-cnv-tracks">Check: agreement between CNV tracks<a class="anchor" aria-label="anchor" href="#check-agreement-between-cnv-tracks"></a>
 </h2>
 <p>Genomic data from whole-genome sequencing for six different lineages
@@ -429,9 +294,9 @@ Illumina SNP arrays.</p>
 assay types.</p>
 <p>We start by obtaining genomic coordinates and copy number scores from
 the sequencing track …</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cnv.hmm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.hmm"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:57:09</span>
+<span class="co">#&gt; Using cached version from 2023-02-26 15:10:50</span>
 <span class="va">cnv.hmm</span>
 <span class="co">#&gt; GRanges object with 12382 ranges and 1 metadata column:</span>
 <span class="co">#&gt;           seqnames              ranges strand |     score</span>
@@ -450,9 +315,9 @@ the sequencing track …</p>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 24 sequences from hg18 genome; no seqlengths</span></code></pre></div>
 <p>… and from the SNP track.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cnv.snp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getHEK293GenomeTrack.html">getHEK293GenomeTrack</a></span><span class="op">(</span>track <span class="op">=</span> <span class="st">"cnv.snp"</span>, cell.line <span class="op">=</span> <span class="st">"293T"</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:57:22</span>
+<span class="co">#&gt; Using cached version from 2023-02-26 15:10:52</span>
 <span class="va">cnv.snp</span>
 <span class="co">#&gt; GRanges object with 204 ranges and 1 metadata column:</span>
 <span class="co">#&gt;         seqnames              ranges strand |     score</span>
@@ -477,7 +342,7 @@ tracks.</p>
 <p>As the genomic coordinates from both CNV tracks is based on the hg18
 human genome assembly, we obtain gene coordinates for hg18 from
 AnnotationHub:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">AnnotationHub</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationHub/man/AnnotationHub-class.html" class="external-link">query</a></span><span class="op">(</span><span class="va">ah</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"TxDb"</span>, <span class="st">"Homo sapiens"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; AnnotationHub with 39 records</span>
 <span class="co">#&gt; # snapshotDate(): 2022-10-31</span>
@@ -528,7 +393,7 @@ AnnotationHub:</p>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 49 sequences (1 circular) from hg18 genome</span></code></pre></div>
 <p>We then transfer SNP-inferred copy numbers to genes by overlap …</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">olaps</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/findOverlaps-methods.html" class="external-link">findOverlaps</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">cnv.snp</span><span class="op">)</span>
 <span class="va">joined</span> <span class="op">&lt;-</span> <span class="va">gs</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html" class="external-link">queryHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
 <span class="va">joined</span><span class="op">$</span><span class="va">score</span> <span class="op">&lt;-</span> <span class="va">cnv.snp</span><span class="op">$</span><span class="va">score</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html" class="external-link">subjectHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
@@ -551,7 +416,7 @@ AnnotationHub:</p>
 <span class="co">#&gt;   seqinfo: 49 sequences (1 circular) from hg18 genome</span></code></pre></div>
 <p>… and, analogously, transfer sequencing-inferred copy numbers to
 genes by overlap.</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">olaps</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/findOverlaps-methods.html" class="external-link">findOverlaps</a></span><span class="op">(</span><span class="va">gs</span>, <span class="va">cnv.hmm</span><span class="op">)</span>
 <span class="va">joined2</span> <span class="op">&lt;-</span> <span class="va">gs</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html" class="external-link">queryHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
 <span class="va">joined2</span><span class="op">$</span><span class="va">score</span> <span class="op">&lt;-</span> <span class="va">cnv.hmm</span><span class="op">$</span><span class="va">score</span><span class="op">[</span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Hits-class.html" class="external-link">subjectHits</a></span><span class="op">(</span><span class="va">olaps</span><span class="op">)</span><span class="op">]</span>
@@ -573,14 +438,14 @@ genes by overlap.</p>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 49 sequences (1 circular) from hg18 genome</span></code></pre></div>
 <p>We then restrict both tracks to common genes.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">isect</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">joined</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">joined2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">joined</span> <span class="op">&lt;-</span> <span class="va">joined</span><span class="op">[</span><span class="va">isect</span><span class="op">]</span>
 <span class="va">joined2</span> <span class="op">&lt;-</span> <span class="va">joined2</span><span class="op">[</span><span class="va">isect</span><span class="op">]</span></code></pre></div>
 <p>Now, can assess agreement by testing the correlation between
 SNP-inferred gene copy numbers and the corresponding sequencing-inferred
 gene copy numbers.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.7953383</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
@@ -596,7 +461,7 @@ gene copy numbers.</p>
 <span class="co">#&gt;       cor </span>
 <span class="co">#&gt; 0.7953383</span></code></pre></div>
 <p>We also inspect the correlation via a boxplot.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">spl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">joined2</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="va">spl</span>, xlab <span class="op">=</span> <span class="st">"SNP-inferred copy number"</span>, ylab <span class="op">=</span> <span class="st">"sequencing-inferred copy number"</span><span class="op">)</span>
 <span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">joined</span><span class="op">$</span><span class="va">score</span>, <span class="va">joined2</span><span class="op">$</span><span class="va">score</span><span class="op">)</span>
@@ -607,7 +472,142 @@ gene copy numbers.</p>
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="st">"   p &lt; 2.2e-16"</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">rho</span>, <span class="va">p</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="BasicChecks_files/figure-html/unnamed-chunk-13-1.png" width="768"></p>
+<p><img src="BasicChecks_files/figure-html/unnamed-chunk-11-1.png" width="768"></p>
+</div>
+<div class="section level2">
+<h2 id="check-expressed-genes-are-showing-up-as-prey-293t-cells">Check: expressed genes are showing up as prey (293T cells)<a class="anchor" aria-label="anchor" href="#check-expressed-genes-are-showing-up-as-prey-293t-cells"></a>
+</h2>
+<p>Get RNA-seq data for HEK293 cells from GEO: <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE122425" class="external-link">GSE122425</a></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getGSE122425.html">getGSE122425</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Using cached version from 2023-02-26 15:11:00</span>
+<span class="va">se</span>
+<span class="co">#&gt; class: SummarizedExperiment </span>
+<span class="co">#&gt; dim: 57905 6 </span>
+<span class="co">#&gt; metadata(0):</span>
+<span class="co">#&gt; assays(2): raw rpkm</span>
+<span class="co">#&gt; rownames(57905): ENSG00000223972 ENSG00000227232 ... ENSG00000231514</span>
+<span class="co">#&gt;   ENSG00000235857</span>
+<span class="co">#&gt; rowData names(4): SYMBOL KO GO length</span>
+<span class="co">#&gt; colnames(6): GSM3466389 GSM3466390 ... GSM3466393 GSM3466394</span>
+<span class="co">#&gt; colData names(41): title geo_accession ... passages.ch1 strain.ch1</span></code></pre></div>
+<p>Inspect expression of prey genes:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bait</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolA</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">bait</span><span class="op">)</span>
+<span class="co">#&gt; [1] 8995</span>
+<span class="va">prey</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolB</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span>
+<span class="co">#&gt; [1] 10419</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="va">prey</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">SYMBOL</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>las <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/boxplot.html" class="external-link">boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>,<span class="op">]</span>, 
+        names <span class="op">=</span> <span class="va">se</span><span class="op">$</span><span class="va">title</span>, 
+        ylab <span class="op">=</span> <span class="st">"log2 RPKM"</span><span class="op">)</span></code></pre></div>
+<p><img src="BasicChecks_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+<p>How many prey genes are expressed (raw read count &gt; 0) in all 3 WT
+reps:</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># background: how many genes in total are expressed in all three WT reps</span>
+<span class="va">gr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowSums</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">gr0</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; FALSE  TRUE </span>
+<span class="co">#&gt; 33842 24063</span>
+<span class="co"># prey: expressed in all three WT reps</span>
+<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; FALSE  TRUE </span>
+<span class="co">#&gt;   599  9346</span>
+<span class="co"># prey: expressed in at least one WT rep</span>
+<span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; FALSE  TRUE </span>
+<span class="co">#&gt;   305  9640</span></code></pre></div>
+<p>Are prey genes overrepresented in the expressed genes?</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">exprTable</span> <span class="op">&lt;-</span>
+     <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">9346</span>, <span class="fl">1076</span>, <span class="fl">14717</span>, <span class="fl">32766</span><span class="op">)</span>,
+            nrow <span class="op">=</span> <span class="fl">2</span>,
+            dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Expressed"</span>, <span class="st">"Not.expressed"</span><span class="op">)</span>,
+                            <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"In.prey.set"</span>, <span class="st">"Not.in.prey.set"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">exprTable</span>
+<span class="co">#&gt;               In.prey.set Not.in.prey.set</span>
+<span class="co">#&gt; Expressed            9346           14717</span>
+<span class="co">#&gt; Not.expressed        1076           32766</span></code></pre></div>
+<p>Test using hypergeometric test (i.e. one-sided Fisher’s exact
+test):</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/fisher.test.html" class="external-link">fisher.test</a></span><span class="op">(</span><span class="va">exprTable</span>, alternative <span class="op">=</span> <span class="st">"greater"</span><span class="op">)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  Fisher's Exact Test for Count Data</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; data:  exprTable</span>
+<span class="co">#&gt; p-value &lt; 2.2e-16</span>
+<span class="co">#&gt; alternative hypothesis: true odds ratio is greater than 1</span>
+<span class="co">#&gt; 95 percent confidence interval:</span>
+<span class="co">#&gt;  18.29105      Inf</span>
+<span class="co">#&gt; sample estimates:</span>
+<span class="co">#&gt; odds ratio </span>
+<span class="co">#&gt;   19.34726</span></code></pre></div>
+<p>Alternatively: permutation test, i.e. repeatedly sample number of
+prey genes from the background, and assess how often we have as many or
+more than 9346 genes expressed:</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">permgr0</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">gr0</span>, <span class="va">nr.genes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prey</span><span class="op">)</span><span class="op">)</span> 
+<span class="op">{</span>
+    <span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-envirAPI.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">)</span>, <span class="va">nr.genes</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">gr0</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">perms</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fu">permgr0</span><span class="op">(</span><span class="va">gr0</span><span class="op">)</span>, <span class="fl">1000</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">perms</span><span class="op">)</span>
+<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">#&gt;    1000    1000    1000    1000    1000    1000</span>
+<span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">perms</span> <span class="op">&gt;=</span> <span class="fl">9346</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">1001</span>
+<span class="co">#&gt; [1] 0.000999001</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="check-is-there-a-relationship-between-prey-frequency-and-prey-expression-level">Check: is there a relationship between prey frequency and prey
+expression level?<a class="anchor" aria-label="anchor" href="#check-is-there-a-relationship-between-prey-frequency-and-prey-expression-level"></a>
+</h2>
+<p>Check which genes turn up most frequently as prey:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">prey.freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">bp.293t</span><span class="op">$</span><span class="va">SymbolB</span><span class="op">)</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">preys</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
+<span class="va">prey.freq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">preys</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
+<span class="co">#&gt; HSPA5 HSPA8 TUBB8   UBB  YBX1 YWHAH </span>
+<span class="co">#&gt;   199   192   176   173   139   132</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>
+<span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="co">#&gt;    1.00    2.00    6.00   11.34   16.00  199.00</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">prey.freq</span>, breaks <span class="op">=</span> <span class="fl">50</span>, main <span class="op">=</span> <span class="st">""</span>, xlab <span class="op">=</span> <span class="st">"Number of PPIs"</span>, ylab <span class="op">=</span> <span class="st">"Number of genes"</span><span class="op">)</span></code></pre></div>
+<p><img src="BasicChecks_files/figure-html/prey-freq-1.png" width="700"></p>
+<p>Prey genes are involved in 11 PPIs on average.</p>
+<p>There doesn’t seem to be a strong correlation between expression
+level and the frequency of gene to turn up as prey:</p>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/match.html" class="external-link">match</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">prey.freq</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">se</span><span class="op">)</span><span class="op">$</span><span class="va">SYMBOL</span><span class="op">)</span>
+<span class="va">rmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/colSums.html" class="external-link">rowMeans</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">assay</a></span><span class="op">(</span><span class="va">se</span>, <span class="st">"rpkm"</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
+<span class="va">log.rmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log2</a></span><span class="op">(</span><span class="va">rmeans</span> <span class="op">+</span> <span class="fl">0.5</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span> x <span class="op">=</span> <span class="va">prey.freq</span>,
+      y <span class="op">=</span> <span class="va">log.rmeans</span>,
+      xlab <span class="op">=</span> <span class="st">"prey frequency"</span>,
+      ylab <span class="op">=</span> <span class="st">"log2 RPKM"</span><span class="op">)</span></code></pre></div>
+<p><img src="BasicChecks_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">prey.freq</span>, 
+    <span class="va">log.rmeans</span>,
+    use <span class="op">=</span> <span class="st">"pairwise.complete.obs"</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.2035977</span></code></pre></div>
+<p>See also the <a href="https://ccb-hms.github.io/BioPlexAnalysis/articles/BioNet.html">BioNet
+maximum scoring subnetwork analysis vignette</a> for a more
+comprehensive analysis of the 293T transcriptome data from GSE122425
+when mapped onto BioPlex PPI network.</p>
 </div>
 <div class="section level2">
 <h2 id="check-differential-protein-expression-hek293-vs--hct116">Check: differential protein expression (HEK293 vs. HCT116)<a class="anchor" aria-label="anchor" href="#check-differential-protein-expression-hek293-vs--hct116"></a>
@@ -616,7 +616,7 @@ gene copy numbers.</p>
 cells from Supplementary Table S4A of the BioPlex 3 paper:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bp.prot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getBioplexProteome.html">getBioplexProteome</a></span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; Using cached version from 2023-02-20 10:57:31</span>
+<span class="co">#&gt; Using cached version from 2023-02-26 15:11:08</span>
 <span class="va">bp.prot</span>
 <span class="co">#&gt; class: SummarizedExperiment </span>
 <span class="co">#&gt; dim: 9604 10 </span>
@@ -712,7 +712,7 @@ HEK293 against HCT116 cells.</p>
 <span class="co">#&gt;  [1] GenomicFeatures_1.50.4      graph_1.76.0               </span>
 <span class="co">#&gt;  [3] AnnotationHub_3.6.0         BiocFileCache_2.6.1        </span>
 <span class="co">#&gt;  [5] dbplyr_2.2.0                AnnotationDbi_1.60.0       </span>
-<span class="co">#&gt;  [7] BioPlex_1.4.3               SummarizedExperiment_1.28.0</span>
+<span class="co">#&gt;  [7] BioPlex_1.5.4               SummarizedExperiment_1.28.0</span>
 <span class="co">#&gt;  [9] Biobase_2.58.0              GenomicRanges_1.50.2       </span>
 <span class="co">#&gt; [11] GenomeInfoDb_1.34.9         IRanges_2.32.0             </span>
 <span class="co">#&gt; [13] S4Vectors_0.36.1            BiocGenerics_0.44.0        </span>
@@ -737,8 +737,8 @@ HEK293 against HCT116 cells.</p>
 <span class="co">#&gt; [29] systemfonts_1.0.4             stringr_1.4.0                </span>
 <span class="co">#&gt; [31] digest_0.6.29                 rmarkdown_2.14               </span>
 <span class="co">#&gt; [33] XVector_0.38.0                pkgconfig_2.0.3              </span>
-<span class="co">#&gt; [35] htmltools_0.5.2               fastmap_1.1.0                </span>
-<span class="co">#&gt; [37] highr_0.9                     rlang_1.0.2                  </span>
+<span class="co">#&gt; [35] htmltools_0.5.2               highr_0.9                    </span>
+<span class="co">#&gt; [37] fastmap_1.1.0                 rlang_1.0.2                  </span>
 <span class="co">#&gt; [39] RSQLite_2.2.14                shiny_1.7.1                  </span>
 <span class="co">#&gt; [41] BiocIO_1.8.0                  jquerylib_0.1.4              </span>
 <span class="co">#&gt; [43] generics_0.1.2                jsonlite_1.8.0               </span>
