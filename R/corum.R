@@ -45,22 +45,18 @@ getCorum <- function(set = c("all", "core", "splice"),
 {
     corum.url <- "http://mips.helmholtz-muenchen.de/corum/download"
     set <- match.arg(set)
-    rname <- paste("corum", 
-                   set,
-                   #ifelse(is.null(organism), "all", organism),
-                   #ifelse(remap.uniprot.ids, "remapped", "original"),
-                   sep = "-")
+    rname <- paste("corum", set, sep = "-")
 
     # should a cache version be used?
     if(cache) set.file <- .getResourceFromCache2(rname)
     if(!cache || is.null(set.file))        
     {
-        # download, unzip, and read in
         set.file <- paste0(set, "Complexes.txt.zip")
         set.url <- file.path(corum.url, set.file)
-        set.file <- .cacheResource2(rname, set.url)#, download = FALSE)
+        set.file <- .cacheResource2(rname, set.url)
     }
 
+    # download, unzip, and read in
     set.file <- unzip(set.file, exdir = dirname(set.file))
     corum <- read.delim(set.file)
     file.remove(set.file)

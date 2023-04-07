@@ -29,7 +29,7 @@
     cache.dir <- tools::R_user_dir(ucdir, which = "cache")
     bfc <- BiocFileCache::BiocFileCache(cache.dir)
     
-    qgsc <-  BiocFileCache::bfcquery(bfc, rname, exact = TRUE)
+    qgsc <- BiocFileCache::bfcquery(bfc, rname, exact = TRUE)
 
     # is there already a cached version?
     res <- NULL
