@@ -8,7 +8,8 @@ getCorum(
   set = c("all", "core", "splice"),
   organism = "Human",
   remap.uniprot.ids = FALSE,
-  cache = TRUE
+  cache = TRUE,
+  mode = c("ehub", "web")
 )
 }
 \arguments{
@@ -31,6 +32,10 @@ Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.}
 
 \item{cache}{logical. Should a locally cached version used if available?
 Defaults to \code{TRUE}.}
+
+\item{mode}{character. Should CORUM complexes be obtained from ExperimentHub
+or via a web download from the CORUM homepage? Defaults to \code{"ehub"},
+which will obtain the chosen complex set from ExperimentHub.}
 }
 \value{
 A \code{data.frame}.

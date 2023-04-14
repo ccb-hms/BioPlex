@@ -44,3 +44,12 @@
     }
     return(res)   
 }
+
+.getResource <- function(recs, suffix)
+{
+    suffix <- paste0(suffix, "$")
+    ind <- grep(suffix, recs$title)
+    id <- recs$ah_id[ind]
+    suppressMessages(rec <- recs[[id]])
+    return(rec)
+}

@@ -31,6 +31,9 @@
 #' Defaults to \code{FALSE} which will then keep the mappings provided by CORUM.
 #' @param cache logical. Should a locally cached version used if available?
 #' Defaults to \code{TRUE}.
+#' @param mode character. Should CORUM complexes be obtained from ExperimentHub 
+#' or via a web download from the CORUM homepage? Defaults to \code{"ehub"}, 
+#' which will obtain the chosen complex set from ExperimentHub. 
 #' @return A \code{data.frame}. 
 #' @references CORUM: \url{http://mips.helmholtz-muenchen.de/corum/#download}
 #' @examples
@@ -41,10 +44,41 @@
 getCorum <- function(set = c("all", "core", "splice"),
                      organism = "Human",
                      remap.uniprot.ids = FALSE,
-                     cache = TRUE)
+                     cache = TRUE,
+                     mode = c("ehub", "web"))
+{
+    set <- match.arg(set)
+    mode <- match.arg(mode)
+    if(mode == "ehub") corum <- .getCorumFromEH(set) 
+    else corum <- .getCorumFromWeb(set, cache)
+
+    # organism
+    if(!is.null(organism))
+    {
+        stopifnot(organism %in% corum$Organism)
+        corum <- subset(corum, Organism %in% organism)
+    }
+    
+    # remap gene ids
+    if(remap.uniprot.ids) corum <- .remapUniprotIds(corum)
+    
+    return(corum) 
+}
+
+.getCorumFromEH <- function(set)
+{
+    # obtain records from ExperimentHub
+    eh <- ExperimentHub::ExperimentHub()
+    recs <- AnnotationHub::query(eh, c("BioPlex", "CORUM"))
+
+    suffix <- paste(set, "complexes", sep = "_")
+    corum <- .getResource(recs, suffix)    
+    return(corum)
+}
+
+.getCorumFromWeb <- function(set, cache)
 {
     corum.url <- "http://mips.helmholtz-muenchen.de/corum/download"
-    set <- match.arg(set)
     rname <- paste("corum", set, sep = "-")
 
     # should a cache version be used?
@@ -61,17 +95,7 @@ getCorum <- function(set = c("all", "core", "splice"),
     corum <- read.delim(set.file)
     file.remove(set.file)
     
-    # organism
-    if(!is.null(organism))
-    {
-        stopifnot(organism %in% corum$Organism)
-        corum <- subset(corum, Organism %in% organism)
-    }
-    
-    # remap gene ids
-    if(remap.uniprot.ids) corum <- .remapUniprotIds(corum)
-    
-    return(corum) 
+    return(corum)
 }
 
 #' @title Represent CORUM protein complex data as a simple list
