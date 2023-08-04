@@ -16,7 +16,7 @@ package: please follow the installation instructions
 [here](https://bioconductor.org/packages/BioPlex). 
 This is the recommended way of installing the package.
 
-### Installation from Gitub
+### Installation from GitHub
 
 It is also possible to install the package directly from GitHub. This is 
 for users/developers interested in using the latest development version of the
